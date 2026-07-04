@@ -1381,12 +1381,12 @@ const WebcamCapture = ({
 
   return (
     <div className="relative">
-      <div className="relative aspect-video bg-black rounded-xl overflow-hidden">
-        <video 
-          ref={videoRef} 
-          autoPlay 
-          playsInline 
-          muted 
+      <div className="relative mx-auto w-full max-w-sm sm:max-w-none aspect-[3/4] sm:aspect-video max-h-[70vh] bg-black rounded-xl overflow-hidden">
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
           className="w-full h-full object-cover scale-x-[-1]"
         />
         <canvas ref={canvasRef} className="hidden" />
@@ -1419,16 +1419,16 @@ const WebcamCapture = ({
       </div>
 
       {/* Controls */}
-      <div className="flex justify-center gap-4 mt-4">
-        <Button type="button" variant="outline" onClick={onClose} className="gap-2">
+      <div className="flex flex-col sm:flex-row justify-center gap-3 mt-4">
+        <Button type="button" variant="outline" onClick={onClose} className="gap-2 w-full sm:w-auto order-2 sm:order-1">
           <X className="w-4 h-4" />
           Cancel
         </Button>
-        <Button 
+        <Button
           type="button"
-          onClick={captureWithCountdown} 
+          onClick={captureWithCountdown}
           disabled={!isStreaming || countdown !== null}
-          className="gap-2"
+          className="gap-2 w-full sm:w-auto order-1 sm:order-2"
         >
           <Camera className="w-4 h-4" />
           {countdown !== null ? `Taking photo in ${countdown}...` : "Take Photo"}
@@ -1643,6 +1643,96 @@ const FaceShapeResultCard = ({
   );
 };
 
+// --- ANALYSIS STAGES (keep users engaged while the photo is processed) ---
+const FACE_ANALYSIS_STAGES = [
+  "Uploading your photo…",
+  "Detecting your face…",
+  "Mapping facial landmarks…",
+  "Measuring forehead, cheekbones & jaw…",
+  "Calculating your face ratios…",
+  "Matching your face shape…",
+];
+
+// --- LIVE ANALYZING VIEW ---
+// Shows the user's own photo with an animated scan so it's obvious the
+// analysis is actively running (instead of a lone spinner).
+const AnalyzingView = ({
+  imageData,
+  stage,
+  progress,
+}: {
+  imageData: string;
+  stage: number;
+  progress: number;
+}) => {
+  return (
+    <div className="py-2">
+      <div className="relative mx-auto w-full max-w-[260px] sm:max-w-xs overflow-hidden rounded-2xl border border-emerald-200 bg-black/5">
+        <img src={imageData} alt="Analyzing your photo" className="block w-full aspect-[3/4] object-cover" />
+
+        {/* Scan overlay */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          {/* Sweeping line */}
+          <div className="absolute left-0 right-0 h-1/3 -top-1/3 bg-gradient-to-b from-transparent via-emerald-400/50 to-transparent animate-[fsSweep_2.2s_linear_infinite]" />
+          {/* Pulsing landmark dots */}
+          <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full opacity-70">
+            {Array.from({ length: 42 }).map((_, i) => {
+              const cx = 14 + (i * 9) % 72;
+              const cy = 12 + Math.floor((i * 9) / 72) * 9 + (i % 3) * 2;
+              return (
+                <circle
+                  key={i}
+                  cx={cx}
+                  cy={cy}
+                  r={0.7}
+                  fill="rgba(16,185,129,0.95)"
+                  style={{ animation: `fsPulse 1.6s ${i * 34}ms ease-in-out infinite` }}
+                />
+              );
+            })}
+          </svg>
+          {/* Corner brackets */}
+          {[
+            "top-2 left-2 border-l-2 border-t-2",
+            "top-2 right-2 border-r-2 border-t-2",
+            "bottom-2 left-2 border-l-2 border-b-2",
+            "bottom-2 right-2 border-r-2 border-b-2",
+          ].map((c, i) => (
+            <div key={i} className={`absolute h-6 w-6 ${c} border-emerald-400 rounded-sm`} />
+          ))}
+        </div>
+      </div>
+
+      <div className="mx-auto mt-5 max-w-sm space-y-3">
+        <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <Loader2 className="h-4 w-4 animate-spin text-emerald-600" />
+          <span className="font-medium">{FACE_ANALYSIS_STAGES[stage]}</span>
+          <span className="ml-auto tabular-nums text-muted-foreground">{Math.round(progress)}%</span>
+        </div>
+        <ul className="space-y-1 text-xs text-muted-foreground">
+          {FACE_ANALYSIS_STAGES.slice(0, stage + 1).map((s, i) => (
+            <li key={i} className="flex items-center gap-2">
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
+              {s}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <style>{`
+        @keyframes fsSweep { 0% { transform: translateY(0); } 100% { transform: translateY(320%); } }
+        @keyframes fsPulse { 0%,100% { opacity:.2 } 50% { opacity:1 } }
+      `}</style>
+    </div>
+  );
+};
+
 // --- MAIN CALCULATOR COMPONENT ---
 export default function FaceShapeCalculator() {
   const [gender, setGender] = useState<Gender>("female");
@@ -1651,6 +1741,8 @@ export default function FaceShapeCalculator() {
   const [showCamera, setShowCamera] = useState(false);
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [analyzeStage, setAnalyzeStage] = useState(0);
+  const [analyzeProgress, setAnalyzeProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -1694,10 +1786,21 @@ export default function FaceShapeCalculator() {
 
     setIsLoading(true);
     setError(null);
+    setAnalyzeStage(0);
+    setAnalyzeProgress(0);
+
+    // Drive the staged "AI scan" animation in parallel with the work below so
+    // the user can see their photo being processed step by step.
+    const stageTimer = setInterval(() => {
+      setAnalyzeStage((s) => Math.min(s + 1, FACE_ANALYSIS_STAGES.length - 1));
+    }, 430);
+    const progTimer = setInterval(() => {
+      setAnalyzeProgress((p) => Math.min(p + Math.random() * 8 + 3, 96));
+    }, 160);
 
     try {
-      // Simulate typical processing time (1.5 seconds) for realism
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Give the staged animation time to play through for credibility.
+      await new Promise(resolve => setTimeout(resolve, 2600));
 
       // Deterministic image hashing function (to guarantee consistent responses per image)
       let hash = 0;
@@ -1730,6 +1833,9 @@ export default function FaceShapeCalculator() {
         }
       };
 
+      setAnalyzeProgress(100);
+      setAnalyzeStage(FACE_ANALYSIS_STAGES.length - 1);
+
       setResult({
         faceAnalysis: analysisResult,
         recommendations: hairstyleDatabase[selectedShape][genderKey] || [],
@@ -1746,6 +1852,8 @@ export default function FaceShapeCalculator() {
       console.error("Analysis error:", err);
       setError("Failed to analyze face. Please try again with a clearer photo.");
     } finally {
+      clearInterval(stageTimer);
+      clearInterval(progTimer);
       setIsLoading(false);
     }
   };
@@ -1992,10 +2100,16 @@ export default function FaceShapeCalculator() {
 
             {/* Image Input Area */}
             <div className="border-2 border-dashed border-muted rounded-xl p-4 md:p-6">
-              {showCamera ? (
-                <WebcamCapture 
-                  onCapture={handleCameraCapture} 
-                  onClose={() => setShowCamera(false)} 
+              {isLoading && imageData ? (
+                <AnalyzingView
+                  imageData={imageData}
+                  stage={analyzeStage}
+                  progress={analyzeProgress}
+                />
+              ) : showCamera ? (
+                <WebcamCapture
+                  onCapture={handleCameraCapture}
+                  onClose={() => setShowCamera(false)}
                 />
               ) : imageData ? (
                 <ImagePreview 

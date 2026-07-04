@@ -562,14 +562,14 @@ const WASM_URL =
   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
 
 const ANALYSIS_STAGES = [
-  "Initializing neural model…",
-  "Detecting 468 facial landmarks…",
-  "Mapping geometric structure…",
+  "Fetching your photo…",
+  "Detecting your face…",
+  "Mapping 468 facial landmarks…",
   "Measuring golden-ratio proportions…",
-  "Scoring facial symmetry…",
-  "Analyzing thirds & fifths…",
+  "Scoring your facial symmetry…",
+  "Analyzing thirds, fifths & features…",
   "Evaluating jaw, eyes & lips…",
-  "Compiling harmony report…",
+  "Determining your beauty score…",
 ]
 
 export default function AiAttractivenessTest() {
@@ -932,11 +932,19 @@ function AnalyzingStep({
 }: { imageUrl: string | null; stage: number; progress: number }) {
   return (
     <div className="py-2">
-      <div className="relative mx-auto max-w-md overflow-hidden rounded-2xl border bg-black/5 dark:bg-white/5">
+      <div className="relative mx-auto w-full max-w-[280px] sm:max-w-md overflow-hidden rounded-2xl border bg-black/5 dark:bg-white/5">
         {imageUrl && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={imageUrl} alt="Analyzing" className="block w-full" />
+          <img src={imageUrl} alt="Analyzing your photo" className="block w-full aspect-[3/4] object-cover sm:aspect-auto sm:object-contain" />
         )}
+
+        {/* Live stage caption pinned to the photo */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/70 via-black/30 to-transparent px-3 pb-3 pt-8">
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-white">
+            <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-fuchsia-300" />
+            <span className="truncate">{ANALYSIS_STAGES[stage]}</span>
+          </div>
+        </div>
 
         {/* Sweep line */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
