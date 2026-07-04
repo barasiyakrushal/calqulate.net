@@ -12,6 +12,8 @@ import { fitTrajectory, forecast, isRealChange, METRIC_NOISE, type SeriesPoint }
 import { computeNextLevers, type LeverResult } from "@/lib/vitals/nextLever";
 import { calcLongevityIndex, calcBiologicalAge, type HealthInput, type LongevityResult, type BioAgeResult } from "@/lib/healthCalculations";
 import { LongevityHero } from "@/components/health/LongevityHero";
+import { PremiumGate } from "@/components/vitals/PremiumGate";
+import Link from "next/link";
 import { BodyAvatarCard } from "@/components/health/BodyAvatarCard";
 import type { VitalsReport } from "@/types/vitals";
 
@@ -130,12 +132,14 @@ export default async function DashboardPage() {
         )}
       </section>
 
-      {/* Real engine output: trajectory + personalized next levers */}
-      {paid && (
+      {/* Real engine output: trajectory + personalized next levers (Premium) */}
+      {paid ? (
         <div className="grid gap-6 lg:grid-cols-2">
           <TrajectoryPanel s={trajectory} />
           <NextLeversPanel levers={levers} />
         </div>
+      ) : (
+        <PremiumGate locked feature="Trajectory & next-levers simulator" description="Your 8-week forecast and personalized, ranked highest-impact levers." />
       )}
 
       <section className="rounded-2xl border bg-white p-6">
@@ -143,9 +147,12 @@ export default async function DashboardPage() {
         {paid ? (
           <MetricForm persist />
         ) : (
-          <p className="text-sm text-gray-600">
-            Upgrade to Vitals Pro to save measurements and build your trend.
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-gray-600">Saving a full biometric measurement and building your trend is a Premium feature.</p>
+            <Link href="/pricing?feature=Add-a-measurement" className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
+              Unlock with Premium
+            </Link>
+          </div>
         )}
       </section>
 

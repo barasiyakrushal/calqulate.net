@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
+import { FreeVsPremium } from "@/components/marketing/FreeVsPremium"
 import { Button } from "@/components/ui/button"
 import { SearchBar } from "@/components/search/search-bar"
 import { ScoreGauge } from "@/components/vitals/ScoreGauge"
@@ -563,12 +564,16 @@ export default async function HomePage() {
                 </div>
 
                 <div className="mt-5 sm:mt-7 flex flex-wrap justify-center gap-3 lg:justify-start">
+                  {/* TOFU: free-start (login required) + gold Premium (pricing) */}
                   <Button size="lg" className="w-full sm:w-auto rounded-xl bg-brand px-7 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-brand-600 min-h-[44px]" asChild>
-                    <Link href="/product/glp1-progress-tracker">Get my Metabolism Score<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link href="/login?next=/dashboard">Start free<ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-xl border-brand bg-white px-7 py-3 font-semibold text-brand-800 transition hover:bg-brand-50 min-h-[44px]" asChild>
-                    <Link href="/how-it-works">See how it works</Link>
+                  <Button size="lg" className="w-full sm:w-auto rounded-xl bg-gradient-to-r from-gold-light to-gold px-7 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5 hover:opacity-95 min-h-[44px]" asChild>
+                    <Link href="/pricing">Go Premium<ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
+                </div>
+                <div className="mt-3 text-center lg:text-left">
+                  <Link href="/how-it-works" className="text-sm font-medium text-brand-700 hover:underline">See how it works →</Link>
                 </div>
 
                 <div className="mt-7 sm:mt-9 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-faint lg:justify-start">
@@ -728,6 +733,13 @@ export default async function HomePage() {
             <p className="mt-6 text-center text-xs text-white/45">
               All calculations are pure, transparent code - no black-box AI. Methodology is shown on every result.
             </p>
+          </div>
+        </section>
+
+        {/* ── FREE vs PREMIUM (before founder vision — keeps the conversion flow) ── */}
+        <section className="bg-white py-12 sm:py-16">
+          <div className="container mx-auto px-3 sm:px-4">
+            <FreeVsPremium showCta />
           </div>
         </section>
 
@@ -1201,8 +1213,8 @@ export default async function HomePage() {
                 className="bg-gradient-to-r from-gold-light to-gold hover:opacity-95 text-gold-ink font-bold px-8 rounded-xl shadow-[0_8px_20px_rgba(245,158,11,.35)]"
                 asChild
               >
-                <Link href="/product/glp-1-progress-tracker">
-                  Start with GLP-1 Progress Tracker
+                <Link href="/login?next=/dashboard">
+                  Start free
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -1212,7 +1224,7 @@ export default async function HomePage() {
                 className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white px-8 rounded-xl font-semibold"
                 asChild
               >
-                <Link href="/search">Or try any free snapshot</Link>
+                <Link href="/pricing">See Premium plans</Link>
               </Button>
             </div>
             <p className="mt-8 text-xs text-white/45">

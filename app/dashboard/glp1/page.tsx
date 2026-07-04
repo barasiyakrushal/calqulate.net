@@ -45,6 +45,7 @@ import { ProgressChart } from "@/components/glp1/ProgressChart";
 import { TodayForecastCard } from "@/components/glp1/TodayForecastCard";
 import { ShareScorecard } from "@/components/glp1/ShareScorecard";
 import { CorrelationInsights } from "@/components/glp1/CorrelationInsights";
+import { PremiumGate, LockBadge } from "@/components/vitals/PremiumGate";
 import type { Glp1EntityName } from "@/lib/glp1/schemas";
 import { Activity, Syringe, Scale, Utensils, Target } from "lucide-react";
 
@@ -254,10 +255,12 @@ export default async function Glp1TrackerPage() {
       {/* Coaching banner — turns the dashboard from passive into a guide */}
       <CoachBanner messages={coach} />
 
-      {/* "Today" forecast — the daily-open hook: appetite / energy / side-effects for this day of the cycle */}
+      {/* "Today" forecast (Premium) — appetite / energy / side-effects for this day of the cycle */}
       {forecast?.available && (
         <div id="today" className="scroll-mt-24">
-          <TodayForecastCard forecast={forecast} />
+          <PremiumGate locked={!paid} feature="Today’s forecast" description="Your appetite, energy and side-effect forecast for today’s dose-cycle day." blur>
+            <TodayForecastCard forecast={forecast} />
+          </PremiumGate>
         </div>
       )}
 
@@ -276,34 +279,46 @@ export default async function Glp1TrackerPage() {
           sub={journey?.projectedNextKg ? `Projected next week ~${(journey.projectedNextKg * 2.2046226218).toFixed(1)} lb` : latestWeight ? `${latestWeight.weightKg.toFixed(1)} kg` : "No weight logged yet"}
           tone={journey && journey.lostKg > 0 ? "ok" : undefined}
         />
-        <SummaryCard
-          icon={<Syringe className="h-5 w-5" />}
-          label="Fat vs. muscle"
-          value={comp ? `${comp.leanLossPct}% lean` : "—"}
-          sub={comp ? comp.message : "Add 2+ body-composition entries"}
-          tone={comp?.level === "high" ? "warn" : comp?.level === "watch" ? "caution" : "ok"}
-        />
+        {paid ? (
+          <SummaryCard
+            icon={<Syringe className="h-5 w-5" />}
+            label="Fat vs. muscle"
+            value={comp ? `${comp.leanLossPct}% lean` : "—"}
+            sub={comp ? comp.message : "Add 2+ body-composition entries"}
+            tone={comp?.level === "high" ? "warn" : comp?.level === "watch" ? "caution" : "ok"}
+          />
+        ) : (
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="flex items-center gap-2 text-gray-400"><Syringe className="h-5 w-5" /><span className="text-xs font-medium uppercase tracking-wide">Fat vs. muscle</span></div>
+            <div className="mt-2"><LockBadge feature="Fat-vs-muscle trend" /></div>
+            <p className="mt-1 text-xs leading-relaxed text-gray-500">Muscle-loss protection insight is a Premium feature.</p>
+          </div>
+        )}
       </div>
 
       {/* Progress & prediction chart — real weigh-ins, projection cone, trial overlay, plateau shading */}
       {trajectory.points.length >= 2 && (
         <div id="chart" className="scroll-mt-24">
-          <ProgressChart
-            points={trajectory.points}
-            currentKg={trajectory.currentKg}
-            projectedKg={trajectory.projectedKg}
-            paceKgPerWeek={trajectory.paceKgPerWeek}
-            hasProjection={trajectory.hasProjection}
-            trialLabel={trialLabel}
-            plateau={{ status: plateau.status, message: plateau.message, plateauStartMs: plateau.plateauStartMs, weeksStalled: plateau.weeksStalled }}
-          />
+          <PremiumGate locked={!paid} feature="Progress & prediction chart" description="Your weigh-ins with a projection cone, trial overlay and plateau detection." blur>
+            <ProgressChart
+              points={trajectory.points}
+              currentKg={trajectory.currentKg}
+              projectedKg={trajectory.projectedKg}
+              paceKgPerWeek={trajectory.paceKgPerWeek}
+              hasProjection={trajectory.hasProjection}
+              trialLabel={trialLabel}
+              plateau={{ status: plateau.status, message: plateau.message, plateauStartMs: plateau.plateauStartMs, weeksStalled: plateau.weeksStalled }}
+            />
+          </PremiumGate>
         </div>
       )}
 
-      {/* Personal correlation engine — which of your habits move your weekly loss */}
+      {/* Personal correlation engine (Premium) — which of your habits move your weekly loss */}
       {correlations.confidence !== "insufficient" && (
         <div id="drivers" className="scroll-mt-24">
-          <CorrelationInsights result={correlations} />
+          <PremiumGate locked={!paid} feature="Correlation engine" description="Which of your own habits — sleep, protein, injection site — actually move your weekly loss." blur>
+            <CorrelationInsights result={correlations} />
+          </PremiumGate>
         </div>
       )}
 
@@ -325,10 +340,12 @@ export default async function Glp1TrackerPage() {
           nextDoseLabel={nextDoseLabel}
           pushEnabled={pushEnabled}
         />
-        <RefillTracker
-          medication={activeMed ? { id: activeMed.id, name: activeMedName!, doseIntervalHours: activeMed.doseIntervalHours } : null}
-          latestRefill={latestRefill ? { filledDate: latestRefill.filledDate, dosesSupplied: latestRefill.dosesSupplied, pharmacy: latestRefill.pharmacy, copayUsd: latestRefill.copayUsd, priorAuthStatus: latestRefill.priorAuthStatus } : null}
-        />
+        <PremiumGate locked={!paid} feature="Refill tracker" description="Supply projection, copay and prior-auth tracking.">
+          <RefillTracker
+            medication={activeMed ? { id: activeMed.id, name: activeMedName!, doseIntervalHours: activeMed.doseIntervalHours } : null}
+            latestRefill={latestRefill ? { filledDate: latestRefill.filledDate, dosesSupplied: latestRefill.dosesSupplied, pharmacy: latestRefill.pharmacy, copayUsd: latestRefill.copayUsd, priorAuthStatus: latestRefill.priorAuthStatus } : null}
+          />
+        </PremiumGate>
       </div>
 
       {/* Clinical-study benchmark */}
@@ -363,8 +380,14 @@ export default async function Glp1TrackerPage() {
         </div>
       )}
 
-      {/* Dosing sweet spot — most loss for the least side effects, from your data */}
-      {showSweetSpot && <div id="sweet-spot" className="scroll-mt-24"><SweetSpotCard result={sweet} /></div>}
+      {/* Dosing sweet spot (Premium) — most loss for the least side effects, from your data */}
+      {showSweetSpot && (
+        <div id="sweet-spot" className="scroll-mt-24">
+          <PremiumGate locked={!paid} feature="Dosing sweet-spot" description="The dose that gave you the most loss for the least side effects, from your own data." blur>
+            <SweetSpotCard result={sweet} />
+          </PremiumGate>
+        </div>
+      )}
 
       {/* Logging */}
       <div id="log" className="scroll-mt-24">

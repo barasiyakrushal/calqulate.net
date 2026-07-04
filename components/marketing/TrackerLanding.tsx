@@ -7,6 +7,7 @@ import { FaqAccordion } from "@/components/glp1/marketing/FaqAccordion";
 import { ScreenshotFrame } from "@/components/glp1/marketing/ScreenshotFrame";
 import { PremiumPricingCard } from "@/components/glp1/marketing/PremiumPricingCard";
 import { StickyCtaBar } from "@/components/glp1/marketing/StickyCtaBar";
+import { FreeVsPremium } from "@/components/marketing/FreeVsPremium";
 
 // ─── Config types ─────────────────────────────────────────────────────────────
 
@@ -358,6 +359,13 @@ export function TrackerLanding({ config: c, paid }: { config: TrackerLandingConf
             )}
           </div>
           <Reveal className="mt-5 text-center text-sm text-faint">Cancel anytime · Switch monthly ↔ yearly anytime · Export your data anytime · Core tracking stays free.</Reveal>
+        </div>
+      </section>
+
+      {/* Free vs Premium — full feature matrix (from the feature registry) */}
+      <section className="bg-gray-50 py-14 sm:py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <FreeVsPremium showCta />
         </div>
       </section>
 

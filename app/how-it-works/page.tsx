@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { FreeVsPremium } from "@/components/marketing/FreeVsPremium";
 import { SinglePlan } from "@/components/vitals/SinglePlan";
 import { getAccess, hasPaidAccess } from "@/lib/auth";
 import {
@@ -280,6 +281,13 @@ export default async function HowItWorksPage() {
                 Try a free snapshot tool
               </Link>
             </div>
+          </div>
+        </section>
+
+        {/* Free vs Premium — full feature matrix */}
+        <section className="bg-gray-50 py-12 sm:py-16 border-t border-gray-100">
+          <div className="container mx-auto px-3 sm:px-4">
+            <FreeVsPremium showCta />
           </div>
         </section>
 

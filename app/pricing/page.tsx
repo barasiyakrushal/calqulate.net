@@ -7,8 +7,9 @@ import { SocialProof } from "@/components/marketing/SocialProof";
 import { PremiumTrackersBand } from "@/components/marketing/PremiumTrackersBand";
 import { CheckoutStatus } from "@/components/payment/CheckoutStatus";
 import { FeatureComparison } from "@/components/marketing/FeatureComparison";
+import { FreeVsPremium } from "@/components/marketing/FreeVsPremium";
 import { getAccess, hasPaidAccess } from "@/lib/auth";
-import { Check, X, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Lock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Pricing | Calqulate Vitals — one simple plan, everything included",
@@ -41,7 +42,8 @@ const FAQS = [
   { q: "What devices does it work on?", a: "Any modern browser on phone, tablet or desktop. You can add it to your home screen as an app and turn on optional notifications." },
 ];
 
-export default async function PricingPage() {
+export default async function PricingPage({ searchParams }: { searchParams: { feature?: string } }) {
+  const gatedFeature = typeof searchParams?.feature === "string" ? searchParams.feature : null;
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -74,6 +76,16 @@ export default async function PricingPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Header />
       <CheckoutStatus />
+      {gatedFeature && !paid && (
+        <div className="border-b border-amber-200 bg-amber-50">
+          <div className="container mx-auto flex items-center gap-3 px-3 py-3 sm:px-4">
+            <Lock className="h-5 w-5 shrink-0 text-amber-600" />
+            <p className="text-sm text-amber-800">
+              <span className="font-semibold">{gatedFeature}</span> is a Premium feature. Subscribe to Calqulate Vitals below to unlock it and the full predictive layer.
+            </p>
+          </div>
+        </div>
+      )}
       <main id="main" className="flex-1">
         {/* Hero */}
         <section className="bg-gradient-to-br from-emerald-50 to-white py-12 sm:py-16">
@@ -94,28 +106,13 @@ export default async function PricingPage() {
           </div>
         </section>
 
-        {/* Free vs paid */}
+        {/* Free vs Premium — full matrix, driven by the feature registry */}
         <section className="py-10 sm:py-12 bg-gray-50 border-y border-gray-100">
-          <div className="container mx-auto px-3 sm:px-4 max-w-3xl">
-            <h2 className="text-center text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-8">What is free vs what you pay for</h2>
-            <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
-              <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6">
-                <h3 className="font-bold text-gray-900">Free, no account</h3>
-                <ul className="mt-4 space-y-2 text-sm text-gray-700">
-                  {["All 50+ calculators", "One-time metabolic snapshot", "Your score, heart age and risk, once", "No saved history"].map((f) => (
-                    <li key={f} className="flex gap-2"><Check className="h-4 w-4 mt-0.5 flex-shrink-0 text-emerald-600" /> {f}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="rounded-2xl border-2 border-emerald-600 bg-white p-5 sm:p-6">
-                <h3 className="font-bold text-gray-900">Calqulate Vitals members</h3>
-                <ul className="mt-4 space-y-2 text-sm text-gray-700">
-                  {["Everything in free, plus saved history and trends", "Longevity Index, Future You, GLP-1 Autopilot", "Weekly email and mobile notifications", "Doctor PDF and full lab tracking"].map((f) => (
-                    <li key={f} className="flex gap-2"><Check className="h-4 w-4 mt-0.5 flex-shrink-0 text-emerald-600" /> {f}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+          <div className="container mx-auto px-3 sm:px-4">
+            <FreeVsPremium
+              heading="What’s free vs. Premium"
+              subheading="Every logging tool, the PK-curve teaser, the trial benchmark and the shareable scorecard stay free forever. Premium unlocks the predictions: forecasts, simulators, your correlation engine, muscle-loss insight, multi-compound and unlimited history."
+            />
           </div>
         </section>
 
