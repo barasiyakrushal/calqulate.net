@@ -55,7 +55,7 @@ export function AppShell({ tier, isAdmin, email, children }: AppShellProps) {
         </Link>
       </div>
 
-      <div className="md:flex">
+      <div className="md:flex md:min-h-screen">
         {/* Persistent rail (md = icon rail, lg = full sidebar) */}
         <Sidebar variant="rail" tier={tier} isAdmin={isAdmin} email={email} />
 
@@ -86,8 +86,8 @@ export function AppShell({ tier, isAdmin, email, children }: AppShellProps) {
           />
         </div>
 
-        {/* Main content — the only vertical scroll container on md+ so the rail stays fixed */}
-        <main className="flex-1 md:h-screen md:overflow-y-auto">
+        {/* Main content — flows with the page; the rail stays visible via position:sticky */}
+        <main id="main" className="min-w-0 flex-1">
           <div className="mx-auto max-w-6xl px-4 py-6 md:px-8 md:py-10">{children}</div>
         </main>
       </div>

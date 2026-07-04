@@ -52,12 +52,19 @@ export function Sidebar({ variant, tier, isAdmin, email, onNavigate, onClose }: 
   const focusRing =
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900";
 
+  // Rail: the dark <aside> stretches to the full page height (flex stretch), while
+  // the nav sits in a sticky, viewport-tall inner wrapper — so the dark column
+  // always reaches the bottom (no white gap) and the nav stays pinned on scroll.
   const asideClasses = isDrawer
     ? "flex h-full w-full flex-col bg-gray-900 text-gray-300"
-    : "hidden md:flex md:h-screen md:w-16 md:flex-col md:border-r md:border-gray-800 bg-gray-900 text-gray-300 lg:w-60";
+    : "hidden md:flex md:w-16 md:flex-col md:border-r md:border-gray-800 bg-gray-900 text-gray-300 lg:w-60";
+  const innerClasses = isDrawer
+    ? "flex h-full w-full flex-col"
+    : "flex w-full flex-col md:sticky md:top-0 md:h-screen";
 
   return (
     <aside className={asideClasses}>
+      <div className={innerClasses}>
       {/* Wordmark */}
       <div className="flex items-center justify-between gap-2 border-b border-gray-800 px-4 py-4 lg:px-5">
         <Link
@@ -165,6 +172,7 @@ export function Sidebar({ variant, tier, isAdmin, email, onNavigate, onClose }: 
             {email}
           </p>
         )}
+      </div>
       </div>
     </aside>
   );

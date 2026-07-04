@@ -8,9 +8,15 @@ import {
   computeNextDoseMs,
   describeDueIn,
   benchmark,
+  todayForecast,
+  weightTrajectory,
+  detectPlateau,
+  weeklyCorrelations,
+  TRIAL_CURVES,
   doseSweetSpot,
   journeyMetrics,
   weeklyHealthScore,
+  buildScorecard,
   coachMessages,
   type Medication,
   type DoseLog,
@@ -35,6 +41,10 @@ import { Glp1ReportButton } from "@/components/glp1/Glp1ReportButton";
 import { ReconstitutionCalculator } from "@/components/glp1/ReconstitutionCalculator";
 import { RefillTracker } from "@/components/glp1/RefillTracker";
 import { SweetSpotCard } from "@/components/glp1/SweetSpotCard";
+import { ProgressChart } from "@/components/glp1/ProgressChart";
+import { TodayForecastCard } from "@/components/glp1/TodayForecastCard";
+import { ShareScorecard } from "@/components/glp1/ShareScorecard";
+import { CorrelationInsights } from "@/components/glp1/CorrelationInsights";
 import type { Glp1EntityName } from "@/lib/glp1/schemas";
 import { Activity, Syringe, Scale, Utensils, Target } from "lucide-react";
 
@@ -81,6 +91,36 @@ export default async function Glp1TrackerPage() {
       });
     }
   }
+
+  // ── Weight trajectory + plateau prediction (advanced-charts moat) ────────────
+  const trajectory = weightTrajectory({
+    weights: weights.map((w) => ({ takenAt: w.takenAt, weightKg: w.weightKg })),
+    compound: activeMed?.compound ?? null,
+    nowMs: Date.now(),
+  });
+  const plateau = detectPlateau(weights.map((w) => ({ takenAt: w.takenAt, weightKg: w.weightKg })), Date.now());
+  const trialLabel = activeMed?.compound ? TRIAL_CURVES[activeMed.compound].trial : null;
+
+  // ── Personal correlation engine ("what moves your results", research #9) ─────
+  const correlations = weeklyCorrelations({
+    weights: weights.map((w) => ({ takenAt: w.takenAt, weightKg: w.weightKg })),
+    checkins: checkins.map((c) => ({ loggedAt: c.loggedAt, sleepHours: c.sleepHours, craving: c.craving })),
+    foods: foods.map((f) => ({ loggedAt: f.loggedAt, proteinG: f.proteinG })),
+    exercises: exercises.map((e) => ({ loggedAt: e.loggedAt })),
+    sideEffects: symptoms.map((s) => ({ loggedAt: s.loggedAt, noSymptoms: s.noSymptoms, severity: s.severity })),
+    doses: doses.map((d) => ({ takenAt: d.takenAt, injectionSite: d.injectionSite, skipped: d.skipped })),
+    nowMs: Date.now(),
+  });
+
+  // ── "Today" dose-cycle forecast (daily-open hook) — GLP-1 compounds only ─────
+  const forecast = activeMed?.compound
+    ? todayForecast({
+        doses: doses.filter((d) => d.medicationId === activeMed.id && !d.skipped).map((d) => ({ takenAt: d.takenAt, amountMg: d.amountMg })),
+        compound: activeMed.compound,
+        intervalHours: activeMed.doseIntervalHours,
+        nowMs: Date.now(),
+      })
+    : null;
 
   // ── Dose reminder + next-dose computation ────────────────────────────────────
   const doseReminder = reminders.find((r) => r.kind === "dose" && r.medicationId === activeMed?.id) ?? null;
@@ -155,6 +195,23 @@ export default async function Glp1TrackerPage() {
     hasWeights: weights.length > 0,
   });
 
+  // ── Shareable weekly scorecard (organic growth loop) ─────────────────────────
+  const medLabelForCard =
+    activeMed?.brandName ??
+    (activeMed?.compound ? activeMed.compound[0].toUpperCase() + activeMed.compound.slice(1) : activeMed?.customName ?? "GLP-1");
+  const scorecard =
+    journey && weights.length >= 2
+      ? buildScorecard({
+          lostLb: journey.lostLb,
+          paceKgPerWeek: journey.paceKgPerWeek,
+          weeksOnMed: journey.weeksOnMed,
+          medLabel: medLabelForCard,
+          weeklyScore: weekly?.overall ?? null,
+          benchmark: bench ? { status: bench.status, deltaPct: bench.deltaPct, trial: bench.trial } : null,
+          plateau: plateau.status,
+        })
+      : null;
+
   // ── Merged recent timeline ───────────────────────────────────────────────────
   const timeline: TimelineItem[] = [
     ...doses.map((d): TimelineItem => ({ entity: "doseLog", id: d.id, when: d.takenAt, icon: "dose", text: `${d.amountMg} mg dose${d.injectionSite ? ` · ${d.injectionSite.replace(/-/g, " ")}` : ""}` })),
@@ -197,6 +254,13 @@ export default async function Glp1TrackerPage() {
       {/* Coaching banner — turns the dashboard from passive into a guide */}
       <CoachBanner messages={coach} />
 
+      {/* "Today" forecast — the daily-open hook: appetite / energy / side-effects for this day of the cycle */}
+      {forecast?.available && (
+        <div id="today" className="scroll-mt-24">
+          <TodayForecastCard forecast={forecast} />
+        </div>
+      )}
+
       {/* Summary cards */}
       <div id="vitals" className="grid gap-4 scroll-mt-24 sm:grid-cols-3">
         <SummaryCard
@@ -221,8 +285,37 @@ export default async function Glp1TrackerPage() {
         />
       </div>
 
+      {/* Progress & prediction chart — real weigh-ins, projection cone, trial overlay, plateau shading */}
+      {trajectory.points.length >= 2 && (
+        <div id="chart" className="scroll-mt-24">
+          <ProgressChart
+            points={trajectory.points}
+            currentKg={trajectory.currentKg}
+            projectedKg={trajectory.projectedKg}
+            paceKgPerWeek={trajectory.paceKgPerWeek}
+            hasProjection={trajectory.hasProjection}
+            trialLabel={trialLabel}
+            plateau={{ status: plateau.status, message: plateau.message, plateauStartMs: plateau.plateauStartMs, weeksStalled: plateau.weeksStalled }}
+          />
+        </div>
+      )}
+
+      {/* Personal correlation engine — which of your habits move your weekly loss */}
+      {correlations.confidence !== "insufficient" && (
+        <div id="drivers" className="scroll-mt-24">
+          <CorrelationInsights result={correlations} />
+        </div>
+      )}
+
       {/* Interactive journey + weekly health score */}
       {journey && <JourneyCoach journey={journey} weekly={weekly} />}
+
+      {/* Shareable branded scorecard — Reddit / Facebook / Instagram / doctor */}
+      {scorecard && (
+        <div id="share" className="scroll-mt-24">
+          <ShareScorecard data={scorecard} />
+        </div>
+      )}
 
       {/* Dose reminders + refills */}
       <div className="grid gap-4 lg:grid-cols-2">
