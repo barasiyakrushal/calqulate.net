@@ -96,14 +96,13 @@ export class RazorpayProvider implements PaymentProvider {
     const plan = await client.plans.fetch(planId) as unknown as RazorpayPlan;
     const totalCount = input.cadence === "yearly" ? 12 : 0; // 0 = infinite for monthly
 
-    // Create subscription — charge starts in 7 days (free trial)
-    const startAt = Math.floor(Date.now() / 1000) + 7 * 86400;
+    // Create subscription — no trial: the first cycle is charged immediately on
+    // authentication, matching the PayPal path (immediate payment).
     const sub = await client.subscriptions.create({
       plan_id: planId,
       customer_id: customerId,
       total_count: totalCount,
       customer_notify: 0,
-      start_at: startAt,
       notes: {
         supabase_user_id: input.userId,
         tier: input.tier,

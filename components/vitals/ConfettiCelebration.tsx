@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 /**
  * One-shot confetti burst for the welcome page. Pieces are generated after mount
@@ -25,6 +26,8 @@ export function ConfettiCelebration() {
   const [pieces, setPieces] = useState<Piece[]>([]);
 
   useEffect(() => {
+    // Fire the payment-success toast once, alongside the confetti burst.
+    toast.success("Payment successful! Welcome to Vitals Pro.");
     const arr: Piece[] = Array.from({ length: 70 }, (_, i) => ({
       id: i,
       left: Math.random() * 100,

@@ -1,10 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Check, ArrowRight, Loader2, Dumbbell, ShieldCheck } from "lucide-react";
 import { GatewayPicker } from "@/components/payment/GatewayPicker";
 import { useCheckout } from "@/hooks/useCheckout";
 import { getPrice, formatPrice, displaySubtitle } from "@/lib/payment/pricing";
+
+const GOLD_BTN =
+  "flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-4 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition-all duration-150 hover:-translate-y-0.5 disabled:opacity-60";
 
 const FEATURES = [
   "Trend chart (score / ASCVD / diabetes / heart-age)",
@@ -16,7 +19,7 @@ const FEATURES = [
   "Progress & prediction chart (projection + plateau)",
   "“What moves your results” correlation engine",
   "Dosing sweet-spot",
-  "Doctor PDF report",
+  "GLP-1 Doctor PDF report",
   "Fat-vs-muscle trend + muscle-loss flag",
   "Multi-compound support (GLP-1/peptide/TRT)",
   "Refill tracker (supply, copay, prior-auth)",
@@ -41,9 +44,23 @@ const HIGHLIGHTS = [
 
 export function SinglePlan({ paid }: { paid?: boolean }) {
   const [cadence, setCadence] = useState<"yearly" | "monthly">("yearly");
+  const [isIndia, setIsIndia] = useState(false);
   const { loading, error, checkout, retry } = useCheckout();
 
-  const currency = "USD";
+  // Resolve the visitor's country from server-side IP headers (reliable, not the
+  // browser locale). India → Razorpay/INR layout; everywhere else → PayPal/USD.
+  // Payment routing is decided server-side at checkout regardless, so a brief
+  // pre-detection flash never charges the wrong gateway.
+  useEffect(() => {
+    let active = true;
+    fetch("/api/geo")
+      .then((r) => r.json())
+      .then((d) => { if (active) setIsIndia(d?.country === "IN"); })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
+
+  const currency = isIndia ? "INR" : "USD";
   const price = getPrice("pro", cadence, currency);
   const formatted = formatPrice(price, currency);
   const unit = cadence === "yearly" ? "/year" : "/month";
@@ -133,27 +150,39 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
                 </button>
               </div>
             )}
-            <button
-              onClick={() => subscribe(true)}
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-4 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition-all duration-150 hover:-translate-y-0.5 disabled:opacity-60"
-            >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-              {loading ? "Redirecting…" : "Start Calqulate Vitals"}
-            </button>
-            <GatewayPicker />
-            <div className="text-center">
-              <button
-                onClick={() => subscribe(false)}
-                disabled={loading}
-                className="text-xs text-gray-400 underline-offset-2 hover:text-emerald-600 hover:underline"
-              >
-                or pay with your card
-              </button>
-            </div>
-            <p className="text-center text-xs text-gray-400">
-              Create your account, then pay securely. Cancel anytime.
-            </p>
+            {isIndia ? (
+              <>
+                {/* India → Razorpay (UPI, cards, netbanking), charged in INR. */}
+                <button onClick={() => subscribe(false)} disabled={loading} className={GOLD_BTN}>
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+                  {loading ? "Redirecting…" : "Start Calqulate Vitals"}
+                </button>
+                <p className="text-center text-xs text-gray-400">
+                  Pay via UPI, cards &amp; netbanking (Razorpay). Cancel anytime.
+                </p>
+              </>
+            ) : (
+              <>
+                {/* Non-India → PayPal (also accepts Visa/MC/Amex with no account). */}
+                <button onClick={() => subscribe(true)} disabled={loading} className={GOLD_BTN}>
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+                  {loading ? "Redirecting…" : "Start Calqulate Vitals"}
+                </button>
+                <GatewayPicker />
+                <div className="text-center">
+                  <button
+                    onClick={() => subscribe(false)}
+                    disabled={loading}
+                    className="text-xs text-gray-400 underline-offset-2 hover:text-emerald-600 hover:underline"
+                  >
+                    or pay with your card
+                  </button>
+                </div>
+                <p className="text-center text-xs text-gray-400">
+                  Create your account, then pay securely. Cancel anytime.
+                </p>
+              </>
+            )}
           </div>
         )}
       </div>

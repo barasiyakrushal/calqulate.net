@@ -26,15 +26,24 @@ export function useCheckout(options: UseCheckoutOptions = {}): UseCheckoutReturn
     async (tier: Tier, cadence: Cadence, usePaypal?: boolean) => {
       setLoading(true);
       setError(null);
-      const country = detectCountryFromBrowser();
-      const gateway = usePaypal !== false ? "paypal" : "razorpay";
+      // usePaypal === true  → PayPal explicitly (also accepts Visa/MC/Amex, no account needed).
+      // usePaypal === false → "pay with card": auto-detect by country
+      //                       (India → Razorpay/INR, everywhere else → PayPal/USD).
+      // undefined           → PayPal.
+      const gateway = usePaypal === false ? undefined : "paypal";
+      // For the auto path, let the server resolve country from IP headers (more reliable
+      // than the browser locale); for the explicit path, pass the browser hint.
+      const country = gateway ? detectCountryFromBrowser() : undefined;
       setLastAttempt({ tier, cadence, usePaypal });
 
       try {
+        const payload: Record<string, unknown> = { tier, cadence };
+        if (gateway) payload.gateway = gateway;
+        if (country) payload.country = country;
         const res = await fetch("/api/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ gateway, tier, cadence, country }),
+          body: JSON.stringify(payload),
         });
 
         const data = await res.json().catch(() => ({}));
