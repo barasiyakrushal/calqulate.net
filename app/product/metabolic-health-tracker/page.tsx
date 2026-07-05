@@ -36,7 +36,7 @@ const config: TrackerLandingConfig = {
     badge: "Your score, tracked over time",
     h1: "Watch your metabolic health",
     h1Accent: "improve month over month",
-    sub: "Calqulate turns your numbers into one Metabolic Health Score, shows your real 10-year heart-attack and diabetes risk, and tells you the single highest-impact change to make next — then tracks it all falling over time.",
+    sub: "Think you have a sluggish metabolism? Calqulate turns your numbers into one Metabolic Health Score, shows your real 10-year heart-attack and diabetes risk, and tells you the single highest-impact change to make next. Then it tracks it all falling over time.",
     trustLine: "Built on the same equations clinicians use — ASCVD, Framingham & FINDRISC",
     screenshotLabel: "Dashboard — Metabolic Health Score, heart age & risk trend",
     screenshotSrc: "/screenshots/metabolic-dashboard.png",
@@ -44,7 +44,7 @@ const config: TrackerLandingConfig = {
   trust: { label: "Built on validated models", items: ["Pooled Cohort Equations", "Framingham", "FINDRISC", "Longevity Index"] },
   whatYouGet: {
     heading: "From a one-time number to a health trajectory",
-    sub: "Most health tools give you a single reading and stop. Calqulate tracks the trend, scores it, and tells you what to fix first.",
+    sub: "Most health tools give you a single reading and stop. Calqulate tracks the trend, scores it, and shows whether your metabolic diet and daily habits are actually moving the number, so you know what to fix first.",
     items: [
       { icon: Gauge, t: "One Metabolic Health Score", d: "A composite 0–100 score from validated models, tracked over time." },
       { icon: HeartPulse, t: "Real heart & diabetes risk", d: "Your 10-year ASCVD risk, heart age and FINDRISC diabetes risk." },
@@ -137,6 +137,16 @@ const config: TrackerLandingConfig = {
   testimonials: getReviews("metabolic").map((r) => ({ q: r.quote, n: r.name, m: r.context })),
   faqs: [
     { q: "What is the Metabolic Health Score?", a: "It's one composite score (0–100) built from peer-reviewed clinical equations — the Pooled Cohort Equations, Framingham and FINDRISC — that rolls up your cardiovascular, metabolic and body-composition picture. The methodology is shown on every result." },
+    {
+      q: "What causes a sluggish metabolism, and can I fix it?",
+      a: "A slow or sluggish metabolism usually comes down to low muscle mass, poor sleep, high stress, and sitting too much, not one single cause. The fix is to protect your muscle, walk after meals, sleep well, and eat enough protein. Calqulate scores it all so you can watch your metabolism improve as you change those habits.",
+      link: { label: "How to fix a sluggish metabolism naturally", href: "/answers/boost-sluggish-metabolism" },
+    },
+    {
+      q: "What are the best metabolism boosting foods and supplements?",
+      a: "The best metabolism boosting foods are high-protein, high-fiber options like eggs, lean meat, Greek yogurt, legumes, and green vegetables, because protein burns the most energy to digest. Most metabolism boosting supplements do very little on their own. What actually matters is whether your metabolic meals move your score over time, which is exactly what this tracker shows you.",
+      link: { label: "Metabolism boosting foods that increase your metabolism", href: "/answers/boost-sluggish-metabolism" },
+    },
     { q: "Is it accurate, and what's a good score?", a: "The score is built from validated published models, not a black box. Any single reading is an estimate, so the real value is the trend — re-check every few weeks and watch it climb. Higher is better, and the tracker shows which levers move it most." },
     { q: "What models is this based on?", a: "The Pooled Cohort Equations for 10-year ASCVD risk, Framingham for heart age, and FINDRISC for type-2 diabetes risk — all transparent, published models." },
     { q: "Is it free to start?", a: "Yes. Every calculator and your first metabolic snapshot are free, with no account and nothing saved. Calqulate Vitals adds saved history, the trajectory engine, the Future You simulator and your next-lever protocol." },

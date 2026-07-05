@@ -40,7 +40,7 @@ export interface TrackerLandingConfig {
   compare: { heading: string; sub: string; cols: [string, string]; rows: CompareRow[]; priceRow: { us: string; b: string; c: string }; note: string };
   pricing: { freeTitle: string; freePrice: string; freeUnit: string; freeSub: string; freeFeatures: string[]; freePrimary: { label: string; href: string } };
   testimonials: { q: string; n: string; m: string }[];
-  faqs: { q: string; a: string }[];
+  faqs: { q: string; a: string; link?: { label: string; href: string } }[];
   finalCta: { h2: string; sub: string };
 }
 

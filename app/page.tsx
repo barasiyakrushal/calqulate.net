@@ -551,7 +551,7 @@ export default async function HomePage() {
               <div className="lg:col-span-6 text-center lg:text-left lg:pl-8 xl:pl-14">
                 <div className="mb-5 sm:mb-6 inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-bold uppercase tracking-wide text-brand-800">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-brand" />
-                  For GLP-1 medication users — Ozempic, Wegovy &amp; Mounjaro
+                  For GLP-1 medication users, Ozempic, Wegovy &amp; Mounjaro
                 </div>
 
                 <h1 className="animate-hero-in text-balance text-3xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.07] tracking-tight text-ink">

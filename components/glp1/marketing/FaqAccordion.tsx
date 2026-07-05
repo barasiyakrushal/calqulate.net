@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Plus, Minus } from "lucide-react";
 
+type FaqItem = { q: string; a: string; link?: { label: string; href: string } };
+
 /** Smooth height-animated accordion; first item open by default. */
-export function FaqAccordion({ items }: { items: { q: string; a: string }[] }) {
+export function FaqAccordion({ items }: { items: FaqItem[] }) {
   const [open, setOpen] = useState(0);
 
   return (
@@ -27,6 +30,11 @@ export function FaqAccordion({ items }: { items: { q: string; a: string }[] }) {
             <div className={`grid px-5 transition-all duration-300 ease-out sm:px-6 ${isOpen ? "grid-rows-[1fr] pb-5 opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
               <div className="overflow-hidden">
                 <p className="text-[15px] leading-relaxed text-copy">{it.a}</p>
+                {it.link && (
+                  <Link href={it.link.href} className="mt-2 inline-block text-[15px] font-semibold text-brand-800 hover:underline">
+                    {it.link.label}
+                  </Link>
+                )}
               </div>
             </div>
           </div>

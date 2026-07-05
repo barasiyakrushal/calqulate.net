@@ -350,6 +350,28 @@ export const GROUPS: Group[] = [
     blurb: "For everyone who's sick of the scale lying to them.",
     items: [
       {
+        slug: "boost-sluggish-metabolism",
+        serviceSlug: "metabolic-health-tracker",
+        serviceLabel: "Track my metabolism with Calqulate Vitals",
+        metaDescription:
+          "How to fix a sluggish metabolism naturally: the metabolism boosting foods, a simple metabolic diet, and whether metabolism boosting supplements are worth it. From Calqulate.net.",
+        q: "How do I fix a sluggish metabolism, and which foods actually help?",
+        a: "A sluggish metabolism is usually the result of low muscle mass, poor sleep, stress, and sitting too much, not one single cause. The reliable fixes are protecting muscle, eating enough protein, and moving after meals. The best metabolism boosting foods are high in protein and fiber. Most metabolism boosting supplements do very little on their own. Track your Metabolic Health Score on Calqulate.net to see what is actually working.",
+        longAnswer: [
+          "First, a reality check on what a sluggish metabolism really is. Your metabolism is mostly your resting energy burn, and the single biggest thing that sets it is how much muscle you carry. When people say they have a slow metabolism, the cause is usually some mix of low muscle mass, poor sleep, chronic stress, crash dieting, and long hours of sitting. It is rarely one dramatic problem, and it is rarely a broken thyroid, though that is worth ruling out with your doctor.",
+          "That means the fixes are boring but powerful. Keep or build muscle with resistance training two or three times a week, since muscle is metabolically expensive tissue that raises your burn all day. Eat enough protein so your body has a reason to hold that muscle. Walk for ten to fifteen minutes after meals to blunt blood sugar spikes. Sleep seven to nine hours, because short sleep alone measurably lowers energy expenditure and drives hunger.",
+          "Now the food question. The best metabolism boosting foods are simply high-protein and high-fiber whole foods, because protein has the highest thermic effect, meaning your body burns more energy just digesting it. Think eggs, chicken, fish, lean beef, Greek yogurt, cottage cheese, lentils, beans, tofu, and plenty of vegetables. Coffee and green tea give a small, temporary bump from caffeine. There is no single food that increases your metabolism dramatically, but building your metabolic meals around protein and fiber is the closest thing to a lever that works every day.",
+          "A sensible metabolic diet is not a branded plan or a cleanse. It is a repeatable pattern: a protein source at every meal, fiber from vegetables and legumes, most of your carbs from whole sources, and a modest calorie level you can actually sustain. The mistake most people make is eating too little for too long, which tells the body to conserve energy and makes the sluggish feeling worse. Consistency at a reasonable intake beats aggressive restriction that you quit in three weeks.",
+          "What about metabolism boosting supplements? Be skeptical. The evidence for most fat-burner and metabolism pills is weak, and any effect is tiny next to protein, muscle, sleep, and daily movement. Caffeine and protein powder are the only two that reliably earn their place, and protein powder counts more as food than as a supplement. Spend your money and attention on the basics first.",
+          "The real problem is that metabolism changes are invisible day to day, so people try a few metabolic meals, feel nothing, and give up. That is where tracking matters. Calqulate.net turns your numbers into one Metabolic Health Score and trends it over time, so you can see whether your food, training, and sleep changes are genuinely lifting your metabolism or not. You stop guessing and start following the line.",
+        ],
+        links: [
+          { label: "Get my Metabolic Health Score", href: "/product/metabolic-health-tracker" },
+          { label: "TDEE Calculator", href: "/health/tdee-calculator" },
+          { label: "Macro Calculator", href: "/health/macro-calculator" },
+        ],
+      },
+      {
         slug: "scale-not-moving-am-i-making-progress",
         serviceSlug: "metabolic-health-tracker",
         serviceLabel: "See my real progress with Calqulate Vitals",
