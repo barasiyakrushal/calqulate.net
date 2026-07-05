@@ -1,11 +1,11 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { Check, ArrowRight, Star, BadgeCheck, CloudUpload } from "lucide-react";
+import { ArrowRight, Star, BadgeCheck, CloudUpload } from "lucide-react";
 import { Reveal } from "@/components/glp1/marketing/Reveal";
 import { CountUp } from "@/components/glp1/marketing/CountUp";
 import { FaqAccordion } from "@/components/glp1/marketing/FaqAccordion";
 import { ScreenshotFrame } from "@/components/glp1/marketing/ScreenshotFrame";
-import { PremiumPricingCard } from "@/components/glp1/marketing/PremiumPricingCard";
+import { SinglePlan } from "@/components/vitals/SinglePlan";
 import { StickyCtaBar } from "@/components/glp1/marketing/StickyCtaBar";
 import { FreeVsPremium } from "@/components/marketing/FreeVsPremium";
 
@@ -330,34 +330,15 @@ export function TrackerLanding({ config: c, paid }: { config: TrackerLandingConf
             <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">Simple, transparent pricing</h2>
             <p className="mt-3 text-[17px] leading-relaxed text-copy">One plan that includes everything — every tracker and bonus.</p>
           </Reveal>
-          <div className="mx-auto mt-10 grid max-w-4xl items-stretch gap-5 lg:grid-cols-2">
-            <Reveal>
-              <div className="flex h-full flex-col rounded-2xl border border-line bg-surface p-7">
-                <div className="text-sm font-bold uppercase tracking-wide text-faint">{c.pricing.freeTitle}</div>
-                <div className="mt-2"><span className="text-4xl font-extrabold text-ink">{c.pricing.freePrice}</span><span className="text-faint">{c.pricing.freeUnit}</span></div>
-                <p className="mt-1 text-sm text-faint">{c.pricing.freeSub}</p>
-                <ul className="mt-5 space-y-2 text-sm text-copy">
-                  {c.pricing.freeFeatures.map((x) => <li key={x} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand" /> {x}</li>)}
-                </ul>
-                <div className="mt-6 flex flex-col gap-2">
-                  <Link href={c.pricing.freePrimary.href} className={`${btnGreen} w-full`}>{paid ? "Go to dashboard" : c.pricing.freePrimary.label} <ArrowRight className="h-4 w-4" /></Link>
-                  <Link href={c.startFreeHref} className={`${btnOutline} w-full`}>{paid ? "Go to dashboard" : "Start the free tracker"}</Link>
-                </div>
-              </div>
+          <Reveal className="mt-10">
+            <SinglePlan paid={paid} />
+          </Reveal>
+          {!paid && (
+            <Reveal className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link href={c.pricing.freePrimary.href} className={btnGreen}>{c.pricing.freePrimary.label} <ArrowRight className="h-4 w-4" /></Link>
+              <Link href={c.startFreeHref} className={btnOutline}>Start the free tracker</Link>
             </Reveal>
-            {paid ? (
-              <Reveal delay={100}>
-                <div className="flex h-full flex-col items-center justify-center rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-7 text-center">
-                  <span className="inline-block rounded-full bg-emerald-200 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-800">Active</span>
-                  <h3 className="mt-4 text-xl font-bold text-emerald-900">You already have Vitals</h3>
-                  <p className="mt-2 text-sm text-emerald-700">Your subscription is active. Go to your dashboard to see your scores and trends.</p>
-                  <Link href="/dashboard" className="mt-6 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700">Go to dashboard →</Link>
-                </div>
-              </Reveal>
-            ) : (
-              <Reveal delay={100}><PremiumPricingCard /></Reveal>
-            )}
-          </div>
+          )}
           <Reveal className="mt-5 text-center text-sm text-faint">Cancel anytime · Switch monthly ↔ yearly anytime · Export your data anytime · Core tracking stays free.</Reveal>
         </div>
       </section>

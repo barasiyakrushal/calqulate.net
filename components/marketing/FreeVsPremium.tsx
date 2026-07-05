@@ -64,9 +64,12 @@ export function FreeVsPremium({
         <div className="mt-6 text-center">
           <Link
             href="/pricing"
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700"
+            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-gold-light to-gold px-6 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition-all duration-150 hover:-translate-y-0.5"
           >
-            See plans — $9.99/mo or $79/yr <ArrowRight className="h-4 w-4" />
+            <span className="gold-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-12deg] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+            <span className="relative inline-flex items-center gap-2">
+              See plans — $9.99/mo or $79/yr <ArrowRight className="h-4 w-4" />
+            </span>
           </Link>
           <p className="mt-2 text-xs text-gray-500">Start free, no card. Upgrade when you want the predictions.</p>
         </div>

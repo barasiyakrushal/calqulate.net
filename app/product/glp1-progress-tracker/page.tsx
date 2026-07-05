@@ -3,13 +3,13 @@ import Link from "next/link";
 import {
   Syringe, Utensils, LineChart, Scale, HeartPulse, ShieldCheck, BellRing, Target,
   Activity, FlaskConical, Dumbbell, Sparkles, FileText, Pill, Flame,
-  Check, ArrowRight, Star, BadgeCheck, CloudUpload,
+  ArrowRight, Star, BadgeCheck, CloudUpload,
 } from "lucide-react";
 import { Reveal } from "@/components/glp1/marketing/Reveal";
 import { CountUp } from "@/components/glp1/marketing/CountUp";
 import { FaqAccordion } from "@/components/glp1/marketing/FaqAccordion";
 import { ScreenshotFrame } from "@/components/glp1/marketing/ScreenshotFrame";
-import { PremiumPricingCard } from "@/components/glp1/marketing/PremiumPricingCard";
+import { SinglePlan } from "@/components/vitals/SinglePlan";
 import { StickyCtaBar } from "@/components/glp1/marketing/StickyCtaBar";
 import { MoatSection } from "@/components/marketing/MoatSection";
 import { getReviews } from "@/lib/reviews";
@@ -146,7 +146,6 @@ export default async function Glp1TrackerLanding() {
   const startFreeHref = paid ? "/dashboard/glp1" : "/signup?next=/dashboard/glp1";
   const goDashboard = <Link href={startFreeHref} className={btnGreen}>Go to dashboard <ArrowRight className="h-4 w-4" /></Link>;
   const startFreeLink = <Link href={startFreeHref} className={btnGreen}>Start free <ArrowRight className="h-4 w-4" /></Link>;
-  const freeCalcLink = <Link href={paid ? "/dashboard/glp1" : "/health/glp-1-dose-calculator"} className={`${btnGreen} w-full`}>Go to dashboard <ArrowRight className="h-4 w-4" /></Link>;
 
   return (
     <main id="main" className="scroll-smooth bg-surface text-copy">
@@ -166,7 +165,7 @@ export default async function Glp1TrackerLanding() {
               <span className="text-brand">actually has your back</span>
             </h1>
             <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-copy">
-              Track your shots, food, weight and side effects in one place. Get free medication-level charts,
+              Track your GLP-1 shots, food, weight and side effects in one place. Get free medication-level charts,
               plus a bonus Heart Age and Metabolism tracker — and your data never disappears.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -202,8 +201,16 @@ export default async function Glp1TrackerLanding() {
           <Reveal className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">Your GLP-1 journey, finally in one place</h2>
             <p className="mt-3 text-[17px] leading-relaxed text-copy">
-              Most people juggle three apps — one for shots, one for food, one for weight. Calqulate Vitals brings it together,
-              so nothing important slips through the cracks.
+              Whether you're on GLP-1 shots or the oral GLP-1 pill, most people juggle three apps — one for doses,
+              one for food, one for weight. Calqulate Vitals works with every GLP-1 drug for weight loss and brings it
+              together, so nothing important slips through the cracks.
+            </p>
+            <p className="mt-3 text-sm text-faint">
+              Still deciding?{" "}
+              <Link href="/answers/best-glp-1-for-weight-loss" className="font-semibold text-brand-800 hover:underline">
+                See which GLP-1 is best for weight loss
+              </Link>
+              .
             </p>
           </Reveal>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -473,46 +480,15 @@ export default async function Glp1TrackerLanding() {
             <p className="mt-3 text-[17px] leading-relaxed text-copy">One plan that includes everything — bonuses and all.</p>
           </Reveal>
 
-          <div className="mx-auto mt-10 grid max-w-4xl items-stretch gap-5 lg:grid-cols-2">
-            {/* Free (left) — leads with the free GLP-1 dose calculator */}
-            <Reveal>
-              <div className="flex h-full flex-col rounded-2xl border border-line bg-surface p-7">
-                <div className="text-sm font-bold uppercase tracking-wide text-faint">Free</div>
-                <div className="mt-2"><span className="text-4xl font-extrabold text-ink">$0</span><span className="text-faint">/forever</span></div>
-                <p className="mt-1 text-sm text-faint">Start with the free GLP-1 dose calculator and core tracking — no account needed to try it.</p>
-                <ul className="mt-5 space-y-2 text-sm text-copy">
-                  {[
-                    "Free GLP-1 dose calculator (units to draw)",
-                    "Shot, weight, food & side-effect logging",
-                    "Smart dose reminders + countdown",
-                    "Free medication-level curves",
-                  ].map((x) => (
-                    <li key={x} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand" /> {x}</li>
-                  ))}
-                </ul>
-                <div className="mt-6 flex flex-col gap-2">
-                  {freeCalcLink}
-                  {!paid && <Link href={startFreeHref} className={`${btnOutline} w-full`}>Start the free tracker</Link>}
-                </div>
-              </div>
+          <Reveal className="mt-10">
+            <SinglePlan paid={paid} />
+          </Reveal>
+          {!paid && (
+            <Reveal className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link href="/health/glp-1-dose-calculator" className={btnGreen}>Free GLP-1 dose calculator <ArrowRight className="h-4 w-4" /></Link>
+              <Link href={startFreeHref} className={btnOutline}>Start the free tracker</Link>
             </Reveal>
-
-            {/* Premium (right) — one plan, monthly/yearly toggle, real checkout flow */}
-            {paid ? (
-              <Reveal delay={100}>
-                <div className="flex h-full flex-col items-center justify-center rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-7 text-center">
-                  <span className="inline-block rounded-full bg-emerald-200 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-800">Active</span>
-                  <h3 className="mt-4 text-xl font-bold text-emerald-900">You already have Vitals</h3>
-                  <p className="mt-2 text-sm text-emerald-700">Your subscription is active.</p>
-                  <Link href="/dashboard" className="mt-6 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700">Go to dashboard →</Link>
-                </div>
-              </Reveal>
-            ) : (
-              <Reveal delay={100}>
-                <PremiumPricingCard />
-              </Reveal>
-            )}
-          </div>
+          )}
           <Reveal className="mt-5 text-center text-sm text-faint">Cancel anytime · Switch monthly ↔ yearly anytime · Export your data anytime · Core tracking &amp; medication-level charts stay free.</Reveal>
         </div>
       </section>

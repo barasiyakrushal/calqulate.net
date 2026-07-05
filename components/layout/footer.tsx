@@ -43,6 +43,7 @@ export function Footer() {
               <li><Link href="/product/heart-age-tracker" className={linkCls}>Heart Age Tracker</Link></li>
               <li><Link href="/product/glp1-progress-tracker" className={linkCls}>GLP-1 Progress Tracker</Link></li>
               <li><Link href="/pricing" className={linkCls}>Pricing</Link></li>
+              <li><Link href="/calqulate-vitals/free-features-list" className={linkCls}>Free Features List</Link></li>
               <li><Link href="/dashboard" className={linkCls}>Dashboard</Link></li>
             </ul>
           </div>

@@ -258,6 +258,26 @@ export const GROUPS: Group[] = [
     blurb: "The questions people whisper in the GLP-1 forums: muscle, rebound, and what happens after.",
     items: [
       {
+        slug: "best-glp-1-for-weight-loss",
+        serviceSlug: "glp1-progress-tracker",
+        serviceLabel: "Track any GLP-1 with Calqulate Vitals",
+        metaDescription:
+          "The best GLP-1 for weight loss compared — tirzepatide vs semaglutide, GLP-1 shots vs pills, and the cheapest GLP-1 options. Plus how to keep the weight off, from Calqulate.net.",
+        q: "What is the best GLP-1 for weight loss?",
+        a: "There's no single best GLP-1 for everyone. Tirzepatide (Mounjaro, Zepbound) usually drives the most weight loss, semaglutide (Ozempic, Wegovy) is the proven standard, and Rybelsus is the oral GLP-1 pill. The best GLP-1 drug for weight loss is the one you can access, afford, and stay on — while protecting your muscle. Calqulate.net tracks whether your GLP-1 is buying real fat loss, not just a lower number.",
+        longAnswer: [
+          "First, the basics. GLP-1 stands for glucagon-like peptide-1, a natural gut hormone that tells your brain you're full and slows how fast your stomach empties. The GLP-1 medications for weight loss are lab-made versions of that hormone that stay active far longer than the one your body produces — which is why these GLP-1 drugs curb appetite so powerfully.",
+          "The main GLP-1s come as weekly or daily injections (\"GLP-1 shots\") and, in one case, a daily pill. Semaglutide is sold as Ozempic and Wegovy (shots) and Rybelsus (the oral GLP-1 pill). Tirzepatide — technically a dual GLP-1/GIP peptide — is sold as Mounjaro and Zepbound. Liraglutide (Saxenda, Victoza) is an older daily shot. All are prescription GLP-1 peptides, not over-the-counter supplements.",
+          "So which is the best GLP-1 for weight loss? In head-to-head and trial data, tirzepatide tends to produce the largest average weight loss, with semaglutide close behind and very well established. But \"best\" is personal: the right GLP-1 drug for weight loss is the one your insurance or budget allows, that your body tolerates, and that you can actually stay on long enough to matter. The cheapest GLP-1 is often whichever your plan covers, or the daily pill in some markets — and prices shift constantly, so compare with your pharmacist.",
+          "A quick warning on shortcuts: \"GLP-1 hormone supplements\" and unbranded compounded GLP-1 peptides sold online are not the same as prescription medication. The supplements don't replicate the drug, and unregulated peptides carry real dosing and safety risks. If you're using a GLP-1 for weight loss, do it with a prescriber.",
+          "Here's the part the drug comparison misses entirely: whichever GLP-1 you pick, up to 40% of the weight you lose can be muscle, not fat. That's what leaves people \"skinny-fat\" and sets up regain later. The GLP-1 that works best long-term is the one you pair with enough protein, resistance training, and tracking of fat vs. muscle. Calqulate.net's GLP-1 Progress Tracker works with any of these medications — log your shots or pills, watch your metabolism score and heart age improve, and confirm you're burning fat, not lean mass.",
+        ],
+        links: [
+          { label: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker" },
+          { label: "GLP-1 Dose Calculator", href: "/health/glp-1-dose-calculator" },
+        ],
+      },
+      {
         slug: "losing-muscle-on-ozempic",
         serviceSlug: "glp1-progress-tracker",
         serviceLabel: "Track muscle vs fat with Calqulate Vitals",

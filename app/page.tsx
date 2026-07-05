@@ -411,7 +411,13 @@ const faqs = [
   {
     question: "I already use MyFitnessPal. Why do I need this?",
     answer:
-      "Generic trackers are designed just for counting calories. Calqulate is built specifically for people on GLP-1 medications (Ozempic, Wegovy, Mounjaro). We monitor the unique side effects of these meds—like rapid muscle loss, extreme drops in appetite, and metabolic changes—so you lose weight safely.",
+      "Generic trackers are designed just for counting calories. Calqulate is built specifically for people on GLP-1 medications for weight loss (Ozempic, Wegovy, Mounjaro). We monitor the unique side effects of these glucagon-like peptide-1 (GLP-1) drugs—like rapid muscle loss, extreme drops in appetite, and metabolic changes—so you lose weight safely.",
+  },
+  {
+    question: "Which GLP-1 is best for weight loss?",
+    answer:
+      "The best GLP-1 for weight loss depends on you — tirzepatide (Mounjaro, Zepbound) tends to drive the largest average loss, while semaglutide (Ozempic, Wegovy) is a proven all-rounder, and Rybelsus is the oral GLP-1 pill option. Whichever GLP-1 drug or shot you're on, what actually protects your results is tracking fat vs. muscle, not just the scale.",
+    link: { label: "Compare the best GLP-1s for weight loss →", href: "/answers/best-glp-1-for-weight-loss" },
   },
   {
     question: "How do I know if I am losing muscle instead of fat?",
@@ -545,7 +551,7 @@ export default async function HomePage() {
               <div className="lg:col-span-6 text-center lg:text-left lg:pl-8 xl:pl-14">
                 <div className="mb-5 sm:mb-6 inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-bold uppercase tracking-wide text-brand-800">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-brand" />
-                  For Ozempic, Wegovy, &amp; Mounjaro users
+                  For GLP-1 medication users — Ozempic, Wegovy &amp; Mounjaro
                 </div>
 
                 <h1 className="animate-hero-in text-balance text-3xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.07] tracking-tight text-ink">
@@ -555,7 +561,7 @@ export default async function HomePage() {
 
                 <p className="mx-auto mt-5 sm:mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-copy lg:mx-0">
                   Up to 40% of GLP-1 weight loss is actually muscle. Stop letting the scale lie to you. Track your
-                  doses, monitor your Metabolism Score, and reverse your Heart Age to ensure you burn 100% fat -
+                  GLP-1 shots, monitor your Metabolism Score, and reverse your Heart Age to ensure you burn 100% fat -
                   so you look and feel 15 years younger.
                 </p>
 
@@ -604,7 +610,7 @@ export default async function HomePage() {
         </section>
 
         {/* ── PREMIUM TRACKERS BAND (luxe, top-of-funnel) ──────────────────── */}
-        <PremiumTrackersBand paid={paid} />
+        <PremiumTrackersBand />
 
         {/* ── SECTION B: THE GLP-1 STORY (miracle → danger → solution) ──────── */}
         <GLP1StorySlides />
@@ -1169,9 +1175,14 @@ export default async function HomePage() {
                     </h3>
                     <ChevronDown className="h-5 w-5 flex-shrink-0 text-emerald-600 transition-transform duration-200 group-open:rotate-180" />
                   </summary>
-                  <p className="pb-5 text-sm sm:text-base leading-relaxed text-gray-600">
-                    {faq.answer}
-                  </p>
+                  <div className="pb-5 text-sm sm:text-base leading-relaxed text-gray-600">
+                    <p>{faq.answer}</p>
+                    {"link" in faq && faq.link && (
+                      <Link href={faq.link.href} className="mt-2 inline-block font-semibold text-emerald-700 hover:underline">
+                        {faq.link.label}
+                      </Link>
+                    )}
+                  </div>
                 </details>
               ))}
             </div>

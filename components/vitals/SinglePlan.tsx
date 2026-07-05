@@ -1,30 +1,36 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { Check, ArrowRight, Loader2, Sparkles, Dumbbell, ShieldCheck } from "lucide-react";
+import { Check, ArrowRight, Loader2, Dumbbell, ShieldCheck } from "lucide-react";
 import { GatewayPicker } from "@/components/payment/GatewayPicker";
 import { useCheckout } from "@/hooks/useCheckout";
 import { getPrice, formatPrice, displaySubtitle } from "@/lib/payment/pricing";
 
 const FEATURES = [
-  "GLP-1 dose & side-effect tracking for Ozempic, Wegovy & Mounjaro",
-  "Protein targets & resistance-training reminders to protect lean mass",
-  "Body-composition tracking - fat vs. muscle, not just the scale",
-  "Metabolic Health Score + Longevity Index (0–1000) & biological age",
-  "\u201cFuture You\u201d simulator - Monte-Carlo projection of your next 6\u201360 months",
-  "Personal trajectory engine - separates real progress from daily noise",
-  "Your single highest-impact 'next lever', quantified in your own risk",
-  "Heart age, 10-yr heart-attack & diabetes risk, trended month over month",
-  "Doctor-shareable PDF report + full lab tracking (kg/lb \u00b7 cm/in)",
-  "Weekly progress email + optional mobile notifications",
-  "Private by design \u00b7 export or delete your data anytime",
+  "Trend chart (score / ASCVD / diabetes / heart-age)",
+  "Trajectory panel (8-week forecast)",
+  "Next-levers simulator",
+  "Add-a-measurement form (full biometric, durable save)",
+  "Download PDF report",
+  "Today’s forecast (appetite/energy/side-effects)",
+  "Progress & prediction chart (projection + plateau)",
+  "“What moves your results” correlation engine",
+  "Dosing sweet-spot",
+  "Doctor PDF report",
+  "Fat-vs-muscle trend + muscle-loss flag",
+  "Multi-compound support (GLP-1/peptide/TRT)",
+  "Refill tracker (supply, copay, prior-auth)",
+  "Unlimited smart food estimator",
+  "Trajectory simulator (optimistic/realistic/pessimistic)",
+  "Adaptive protocol builder (Autopilot)",
+  "Unlimited measurement history",
 ];
 
 const HIGHLIGHTS = [
   {
     icon: Dumbbell,
     title: "Fat-loss vs. muscle-loss detection",
-    body: "Know exactly what you\u2019re burning on a GLP-1 \u2014 so you never end up \u201cskinny-fat\u201d.",
+    body: "Know exactly what you’re burning on a GLP-1 — so you never end up “skinny-fat”.",
   },
   {
     icon: ShieldCheck,
@@ -81,10 +87,7 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
         <div className="relative mt-6 overflow-hidden rounded-2xl border border-gold/40 bg-gradient-to-br from-gold-light/15 via-white to-gold/10 p-4 shadow-[0_4px_20px_rgba(245,158,11,0.12)]">
           <span className="gold-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-12deg] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
           <div className="relative">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-gold-light to-gold px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gold-ink shadow-sm">
-              <Sparkles className="h-3 w-3" /> Members-only
-            </span>
-            <ul className="mt-3 space-y-2.5">
+            <ul className="space-y-2.5">
               {HIGHLIGHTS.map(({ icon: Icon, title, body }) => (
                 <li key={title} className="flex gap-2.5">
                   <Icon className="h-4 w-4 mt-0.5 flex-shrink-0 text-gold" />
@@ -97,7 +100,14 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
           </div>
         </div>
 
-        <ul className="mt-5 space-y-2.5">
+        <p className="mt-6 text-sm font-semibold text-gray-900">
+          <Link href="/calqulate-vitals/free-features-list" className="text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800">
+            Everything in Free
+          </Link>
+          , plus unlock these with Calqulate Vitals:
+        </p>
+
+        <ul className="mt-3 space-y-2.5">
           {FEATURES.map((f) => (
             <li key={f} className="flex gap-2.5 text-sm text-gray-700">
               <Check className="h-4 w-4 mt-0.5 flex-shrink-0 text-emerald-600" />
@@ -129,7 +139,7 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-4 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition-all duration-150 hover:-translate-y-0.5 disabled:opacity-60"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-              {loading ? "Redirecting\u2026" : "Start Calqulate Vitals"}
+              {loading ? "Redirecting…" : "Start Calqulate Vitals"}
             </button>
             <GatewayPicker />
             <div className="text-center">
