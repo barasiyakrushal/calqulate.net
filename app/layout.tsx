@@ -53,12 +53,9 @@ export const metadata: Metadata = {
     canonical: "https://calqulate.net/",
   },
   icons: {
-    icon: [
-      { url: "/favicon/favicon-32x32.webp", sizes: "32x32", type: "image/webp" },
-      { url: "/favicon/favicon-16x16.webp", sizes: "16x16", type: "image/webp" },
-      { url: "/logo.webp", sizes: "192x192", type: "image/webp" },
-    ],
-    apple: "/favicon/apple-touch-icon.webp",
+    icon: [{ url: "/calqulate-logo.png", sizes: "any", type: "image/png" }],
+    apple: "/calqulate-logo.png",
+    shortcut: "/calqulate-logo.png",
   },
   manifest: "/manifest.webmanifest",
 };

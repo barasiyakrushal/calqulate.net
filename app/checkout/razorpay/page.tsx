@@ -38,7 +38,7 @@ export default function RazorpayCheckoutPage() {
           subscription_id: subscriptionId,
           name: "Calqulate",
           description: "Vitals Pro",
-          image: "https://calqulate.net/favicon.ico",
+          image: "https://calqulate.net/calqulate-logo.png",
           theme: { color: "#059669" },
           handler: () => {
             router.push("/calqulate-vitals/welcome");

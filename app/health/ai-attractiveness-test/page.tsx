@@ -132,7 +132,7 @@ const articleSchema = {
     "@type": "Organization",
     name: "Calqulate.net",
     url: "https://calqulate.net",
-    logo: { "@type": "ImageObject", url: "https://calqulate.net/logo.webp" },
+    logo: { "@type": "ImageObject", url: "https://calqulate.net/calqulate-logo.png" },
   },
   about: [
     { "@type": "Thing", name: "Facial symmetry" },

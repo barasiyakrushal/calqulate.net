@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { Menu, X, HeartPulse, ChevronDown, Search, ArrowRight, Activity, LayoutDashboard, Settings, Download, LogOut, User } from "lucide-react"
+import Image from "next/image"
+import { Menu, X, ChevronDown, Search, ArrowRight, Activity, LayoutDashboard, Settings, Download, LogOut, User } from "lucide-react"
 import { SearchBar } from "@/components/search/search-bar"
 import { createClient } from "@/lib/supabase/client"
 
@@ -324,9 +325,14 @@ export function Header() {
         <div className="flex h-[60px] items-center gap-2 sm:gap-4 lg:gap-6">
           {/* Logo */}
           <Link href="/" onClick={closeAll} className="flex items-center gap-2 flex-shrink-0 group">
-            <div className="w-8 h-8 rounded-lg bg-emerald-600 group-hover:bg-emerald-700 transition-colors flex items-center justify-center shadow-sm">
-              <HeartPulse className="h-[18px] w-[18px] text-white" />
-            </div>
+            <Image
+              src="/calqulate-logo.png"
+              alt="Calqulate logo"
+              width={32}
+              height={32}
+              priority
+              className="h-8 w-8 rounded-lg object-contain"
+            />
             <span className="flex flex-col leading-none">
               <span className="text-[17px] font-bold tracking-tight text-gray-900">
                 Calqulate<span className="text-emerald-600">.NET</span>

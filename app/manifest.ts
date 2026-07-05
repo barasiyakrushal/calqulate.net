@@ -15,33 +15,15 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["health", "fitness", "medical"],
     icons: [
       {
-        src: "/favicon/android-chrome-192x192.png",
-        sizes: "192x192",
+        src: "/calqulate-logo.png",
+        sizes: "1024x1024",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/favicon/android-chrome-512x512.webp",
-        sizes: "512x512",
-        type: "image/webp",
-        purpose: "any",
-      },
-      {
-        src: "/favicon/android-chrome-512x512.webp",
-        sizes: "512x512",
-        type: "image/webp",
-        purpose: "maskable",
-      },
-      {
-        src: "/favicon/android-chrome-192x192.webp",
-        sizes: "192x192",
-        type: "image/webp",
-        purpose: "any",
-      },
-      {
-        src: "/favicon/apple-touch-icon.webp",
-        sizes: "180x180",
-        type: "image/webp",
+        src: "/calqulate-logo.png",
+        sizes: "1024x1024",
+        type: "image/png",
         purpose: "maskable",
       },
     ],

@@ -82,8 +82,8 @@ export function OrganizationSchema() {
     description:
       "Calqulate is a metabolic and cardiovascular risk-reversal service. It turns a person's numbers and lab values into a tracked Metabolic Health Score plus validated clinical risk scores (10-year ASCVD heart risk, heart age via Framingham, and type-2 diabetes risk via FINDRISC), follows them over time, and surfaces the single highest-impact change to lower that risk. It also offers 50+ free, no-login health calculators.",
     url: "https://calqulate.net/",
-    logo: "https://calqulate.net/logo.webp",
-    image: "https://calqulate.net/logo.webp",
+    logo: "https://calqulate.net/calqulate-logo.png",
+    image: "https://calqulate.net/calqulate-logo.png",
     brand: {
       "@type": "Brand",
       name: "Calqulate Vitals",

@@ -1900,7 +1900,7 @@ export default function FaceShapeCalculator() {
         tips: []
       };
 
-      const logoDataUrl = await fetchImageDataUrl("/logo.webp");
+      const logoDataUrl = await fetchImageDataUrl("/calqulate-logo.png");
       const userPhotoType = getImageType(result.imageData);
       const logoType = getImageType(logoDataUrl);
       const hairstyleImageUrl = leadingRecommendation.images[0] || femaleFaceShapeImage[result.faceAnalysis.faceShape];

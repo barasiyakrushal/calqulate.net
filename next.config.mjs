@@ -7,6 +7,9 @@ const withSerwist = withSerwistInit({
   additionalPrecacheEntries: [{ url: "/offline", revision }],
   swSrc: "app/sw.ts",
   swDest: "public/sw.js",
+  // Building the service worker in dev bloats the compile graph and memory.
+  // The SW is a production concern, so skip it during `next dev`.
+  disable: process.env.NODE_ENV !== "production",
 });
 
 /** @type {import('next').NextConfig} */

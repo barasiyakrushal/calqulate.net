@@ -41,8 +41,8 @@ self.addEventListener("push", (event) => {
   const title = payload.title || "Calqulate.net";
   const options: NotificationOptions = {
     body: payload.body || "Your weekly health update is ready.",
-    icon: payload.icon || "/logo.webp",
-    badge: "/logo.webp",
+    icon: payload.icon || "/calqulate-logo.png",
+    badge: "/calqulate-logo.png",
     tag: payload.tag || "calqulate-update",
     data: { url: payload.url || "/dashboard" },
     requireInteraction: false,
