@@ -9,10 +9,8 @@ import {
   describeDueIn,
   benchmark,
   todayForecast,
-  weightTrajectory,
   detectPlateau,
   weeklyCorrelations,
-  TRIAL_CURVES,
   doseSweetSpot,
   journeyMetrics,
   weeklyHealthScore,
@@ -41,13 +39,15 @@ import { Glp1ReportButton } from "@/components/glp1/Glp1ReportButton";
 import { ReconstitutionCalculator } from "@/components/glp1/ReconstitutionCalculator";
 import { RefillTracker } from "@/components/glp1/RefillTracker";
 import { SweetSpotCard } from "@/components/glp1/SweetSpotCard";
-import { ProgressChart } from "@/components/glp1/ProgressChart";
+import { WeightTrendChart } from "@/components/glp1/WeightTrendChart";
 import { TodayForecastCard } from "@/components/glp1/TodayForecastCard";
 import { ShareScorecard } from "@/components/glp1/ShareScorecard";
 import { CorrelationInsights } from "@/components/glp1/CorrelationInsights";
+import { NextDoseCard, CurrentCycleCard, PlanSummaryCard } from "@/components/glp1/DashboardRail";
 import { PremiumGate, LockBadge } from "@/components/vitals/PremiumGate";
 import type { Glp1EntityName } from "@/lib/glp1/schemas";
-import { Activity, Syringe, Scale, Utensils, Target } from "lucide-react";
+import Link from "next/link";
+import { Activity, Syringe, Scale, Utensils, Target, Bell, HelpCircle, ArrowRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -63,7 +63,7 @@ export default async function Glp1TrackerPage() {
   const [meds, doses, weights, foods, symptoms, checkins, bodyComps, labs, exercises, reminders, refills, prefsRes] = await Promise.all([
     listRecords<Medication>(supabase, "medication", userId, { limit: 10 }),
     listRecords<DoseLog>(supabase, "doseLog", userId, { limit: 50 }),
-    listRecords<WeightLog>(supabase, "weightLog", userId, { limit: 30 }),
+    listRecords<WeightLog>(supabase, "weightLog", userId, { limit: 365 }),
     listRecords<FoodLog>(supabase, "foodLog", userId, { limit: 20 }),
     listRecords<SideEffectLog>(supabase, "sideEffect", userId, { limit: 20 }),
     listRecords<CheckIn>(supabase, "checkIn", userId, { limit: 20 }),
@@ -93,14 +93,8 @@ export default async function Glp1TrackerPage() {
     }
   }
 
-  // ── Weight trajectory + plateau prediction (advanced-charts moat) ────────────
-  const trajectory = weightTrajectory({
-    weights: weights.map((w) => ({ takenAt: w.takenAt, weightKg: w.weightKg })),
-    compound: activeMed?.compound ?? null,
-    nowMs: Date.now(),
-  });
+  // ── Plateau prediction (used by the shareable scorecard) ─────────────────────
   const plateau = detectPlateau(weights.map((w) => ({ takenAt: w.takenAt, weightKg: w.weightKg })), Date.now());
-  const trialLabel = activeMed?.compound ? TRIAL_CURVES[activeMed.compound].trial : null;
 
   // ── Personal correlation engine ("what moves your results", research #9) ─────
   const correlations = weeklyCorrelations({
@@ -127,9 +121,10 @@ export default async function Glp1TrackerPage() {
   const doseReminder = reminders.find((r) => r.kind === "dose" && r.medicationId === activeMed?.id) ?? null;
   let nextDoseLabel: string | null = null;
   let nextDoseDueSoon = false;
+  let nextDoseMs: number | null = null;
   if (activeMed) {
     const medDoses = doses.filter((d) => d.medicationId === activeMed.id && !d.skipped);
-    const nextDoseMs = computeNextDoseMs({
+    nextDoseMs = computeNextDoseMs({
       startMs: Date.parse(activeMed.startDate),
       intervalMs: activeMed.doseIntervalHours * 3_600_000,
       lastDoseMs: medDoses[0] ? Date.parse(medDoses[0].takenAt) : null,
@@ -231,6 +226,14 @@ export default async function Glp1TrackerPage() {
   const activeMedName = activeMed ? (activeMed.brandName ?? activeMed.customName ?? activeMed.compound ?? "Medication") : null;
   const latestRefill = activeMed ? refills.find((r) => r.medicationId === activeMed.id) ?? null : null;
 
+  // ── Right-rail display values (Next Dose · Current Cycle · Plan Summary) ──────
+  const nextDoseOverdue = nextDoseMs != null && nextDoseMs < Date.now();
+  const nextDoseDate = nextDoseMs != null ? fmtDate(nextDoseMs) : null;
+  const latestDoseAmt = doses.find((d) => !d.skipped)?.amountMg ?? null;
+  const planDose = latestDoseAmt != null ? `${latestDoseAmt} mg` : "—";
+  const planFrequency = activeMed ? frequencyLabel(activeMed.doseIntervalHours) : "—";
+  const startedDate = activeMed?.startDate ? fmtDate(Date.parse(activeMed.startDate)) : null;
+
   // First-time experience: no medication yet → guided 6-step setup instead of an empty dashboard.
   if (!activeMed) {
     return (
@@ -244,74 +247,109 @@ export default async function Glp1TrackerPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">GLP-1 Tracker</h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold text-gray-900">GLP-1 Tracker</h1>
+            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
+              Active Plan
+            </span>
+          </div>
           <p className="mt-1 text-sm text-gray-500">
             Log in seconds. Everything is saved durably the moment you hit save — and recoverable if you delete it.
           </p>
         </div>
-        <span id="report" className="scroll-mt-24"><Glp1ReportButton enabled={paid} /></span>
+        <div className="flex items-center gap-2">
+          <Link href="/dashboard/settings" aria-label="Notification settings" className="grid h-10 w-10 place-items-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700">
+            <Bell className="h-5 w-5" />
+          </Link>
+          <Link href="/dashboard/guide" aria-label="Help guide" className="grid h-10 w-10 place-items-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700">
+            <HelpCircle className="h-5 w-5" />
+          </Link>
+          <span id="report" className="scroll-mt-24"><Glp1ReportButton enabled={paid} /></span>
+        </div>
       </div>
 
       {/* Coaching banner — turns the dashboard from passive into a guide */}
       <CoachBanner messages={coach} />
 
-      {/* "Today" forecast (Premium) — appetite / energy / side-effects for this day of the cycle */}
-      {forecast?.available && (
-        <div id="today" className="scroll-mt-24">
-          <PremiumGate locked={!paid} feature="Today’s forecast" description="Your appetite, energy and side-effect forecast for today’s dose-cycle day." blur>
-            <TodayForecastCard forecast={forecast} />
-          </PremiumGate>
-        </div>
-      )}
+      {/* ── Two-column dashboard: main content + right rail ─────────────────── */}
+      <div className="grid gap-5 lg:grid-cols-3">
+        {/* MAIN COLUMN */}
+        <div className="space-y-5 lg:col-span-2">
+          {/* "Today" forecast (Premium) */}
+          {forecast?.available && (
+            <div id="today" className="scroll-mt-24">
+              <PremiumGate locked={!paid} feature="Today’s forecast" description="Your appetite, energy and side-effect forecast for today’s dose-cycle day." blur>
+                <TodayForecastCard forecast={forecast} />
+              </PremiumGate>
+            </div>
+          )}
 
-      {/* Summary cards */}
-      <div id="vitals" className="grid gap-4 scroll-mt-24 sm:grid-cols-3">
-        <SummaryCard
-          icon={<Activity className="h-5 w-5" />}
-          label="Medication level now"
-          value={pk ? `${pk.currentPct}%` : "—"}
-          sub={pk?.nextDosePct != null ? `~${pk.nextDosePct}% active just before your next dose — cravings often return here` : "Log a dose to see your curve"}
-        />
-        <SummaryCard
-          icon={<Scale className="h-5 w-5" />}
-          label="Latest weight"
-          value={latestWeight ? `${(latestWeight.weightKg * 2.2046226218).toFixed(1)} lb` : "—"}
-          sub={journey?.projectedNextKg ? `Projected next week ~${(journey.projectedNextKg * 2.2046226218).toFixed(1)} lb` : latestWeight ? `${latestWeight.weightKg.toFixed(1)} kg` : "No weight logged yet"}
-          tone={journey && journey.lostKg > 0 ? "ok" : undefined}
-        />
-        {paid ? (
-          <SummaryCard
-            icon={<Syringe className="h-5 w-5" />}
-            label="Fat vs. muscle"
-            value={comp ? `${comp.leanLossPct}% lean` : "—"}
-            sub={comp ? comp.message : "Add 2+ body-composition entries"}
-            tone={comp?.level === "high" ? "warn" : comp?.level === "watch" ? "caution" : "ok"}
-          />
-        ) : (
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
-            <div className="flex items-center gap-2 text-gray-400"><Syringe className="h-5 w-5" /><span className="text-xs font-medium uppercase tracking-wide">Fat vs. muscle</span></div>
-            <div className="mt-2"><LockBadge feature="Fat-vs-muscle trend" /></div>
-            <p className="mt-1 text-xs leading-relaxed text-gray-500">Muscle-loss protection insight is a Premium feature.</p>
-          </div>
-        )}
-      </div>
-
-      {/* Progress & prediction chart — real weigh-ins, projection cone, trial overlay, plateau shading */}
-      {trajectory.points.length >= 2 && (
-        <div id="chart" className="scroll-mt-24">
-          <PremiumGate locked={!paid} feature="Progress & prediction chart" description="Your weigh-ins with a projection cone, trial overlay and plateau detection." blur>
-            <ProgressChart
-              points={trajectory.points}
-              currentKg={trajectory.currentKg}
-              projectedKg={trajectory.projectedKg}
-              paceKgPerWeek={trajectory.paceKgPerWeek}
-              hasProjection={trajectory.hasProjection}
-              trialLabel={trialLabel}
-              plateau={{ status: plateau.status, message: plateau.message, plateauStartMs: plateau.plateauStartMs, weeksStalled: plateau.weeksStalled }}
+          {/* Summary cards */}
+          <div id="vitals" className="grid gap-4 scroll-mt-24 sm:grid-cols-3">
+            <SummaryCard
+              icon={<Activity className="h-5 w-5" />}
+              label="Medication level now"
+              value={pk ? `${pk.currentPct}%` : "—"}
+              sub={pk?.nextDosePct != null ? `~${pk.nextDosePct}% active just before your next dose — cravings often return here` : "Log a dose to see your curve"}
             />
-          </PremiumGate>
+            <SummaryCard
+              icon={<Scale className="h-5 w-5" />}
+              label="Latest weight"
+              value={latestWeight ? `${(latestWeight.weightKg * 2.2046226218).toFixed(1)} lb` : "—"}
+              sub={journey?.projectedNextKg ? `Projected next week ~${(journey.projectedNextKg * 2.2046226218).toFixed(1)} lb` : latestWeight ? `${latestWeight.weightKg.toFixed(1)} kg` : "No weight logged yet"}
+              tone={journey && journey.lostKg > 0 ? "ok" : undefined}
+            />
+            {paid ? (
+              <SummaryCard
+                icon={<Syringe className="h-5 w-5" />}
+                label="Fat vs. muscle"
+                value={comp ? `${comp.leanLossPct}% lean` : "—"}
+                sub={comp ? comp.message : "Add 2+ body-composition entries"}
+                tone={comp?.level === "high" ? "warn" : comp?.level === "watch" ? "caution" : "ok"}
+              />
+            ) : (
+              <div className="rounded-2xl border border-gray-200 bg-white p-5">
+                <div className="flex items-center gap-2 text-gray-400"><Syringe className="h-5 w-5" /><span className="text-xs font-medium uppercase tracking-wide">Fat vs. muscle</span></div>
+                <div className="mt-2"><LockBadge feature="Fat-vs-muscle trend" /></div>
+                <p className="mt-1 text-xs leading-relaxed text-gray-500">Muscle-loss protection insight is a Premium feature.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Weight Trend — graph over the selected period; full analytics live in
+              the dedicated Weight Tracker (goals, insights, projections). */}
+          <div id="weight-trend" className="scroll-mt-24 space-y-3">
+            <WeightTrendChart
+              points={weights.map((w) => ({ t: Date.parse(w.takenAt), kg: w.weightKg }))}
+              nowMs={Date.now()}
+              unit="lb"
+            />
+            <Link
+              href="/dashboard/weight"
+              className="flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-100"
+            >
+              Open full Weight Tracker — goals, insights &amp; projections
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
-      )}
+
+        {/* RIGHT RAIL */}
+        <div className="space-y-5">
+          <NextDoseCard label={nextDoseLabel} dueDate={nextDoseDate} overdue={nextDoseOverdue} />
+          {forecast?.available && (
+            <CurrentCycleCard
+              dayOfCycle={forecast.dayOfCycle}
+              cycleLengthDays={forecast.cycleLengthDays}
+              cycleFraction={forecast.cycleFraction}
+              phaseLabel={nextDoseOverdue ? "Dose overdue" : forecast.phaseLabel}
+              overdue={nextDoseOverdue}
+              startedDate={startedDate}
+            />
+          )}
+          <PlanSummaryCard medication={medLabelForCard} dose={planDose} frequency={planFrequency} />
+        </div>
+      </div>
 
       {/* Personal correlation engine (Premium) — which of your habits move your weekly loss */}
       {correlations.confidence !== "insufficient" && (
@@ -441,4 +479,17 @@ function SummaryCard({
       <p className="mt-1 text-xs leading-relaxed text-gray-500">{sub}</p>
     </div>
   );
+}
+
+function fmtDate(ms: number): string {
+  return new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function frequencyLabel(hours: number): string {
+  if (hours === 168) return "Weekly";
+  if (hours === 24) return "Daily";
+  if (hours === 336) return "Every 2 weeks";
+  if (hours % 168 === 0) return `Every ${hours / 168} weeks`;
+  if (hours % 24 === 0) return `Every ${hours / 24} days`;
+  return `Every ${hours} h`;
 }
