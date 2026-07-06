@@ -35,15 +35,16 @@ export function TodayForecastCard({ forecast }: { forecast: TodayForecast }) {
             </p>
           </div>
         </div>
-        {/* Cycle position dial */}
+        {/* Cycle position dial — bar and % both track cycle progress (of 100%) */}
         <div className="flex items-center gap-2">
-          <div className="h-2 w-28 overflow-hidden rounded-full bg-brand-50 sm:w-36">
+          <span className="hidden text-[11px] font-medium text-gray-500 sm:inline">Cycle Progress</span>
+          <div className="h-2 w-28 overflow-hidden rounded-full bg-gray-200 ring-1 ring-inset ring-gray-300/50 sm:w-36">
             <div
               className="h-full rounded-full bg-brand transition-all"
               style={{ width: `${Math.min(100, Math.round(forecast.cycleFraction * 100))}%` }}
             />
           </div>
-          <span className="text-xs font-semibold text-brand-800">{forecast.levelPctOfPeak}%</span>
+          <span className="text-xs font-semibold text-brand-800">{Math.min(100, Math.round(forecast.cycleFraction * 100))}%</span>
         </div>
       </div>
 

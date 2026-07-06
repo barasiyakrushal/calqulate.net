@@ -39,7 +39,7 @@ const MEDS = ["Ozempic", "Wegovy", "Mounjaro", "Zepbound", "Rybelsus", "Saxenda"
 const WHAT_YOU_GET = [
   { icon: Syringe, t: "Every shot in one place", d: "Log doses, timing and sites — never miss one." },
   { icon: Utensils, t: "Track food the GLP-1 way", d: "Protein, fiber and water first, calories second." },
-  { icon: LineChart, t: "Free medication-level curves", d: "See active drug rise and fall through the week." },
+  { icon: LineChart, t: "Medication-level curves", d: "See active drug rise and fall through the week." },
   { icon: Scale, t: "Real body composition", d: "Watch fat vs. lean mass, not just the scale." },
   { icon: HeartPulse, t: "Bonus heart age & metabolism", d: "Two extra trackers in the same plan." },
   { icon: ShieldCheck, t: "Your data, backed up & yours", d: "Automatic backup, export anytime. Never lost." },
@@ -165,7 +165,7 @@ export default async function Glp1TrackerLanding() {
               <span className="text-brand">actually has your back</span>
             </h1>
             <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-copy">
-              Track your GLP-1 shots, food, weight and side effects in one place. Get free medication-level charts,
+              Track your GLP-1 shots, food, weight and side effects in one place. Get medication-level charts,
               plus a bonus Heart Age and Metabolism tracker — and your data never disappears.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -182,7 +182,7 @@ export default async function Glp1TrackerLanding() {
 
           <Reveal delay={120}>
             {/* SCREENSHOT 1: dashboard — dose countdown, weight trend, medication-level curve */}
-            <ScreenshotFrame label="Dashboard — dose countdown, weight trend & medication-level curve" src="/screenshots/glp1-dashboard.png" frame="browser" />
+            <ScreenshotFrame label="Dashboard — dose countdown, weight trend & medication-level curve" src="/screenshots/glp1-dashboard.webp" frame="browser" />
           </Reveal>
         </div>
       </section>
@@ -231,32 +231,30 @@ export default async function Glp1TrackerLanding() {
       <section id="free" className="scroll-mt-24 bg-white py-14 sm:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-brand-800">No paywall on what matters</span>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">Free features, from day one</h2>
-            <p className="mt-3 text-[17px] leading-relaxed text-copy">You shouldn’t have to pay to understand your own medication.</p>
+            <span className="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-brand-800">Everything you need to start strong</span>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">Take the guesswork out of every shot</h2>
+            <p className="mt-3 text-[17px] leading-relaxed text-copy">Know exactly what your medication is doing in your body — every single day.</p>
           </Reveal>
 
           {/* Hero free feature row 1 — medication-level curve */}
           <div className="mt-12 grid items-center gap-8 lg:grid-cols-2">
             <Reveal>
-              <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-800">Free</span>
-              <h3 className="mt-3 text-2xl font-bold text-ink">Free medication-level curves</h3>
+              <h3 className="text-2xl font-bold text-ink">Medication-level curves</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-copy">
                 See how much medication is active in your body each day until your next shot — so you finally understand why
-                cravings creep back late in the week. This is the feature people pay extra for elsewhere. With us, it’s free.
+                cravings creep back late in the week, and can plan for it instead of being blindsided.
               </p>
             </Reveal>
             <Reveal delay={100}>
               {/* SCREENSHOT 3: medication-level (PK) curve with cravings overlay */}
-              <ScreenshotFrame label="Medication-level curve with cravings overlay" src="/screenshots/glp1-medication-curve.png" />
+              <ScreenshotFrame label="Medication-level curve with cravings overlay" src="/screenshots/glp1-medication-curve.webp" />
             </Reveal>
           </div>
 
           {/* Hero free feature row 2 — side effects (reversed) */}
           <div className="mt-12 grid items-center gap-8 lg:grid-cols-2">
             <Reveal className="lg:order-2">
-              <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-800">Free</span>
-              <h3 className="mt-3 text-2xl font-bold text-ink">Side-effect tracking that gets it</h3>
+              <h3 className="text-2xl font-bold text-ink">Side-effect tracking that gets it</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-copy">
                 Log nausea, fatigue, constipation and more on a severity scale. You can even mark “no symptoms today” —
                 something most apps won’t let you do.
@@ -264,7 +262,7 @@ export default async function Glp1TrackerLanding() {
             </Reveal>
             <Reveal delay={100} className="lg:order-1">
               {/* SCREENSHOT: side-effect logging with severity + "no symptoms" */}
-              <ScreenshotFrame label="Side-effect logging — severity scale & “no symptoms today”" src="/screenshots/glp1-side-effects.png" />
+              <ScreenshotFrame label="Side-effect logging — severity scale & “no symptoms today”" src="/screenshots/glp1-side-effects.webp" />
             </Reveal>
           </div>
 
@@ -273,10 +271,7 @@ export default async function Glp1TrackerLanding() {
             {FREE_LIST.map((f, i) => (
               <Reveal key={f.t} delay={i * 40}>
                 <div className="h-full rounded-2xl border border-line bg-surface p-5">
-                  <div className="flex items-center justify-between">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-brand shadow-sm"><f.icon className="h-5 w-5" /></span>
-                    <span className="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-800">Free</span>
-                  </div>
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-brand shadow-sm"><f.icon className="h-5 w-5" /></span>
                   <h3 className="mt-3 text-[15px] font-bold text-ink">{f.t}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-copy">{f.d}</p>
                 </div>
