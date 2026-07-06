@@ -154,12 +154,13 @@ const config: TrackerLandingConfig = {
 export default async function HeartAgeTrackerPage() {
   const access = await getAccess();
   const paid = hasPaidAccess(access);
+  const loggedIn = access.userId !== null;
   const cfg = { ...config };
 
-  if (paid) {
+  if (paid || loggedIn) {
     cfg.startFreeHref = "/dashboard";
     cfg.pricing = { ...cfg.pricing, freePrimary: { ...cfg.pricing.freePrimary, href: "/dashboard" } };
   }
 
-  return <TrackerLanding config={cfg} paid={paid} />;
+  return <TrackerLanding config={cfg} paid={paid} loggedIn={loggedIn} />;
 }

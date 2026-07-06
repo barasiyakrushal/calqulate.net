@@ -70,6 +70,7 @@ export default async function PricingPage({ searchParams }: { searchParams: { fe
 
   const access = await getAccess();
   const paid = hasPaidAccess(access);
+  const loggedIn = access.userId !== null;
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -163,7 +164,7 @@ export default async function PricingPage({ searchParams }: { searchParams: { fe
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{paid ? "Your plan is active" : "Start free, upgrade when you want the trend"}</h2>
             <p className="mt-3 text-sm sm:text-base text-emerald-100/80">{paid ? "You already have Vitals. Go to your dashboard to see your scores." : "Get your free score first. No card needed."}</p>
             <div className="mt-6 flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-              <Link href={paid ? "/dashboard" : "/product/metabolic-health-tracker"} className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 sm:px-6 py-3 min-h-[44px] font-semibold text-gray-950 hover:bg-emerald-400">
+              <Link href={paid || loggedIn ? "/dashboard" : "/product/metabolic-health-tracker"} className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 sm:px-6 py-3 min-h-[44px] font-semibold text-gray-950 hover:bg-emerald-400">
                 {paid ? "Go to dashboard" : "Get my free score"} <ArrowRight className="h-4 w-4" />
               </Link>
               <Link href="/how-it-works" className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/50 px-5 sm:px-6 py-3 min-h-[44px] font-semibold text-emerald-200 hover:bg-emerald-800/50">

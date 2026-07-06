@@ -13,6 +13,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ServiceCTA } from "@/components/seo/service-cta"
 import { SourcesSection } from "@/components/seo/sources-section"
 import { RelatedCalculators } from "@/components/seo/related-calculators"
+import { getAccess } from "@/lib/auth"
 import { RelatedCalculators as CatalogRelatedCalculators } from "@/components/calculators/related-calculators"
 import { EmbedCodeBox } from "@/components/embed/EmbedCodeBox"
 import {
@@ -91,7 +92,9 @@ const faqs = [
   },
 ]
 
-export default function GLP1DoseCalculatorPage() {
+export default async function GLP1DoseCalculatorPage() {
+  const access = await getAccess();
+  const loggedIn = access.userId !== null;
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <CalculatorSchema
@@ -191,6 +194,7 @@ export default function GLP1DoseCalculatorPage() {
         <FreeFeaturesPromo
           heading="Calculated your dose? Now track it — free"
           sub="Calqulate Vitals logs every shot, reminds you when the next is due, and tracks food, weight and side effects in one place — with medication-level curves other apps charge for."
+          loggedIn={loggedIn}
         />
 
         <div className="container mx-auto px-4 py-8">

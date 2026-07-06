@@ -142,8 +142,9 @@ const btnOutline =
 export default async function Glp1TrackerLanding() {
   const access = await getAccess();
   const paid = hasPaidAccess(access);
+  const loggedIn = access.userId !== null;
 
-  const startFreeHref = paid ? "/dashboard/glp1" : "/signup?next=/dashboard/glp1";
+  const startFreeHref = paid || loggedIn ? "/dashboard/glp1" : "/signup?next=/dashboard/glp1";
   const goDashboard = <Link href={startFreeHref} className={btnGreen}>Go to dashboard <ArrowRight className="h-4 w-4" /></Link>;
   const startFreeLink = <Link href={startFreeHref} className={btnGreen}>Start free <ArrowRight className="h-4 w-4" /></Link>;
 
@@ -543,7 +544,7 @@ export default async function Glp1TrackerLanding() {
       </section>
 
       {/* Mobile sticky CTA — follows the user past the hero */}
-      <StickyCtaBar hidePremium={paid} />
+      <StickyCtaBar hidePremium={paid} loggedIn={loggedIn} />
     </main>
   );
 }

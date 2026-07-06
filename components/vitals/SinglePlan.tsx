@@ -151,39 +151,26 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
                 </button>
               </div>
             )}
-            {isIndia ? (
-              <>
-                {/* India → Razorpay (UPI, cards, netbanking), charged in INR. */}
-                <button onClick={() => subscribe()} disabled={loading} className={GOLD_BTN}>
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-                  {loading ? "Redirecting…" : "Start Calqulate Vitals"}
+            <>
+              {/* Main button → PayPal for all users (accepts cards, no account needed). */}
+              <button onClick={() => subscribe("paypal")} disabled={loading} className={GOLD_BTN}>
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+                {loading ? "Redirecting…" : "Start Calqulate Vitals"}
+              </button>
+              <GatewayPicker />
+              <div className="text-center">
+                <button
+                  onClick={() => subscribe("razorpay")}
+                  disabled={loading}
+                  className="text-xs text-gray-400 underline-offset-2 hover:text-emerald-600 hover:underline"
+                >
+                  {isIndia ? "or pay via UPI / cards (Razorpay)" : "or pay with your card"}
                 </button>
-                <p className="text-center text-xs text-gray-400">
-                  Pay via UPI, cards &amp; netbanking (Razorpay). Cancel anytime.
-                </p>
-              </>
-            ) : (
-              <>
-                {/* Non-India → PayPal (also accepts Visa/MC/Amex with no account). */}
-                <button onClick={() => subscribe("paypal")} disabled={loading} className={GOLD_BTN}>
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-                  {loading ? "Redirecting…" : "Start Calqulate Vitals"}
-                </button>
-                <GatewayPicker />
-                <div className="text-center">
-                  <button
-                    onClick={() => subscribe("razorpay")}
-                    disabled={loading}
-                    className="text-xs text-gray-400 underline-offset-2 hover:text-emerald-600 hover:underline"
-                  >
-                    or pay with your card
-                  </button>
-                </div>
-                <p className="text-center text-xs text-gray-400">
-                  Create your account, then pay securely. Cancel anytime.
-                </p>
-              </>
-            )}
+              </div>
+              <p className="text-center text-xs text-gray-400">
+                Create your account, then pay securely. Cancel anytime.
+              </p>
+            </>
           </div>
         )}
       </div>

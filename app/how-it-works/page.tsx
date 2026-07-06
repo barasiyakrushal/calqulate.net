@@ -70,6 +70,7 @@ const audiences = [
 export default async function HowItWorksPage() {
   const access = await getAccess();
   const paid = hasPaidAccess(access);
+  const loggedIn = access.userId !== null;
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />

@@ -22,10 +22,12 @@ export function FreeFeaturesPromo({
   heading = "Track every dose free with Calqulate Vitals",
   sub = "Your free GLP-1 tracker: log shots, food, weight and side effects in one place — and get medication-level curves other apps charge for.",
   className = "",
+  loggedIn = false,
 }: {
   heading?: string;
   sub?: string;
   className?: string;
+  loggedIn?: boolean;
 }) {
   return (
     <section className={`bg-surface py-12 sm:py-16 ${className}`}>
@@ -57,7 +59,7 @@ export function FreeFeaturesPromo({
 
         <Reveal className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
-            href="/signup?next=/dashboard/glp1"
+            href={loggedIn ? "/dashboard/glp1" : "/signup?next=/dashboard/glp1"}
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:bg-brand-600 hover:shadow-md sm:w-auto"
           >
             Start free <ArrowRight className="h-4 w-4" />

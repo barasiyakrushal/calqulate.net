@@ -515,6 +515,7 @@ const LUXE_BG =
 export default async function HomePage() {
   const access = await getAccess();
   const paid = hasPaidAccess(access);
+  const loggedIn = access.userId !== null;
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }} />
@@ -577,7 +578,7 @@ export default async function HomePage() {
                   ) : (
                     <>
                     <Button size="lg" className="w-full sm:w-auto rounded-xl bg-brand px-7 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-brand-600 min-h-[44px]" asChild>
-                      <Link href="/signup">Start free<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                      <Link href={loggedIn ? "/dashboard" : "/signup"}>Start free<ArrowRight className="ml-2 h-4 w-4" /></Link>
                     </Button>
                       <Button size="lg" className="w-full sm:w-auto rounded-xl bg-gradient-to-r from-gold-light to-gold px-7 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5 hover:opacity-95 min-h-[44px]" asChild>
                         <Link href="/pricing">Go Premium<ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -1246,7 +1247,7 @@ export default async function HomePage() {
                     className="bg-gradient-to-r from-gold-light to-gold hover:opacity-95 text-gold-ink font-bold px-8 rounded-xl shadow-[0_8px_20px_rgba(245,158,11,.35)]"
                     asChild
                   >
-                    <Link href="/signup">
+                    <Link href={loggedIn ? "/dashboard" : "/signup"}>
                       Start free
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>

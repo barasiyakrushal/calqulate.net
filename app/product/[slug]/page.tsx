@@ -37,6 +37,7 @@ export default async function ProductPage({
   if (!svc) notFound();
   const access = await getAccess();
   const paid = hasPaidAccess(access);
+  const loggedIn = access.userId !== null;
 
   // Each tracker foregrounds its own metric in the free snapshot.
   const SNAPSHOTS: Record<string, { heading: string; sub: string; focus: "metabolic" | "heartAge" | "glp1" }> = {

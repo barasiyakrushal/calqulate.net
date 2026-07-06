@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Check, ArrowRight, Sparkles } from "lucide-react";
 import { FEATURE_AREAS } from "@/lib/features";
+import { getAccess } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Free Features List | Calqulate Vitals",
@@ -28,7 +29,9 @@ const FREE_AREAS = FEATURE_AREAS
 
 const FREE_COUNT = FREE_AREAS.reduce((n, g) => n + g.rows.length, 0);
 
-export default function FreeFeaturesListPage() {
+export default async function FreeFeaturesListPage() {
+  const access = await getAccess();
+  const loggedIn = access.userId !== null;
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-emerald-50/60 via-white to-white">
       <Header />
@@ -48,7 +51,7 @@ export default function FreeFeaturesListPage() {
             </p>
             <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
-                href="/signup?next=/dashboard"
+                href={loggedIn ? "/dashboard" : "/signup?next=/dashboard"}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 sm:w-auto"
               >
                 Start free <ArrowRight className="h-4 w-4" />

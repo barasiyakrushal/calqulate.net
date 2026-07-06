@@ -70,7 +70,7 @@ function CompareCell({ v }: { v: CompareVal }) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function TrackerLanding({ config: c, paid }: { config: TrackerLandingConfig; paid?: boolean }) {
+export function TrackerLanding({ config: c, paid, loggedIn }: { config: TrackerLandingConfig; paid?: boolean; loggedIn?: boolean }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -393,7 +393,7 @@ export function TrackerLanding({ config: c, paid }: { config: TrackerLandingConf
         </div>
       </section>
 
-      <StickyCtaBar hidePremium={paid} />
+      <StickyCtaBar hidePremium={paid} loggedIn={loggedIn} />
     </main>
   );
 }
