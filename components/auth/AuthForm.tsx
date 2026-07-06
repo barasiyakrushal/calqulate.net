@@ -75,9 +75,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         toast.success("Account created! Check your email to confirm.");
         return;
       }
-      if (mode === "login") {
-        await fetch("/api/auth/register-session", { method: "POST" });
-      }
+      await fetch("/api/auth/register-session", { method: "POST" });
       toast.success(mode === "login" ? "Welcome back!" : "Account created!");
       router.push(next);
       router.refresh();

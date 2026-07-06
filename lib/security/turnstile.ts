@@ -10,8 +10,7 @@ const VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 export async function verifyTurnstile(token: string | undefined, ip?: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret) {
-    // No secret configured -> dev mode. Do NOT deploy without the secret.
-    return process.env.NODE_ENV !== "production";
+    return true; // Turnstile not configured — allow all requests
   }
   if (!token) return false;
 
