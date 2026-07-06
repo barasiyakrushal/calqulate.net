@@ -49,7 +49,6 @@ export default async function WeightTrackerPage() {
       at: Date.parse(w.takenAt),
       kg: w.weightKg,
       changeKg: prev ? w.weightKg - prev.weightKg : null,
-      notes: w.notes,
     };
   });
 
@@ -136,7 +135,6 @@ export default async function WeightTrackerPage() {
                         <th className="px-5 py-2 font-medium">Date</th>
                         <th className="px-5 py-2 font-medium">Weight</th>
                         <th className="px-5 py-2 font-medium">Change</th>
-                        <th className="px-5 py-2 font-medium">Notes</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -158,7 +156,6 @@ export default async function WeightTrackerPage() {
                                 </span>
                               )}
                             </td>
-                            <td className="px-5 py-3 text-gray-500">{r.notes || "—"}</td>
                           </tr>
                         );
                       })}

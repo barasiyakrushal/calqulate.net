@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
@@ -50,8 +51,8 @@ export function AppShell({ tier, isAdmin, email, children }: AppShellProps) {
         >
           <Menu className="h-6 w-6" />
         </button>
-        <Link href="/dashboard" className="text-base font-bold text-gray-900">
-          Calqulate <span className="text-emerald-600">Vitals</span>
+        <Link href="/dashboard" aria-label="Calqulate Vitals — Overview" className="flex items-center">
+          <Image src="/calqulate-wordmark.png" alt="Calqulate Vitals" width={654} height={167} priority className="h-8 w-auto object-contain" />
         </Link>
       </div>
 

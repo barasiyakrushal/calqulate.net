@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -77,9 +78,14 @@ export function Sidebar({ variant, tier, isAdmin, email, onNavigate, onClose }: 
         >
           {/* Compact mark for the collapsed rail */}
           <span className={isDrawer ? "hidden" : "hidden md:inline lg:hidden"}>CV</span>
-          <span className={isDrawer ? "inline" : "hidden lg:inline"}>
-            Calqulate <span className="text-emerald-500">Vitals</span>
-          </span>
+          {/* Full logo (white chip on the dark rail) for drawer + expanded rail */}
+          <Image
+            src="/calqulate-wordmark.png"
+            alt="Calqulate Vitals"
+            width={654}
+            height={167}
+            className={`h-8 w-auto rounded-md ${isDrawer ? "inline-block" : "hidden lg:inline-block"}`}
+          />
         </Link>
         {isDrawer && (
           <button
