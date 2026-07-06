@@ -140,7 +140,9 @@ export class RazorpayProvider implements PaymentProvider {
       .update(body)
       .digest("hex");
 
-    if (expectedSignature !== signature) {
+    const sigBuf = Buffer.from(expectedSignature, "hex");
+    const recvBuf = Buffer.from(signature, "hex");
+    if (sigBuf.length !== recvBuf.length || !crypto.timingSafeEqual(sigBuf, recvBuf)) {
       throw new InvalidWebhookError("Signature mismatch");
     }
 

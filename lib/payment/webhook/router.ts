@@ -19,14 +19,17 @@ export async function processWebhook(
 
   await logWebhook(gateway, normalized.eventId, normalized.type, body, "received");
 
+  // Sync subscription BEFORE marking event as processed.
+  // This ensures that if syncSubscription fails, the webhook can be retried
+  // and the subscription update is not silently lost.
+  await syncSubscription(normalized);
+
   const result = await markEventProcessed(gateway, normalized.eventId, normalized.type, body);
 
   if (result === "skipped") {
     await logWebhook(gateway, normalized.eventId, normalized.type, body, "skipped");
     return { received: true, status: "skipped" };
   }
-
-  await syncSubscription(normalized);
 
   await logWebhook(gateway, normalized.eventId, normalized.type, body, "processed");
   return { received: true, status: "processed" };

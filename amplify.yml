@@ -9,29 +9,66 @@ frontend:
       commands:
         - echo "Building Next.js site..."
 
-        # Resend API Key
-        - |-
-          if [ -n "$RESEND_API_KEY" ]; then
-            echo "RESEND_API_KEY=$RESEND_API_KEY" >> .env.production
-          else
-            echo "Warning: RESEND_API_KEY is not set."
-          fi
+        # ── Write ALL env vars to .env.production ──
+        # Set these in the AWS Amplify console under Environment Variables.
+        # NEXT_PUBLIC_* vars MUST be available at build time (embedded in JS).
+        # All others are read at runtime on the server.
 
-        # Supabase URL
-        - |-
-          if [ -n "$NEXT_PUBLIC_SUPABASE_URL" ]; then
-            echo "NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL" >> .env.production
-          else
-            echo "Warning: NEXT_PUBLIC_SUPABASE_URL is not set."
-          fi
+        # Supabase (required)
+        - echo "NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL" >> .env.production
+        - echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY" >> .env.production
+        - echo "SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY" >> .env.production
 
-        # Supabase Secret Key
-        - |-
-          if [ -n "$SUPABASE_SERVICE_ROLE_KEY" ]; then
-            echo "SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY" >> .env.production
-          else
-            echo "Warning: SUPABASE_SERVICE_ROLE_KEY is not set."
-          fi
+        # Site URL
+        - echo "NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL" >> .env.production
+
+        # Razorpay (India)
+        - echo "RAZORPAY_KEY_ID=$RAZORPAY_KEY_ID" >> .env.production
+        - echo "RAZORPAY_KEY_SECRET=$RAZORPAY_KEY_SECRET" >> .env.production
+        - echo "RAZORPAY_WEBHOOK_SECRET=$RAZORPAY_WEBHOOK_SECRET" >> .env.production
+        - echo "RAZORPAY_PLAN_PRO_MONTHLY=$RAZORPAY_PLAN_PRO_MONTHLY" >> .env.production
+        - echo "RAZORPAY_PLAN_PRO_YEARLY=$RAZORPAY_PLAN_PRO_YEARLY" >> .env.production
+        - echo "RAZORPAY_PLAN_PRO_MONTHLY_INR=$RAZORPAY_PLAN_PRO_MONTHLY_INR" >> .env.production
+        - echo "RAZORPAY_PLAN_PRO_YEARLY_INR=$RAZORPAY_PLAN_PRO_YEARLY_INR" >> .env.production
+
+        # PayPal (rest of world)
+        - echo "PAYPAL_CLIENT_ID=$PAYPAL_CLIENT_ID" >> .env.production
+        - echo "PAYPAL_CLIENT_SECRET=$PAYPAL_CLIENT_SECRET" >> .env.production
+        - echo "PAYPAL_WEBHOOK_ID=$PAYPAL_WEBHOOK_ID" >> .env.production
+        - echo "PAYPAL_PLAN_PRO_MONTHLY=$PAYPAL_PLAN_PRO_MONTHLY" >> .env.production
+        - echo "PAYPAL_PLAN_PRO_YEARLY=$PAYPAL_PLAN_PRO_YEARLY" >> .env.production
+
+        # SMTP — Support (weekly digest, dose reminders)
+        - echo "SUPPORT_SMTP_HOST=$SUPPORT_SMTP_HOST" >> .env.production
+        - echo "SUPPORT_SMTP_PORT=$SUPPORT_SMTP_PORT" >> .env.production
+        - echo "SUPPORT_SMTP_USER=$SUPPORT_SMTP_USER" >> .env.production
+        - echo "SUPPORT_SMTP_PASS=$SUPPORT_SMTP_PASS" >> .env.production
+        - echo "SUPPORT_FROM_EMAIL=$SUPPORT_FROM_EMAIL" >> .env.production
+
+        # SMTP — Feedback (welcome emails)
+        - echo "FEEDBACK_SMTP_HOST=$FEEDBACK_SMTP_HOST" >> .env.production
+        - echo "FEEDBACK_SMTP_PORT=$FEEDBACK_SMTP_PORT" >> .env.production
+        - echo "FEEDBACK_SMTP_USER=$FEEDBACK_SMTP_USER" >> .env.production
+        - echo "FEEDBACK_SMTP_PASS=$FEEDBACK_SMTP_PASS" >> .env.production
+        - echo "FEEDBACK_FROM_EMAIL=$FEEDBACK_FROM_EMAIL" >> .env.production
+
+        # Resend (contact form)
+        - echo "RESEND_API_KEY=$RESEND_API_KEY" >> .env.production
+
+        # Web Push (VAPID)
+        - echo "NEXT_PUBLIC_VAPID_PUBLIC_KEY=$NEXT_PUBLIC_VAPID_PUBLIC_KEY" >> .env.production
+        - echo "VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY" >> .env.production
+        - echo "VAPID_SUBJECT=$VAPID_SUBJECT" >> .env.production
+
+        # Security
+        - echo "TURNSTILE_SECRET_KEY=$TURNSTILE_SECRET_KEY" >> .env.production
+        - echo "NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY" >> .env.production
+        - echo "CRON_SECRET=$CRON_SECRET" >> .env.production
+        - echo "ADMIN_EMAILS=$ADMIN_EMAILS" >> .env.production
+
+        # Redis (rate limiting — optional, falls back to in-memory)
+        - echo "UPSTASH_REDIS_URL=$UPSTASH_REDIS_URL" >> .env.production
+        - echo "UPSTASH_REDIS_TOKEN=$UPSTASH_REDIS_TOKEN" >> .env.production
 
         - npm run build
 

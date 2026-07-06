@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { paymentService } from "@/lib/payment/PaymentService";
 import { resolveIsAdmin } from "@/lib/admin-core";
+import { logAudit } from "@/lib/admin";
 import type { Gateway } from "@/lib/payment/types/index";
 
 /**
@@ -42,6 +43,8 @@ export async function POST(req: Request) {
         updated_at: new Date().toISOString(),
       })
       .eq("id", subscriptionId);
+
+    await logAudit("refund", subscriptionId, { userId, gatewaySubId, gateway });
 
     return NextResponse.json({ ok: true });
   } catch (err) {

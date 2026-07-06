@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, ArrowRight, Loader2 } from "lucide-react";
+import type { Gateway } from "@/lib/payment/types/index";
 import { GatewayPicker } from "@/components/payment/GatewayPicker";
 import { useCheckout } from "@/hooks/useCheckout";
 import { getPrice, formatPrice, displaySubtitle } from "@/lib/payment/pricing";
@@ -16,8 +17,8 @@ export function PremiumPricingCard() {
   const unit = cadence === "yearly" ? "/year" : "/month";
   const sub = displaySubtitle(currency, cadence);
 
-  async function goPremium(usePaypal?: boolean) {
-    await checkout("pro", cadence, usePaypal);
+  async function goPremium(gateway?: Gateway) {
+    await checkout("pro", cadence, gateway);
   }
 
   return (
@@ -72,7 +73,7 @@ export function PremiumPricingCard() {
           </div>
         )}
         <button
-          onClick={() => goPremium(true)}
+          onClick={() => goPremium("paypal")}
           disabled={loading}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-6 py-3 text-sm font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition-all duration-150 hover:-translate-y-0.5 disabled:opacity-60"
         >
@@ -81,7 +82,7 @@ export function PremiumPricingCard() {
         <GatewayPicker />
         <div className="text-center">
           <button
-                onClick={() => goPremium(false)}
+                onClick={() => goPremium("razorpay")}
             disabled={loading}
             className="text-xs text-gray-400 underline-offset-2 hover:text-emerald-600 hover:underline"
           >

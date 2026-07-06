@@ -570,13 +570,20 @@ export default async function HomePage() {
                 </div>
 
                 <div className="mt-5 sm:mt-7 flex flex-wrap justify-center gap-3 lg:justify-start">
-                  {/* TOFU: free-start (login required) + gold Premium (pricing) */}
-                  <Button size="lg" className="w-full sm:w-auto rounded-xl bg-brand px-7 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-brand-600 min-h-[44px]" asChild>
-                    <Link href="/login?next=/dashboard">Start free<ArrowRight className="ml-2 h-4 w-4" /></Link>
-                  </Button>
-                  <Button size="lg" className="w-full sm:w-auto rounded-xl bg-gradient-to-r from-gold-light to-gold px-7 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5 hover:opacity-95 min-h-[44px]" asChild>
-                    <Link href="/pricing">Go Premium<ArrowRight className="ml-2 h-4 w-4" /></Link>
-                  </Button>
+                  {paid ? (
+                    <Button size="lg" className="w-full sm:w-auto rounded-xl bg-emerald-700 px-7 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-800 min-h-[44px]" asChild>
+                      <Link href="/dashboard">Go to dashboard<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    </Button>
+                  ) : (
+                    <>
+                      <Button size="lg" className="w-full sm:w-auto rounded-xl bg-brand px-7 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-brand-600 min-h-[44px]" asChild>
+                        <Link href="/login?next=/dashboard">Start free<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                      </Button>
+                      <Button size="lg" className="w-full sm:w-auto rounded-xl bg-gradient-to-r from-gold-light to-gold px-7 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5 hover:opacity-95 min-h-[44px]" asChild>
+                        <Link href="/pricing">Go Premium<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
                 <div className="mt-3 text-center lg:text-left">
                   <Link href="/how-it-works" className="text-sm font-medium text-brand-700 hover:underline">See how it works →</Link>
@@ -743,11 +750,13 @@ export default async function HomePage() {
         </section>
 
         {/* ── FREE vs PREMIUM (before founder vision — keeps the conversion flow) ── */}
-        <section className="bg-white py-12 sm:py-16">
-          <div className="container mx-auto px-3 sm:px-4">
-            <FreeVsPremium showCta />
-          </div>
-        </section>
+        {!paid && (
+          <section className="bg-white py-12 sm:py-16">
+            <div className="container mx-auto px-3 sm:px-4">
+              <FreeVsPremium showCta />
+            </div>
+          </section>
+        )}
 
         {/* ── SECTION E: PRICING ───────────────────────────────────────────── */}
         <section id="pricing" className="py-12 sm:py-16 bg-gray-50 border-y border-gray-100 scroll-mt-20">
@@ -1219,24 +1228,39 @@ export default async function HomePage() {
               want to save and reverse it.
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-gold-light to-gold hover:opacity-95 text-gold-ink font-bold px-8 rounded-xl shadow-[0_8px_20px_rgba(245,158,11,.35)]"
-                asChild
-              >
-                <Link href="/login?next=/dashboard">
-                  Start free
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white px-8 rounded-xl font-semibold"
-                asChild
-              >
-                <Link href="/pricing">See Premium plans</Link>
-              </Button>
+              {paid ? (
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-gold-light to-gold hover:opacity-95 text-gold-ink font-bold px-8 rounded-xl shadow-[0_8px_20px_rgba(245,158,11,.35)]"
+                  asChild
+                >
+                  <Link href="/dashboard">
+                    Go to dashboard
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-gold-light to-gold hover:opacity-95 text-gold-ink font-bold px-8 rounded-xl shadow-[0_8px_20px_rgba(245,158,11,.35)]"
+                    asChild
+                  >
+                    <Link href="/login?next=/dashboard">
+                      Start free
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white px-8 rounded-xl font-semibold"
+                    asChild
+                  >
+                    <Link href="/pricing">See Premium plans</Link>
+                  </Button>
+                </>
+              )}
             </div>
             <p className="mt-8 text-xs text-white/45">
               Educational decision-support - not medical, legal, or financial advice.

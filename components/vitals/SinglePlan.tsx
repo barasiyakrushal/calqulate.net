@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Check, ArrowRight, Loader2, Dumbbell, ShieldCheck } from "lucide-react";
 import { GatewayPicker } from "@/components/payment/GatewayPicker";
 import { useCheckout } from "@/hooks/useCheckout";
+import type { Gateway } from "@/lib/payment/types/index";
 import { getPrice, formatPrice, displaySubtitle } from "@/lib/payment/pricing";
 
 const GOLD_BTN =
@@ -66,8 +67,8 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
   const unit = cadence === "yearly" ? "/year" : "/month";
   const sub = displaySubtitle(currency, cadence);
 
-  async function subscribe(usePaypal?: boolean) {
-    await checkout("pro", cadence, usePaypal);
+  async function subscribe(gateway?: Gateway) {
+    await checkout("pro", cadence, gateway);
   }
 
   return (
@@ -153,7 +154,7 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
             {isIndia ? (
               <>
                 {/* India → Razorpay (UPI, cards, netbanking), charged in INR. */}
-                <button onClick={() => subscribe(false)} disabled={loading} className={GOLD_BTN}>
+                <button onClick={() => subscribe()} disabled={loading} className={GOLD_BTN}>
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
                   {loading ? "Redirecting…" : "Start Calqulate Vitals"}
                 </button>
@@ -164,14 +165,14 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
             ) : (
               <>
                 {/* Non-India → PayPal (also accepts Visa/MC/Amex with no account). */}
-                <button onClick={() => subscribe(true)} disabled={loading} className={GOLD_BTN}>
+                <button onClick={() => subscribe("paypal")} disabled={loading} className={GOLD_BTN}>
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
                   {loading ? "Redirecting…" : "Start Calqulate Vitals"}
                 </button>
                 <GatewayPicker />
                 <div className="text-center">
                   <button
-                    onClick={() => subscribe(false)}
+                    onClick={() => subscribe("razorpay")}
                     disabled={loading}
                     className="text-xs text-gray-400 underline-offset-2 hover:text-emerald-600 hover:underline"
                   >

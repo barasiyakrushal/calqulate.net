@@ -11,8 +11,10 @@ import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
 import { NonEmbedChrome } from "@/components/layout/non-embed-chrome";
 import { Toaster } from "@/components/ui/sonner";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://calqulate.net";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://calqulate.net"),
+  metadataBase: new URL(SITE_URL),
   title: "Stop GLP-1 Muscle Loss: Track Metabolism & Look Younger",
   description:
     "Stop GLP-1 muscle loss. The only app to track your dosage, Metabolism Score, and Heart Age. Burn pure fat, protect muscle, and look 15 years younger.",
@@ -33,7 +35,7 @@ export const metadata: Metadata = {
     description: "Free online calculators for health improvement",
     type: "website",
     siteName: "Calqulate",
-    url: "https://calqulate.net/",
+    url: SITE_URL,
     images: [
       {
         url: "/og-image.webp",
@@ -50,12 +52,16 @@ export const metadata: Metadata = {
     images: ["/og-image.webp"],
   },
   alternates: {
-    canonical: "https://calqulate.net/",
+    canonical: SITE_URL,
   },
   icons: {
-    icon: [{ url: "/calqulate-logo.png", sizes: "any", type: "image/png" }],
-    apple: "/calqulate-logo.png",
-    shortcut: "/calqulate-logo.png",
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/calqulate-logo-192x192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon-32x32.png",
   },
   manifest: "/manifest.webmanifest",
 };

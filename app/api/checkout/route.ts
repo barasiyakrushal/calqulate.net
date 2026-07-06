@@ -16,7 +16,7 @@ const schema = z.object({
 
 export async function POST(req: Request) {
   try {
-    const rl = rateLimit(`checkout:${clientIp(req)}`, 15, 60_000);
+    const rl = await rateLimit(`checkout:${clientIp(req)}`, 15, 60_000);
     if (!rl.ok) {
       return NextResponse.json(
         { error: "Too many requests. Please wait a moment." },
@@ -41,10 +41,23 @@ export async function POST(req: Request) {
     // Detect country: client-provided > server headers > default
     const country = clientCountry ?? detectCountryFromHeaders(req.headers);
 
-    // If gateway explicitly chosen by user, use it; otherwise auto-detect
-    const config = gateway
-      ? { gateway: gateway as Gateway, currency: gateway === "razorpay" ? "INR" as const : "USD" as const }
+    // If gateway explicitly chosen by user, use it; otherwise auto-detect.
+    // Razorpay: India → INR, non-India → USD (for card payments once international approved).
+    // PayPal: always USD.
+    let config = gateway
+      ? { gateway: gateway as Gateway, currency: gateway === "razorpay" && country !== "IN" ? "USD" as const : "INR" as const }
       : getConfigForCountry(country);
+
+    // Fallback: Razorpay USD plans not yet configured → route to PayPal.
+    // Once Razorpay approves international cards, set RAZORPAY_PLAN_PRO_MONTHLY/YEARLY
+    // env vars and this fallback drops away automatically.
+    if (config.gateway === "razorpay" && config.currency === "USD") {
+      const monthlyPlan = process.env.RAZORPAY_PLAN_PRO_MONTHLY;
+      const yearlyPlan = process.env.RAZORPAY_PLAN_PRO_YEARLY;
+      if (!monthlyPlan || monthlyPlan === '<plan_id>' || !yearlyPlan || yearlyPlan === '<plan_id>') {
+        config = { gateway: "paypal", currency: "USD" };
+      }
+    }
 
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();

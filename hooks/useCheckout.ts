@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import type { Tier, Cadence } from "@/lib/payment/types/index";
+import type { Tier, Cadence, Gateway } from "@/lib/payment/types/index";
 import { detectCountryFromBrowser } from "@/lib/payment/country";
 
 interface UseCheckoutOptions {
@@ -12,29 +12,25 @@ interface UseCheckoutOptions {
 interface UseCheckoutReturn {
   loading: boolean;
   error: string | null;
-  checkout: (tier: Tier, cadence: Cadence, usePaypal?: boolean) => Promise<void>;
+  checkout: (tier: Tier, cadence: Cadence, gateway?: Gateway) => Promise<void>;
   retry: () => void;
-  lastAttempt: { tier: Tier; cadence: Cadence; usePaypal?: boolean } | null;
+  lastAttempt: { tier: Tier; cadence: Cadence; gateway?: Gateway } | null;
 }
 
 export function useCheckout(options: UseCheckoutOptions = {}): UseCheckoutReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lastAttempt, setLastAttempt] = useState<{ tier: Tier; cadence: Cadence; usePaypal?: boolean } | null>(null);
+  const [lastAttempt, setLastAttempt] = useState<{ tier: Tier; cadence: Cadence; gateway?: Gateway } | null>(null);
 
   const checkout = useCallback(
-    async (tier: Tier, cadence: Cadence, usePaypal?: boolean) => {
+    async (tier: Tier, cadence: Cadence, gateway?: Gateway) => {
       setLoading(true);
       setError(null);
-      // usePaypal === true  → PayPal explicitly (also accepts Visa/MC/Amex, no account needed).
-      // usePaypal === false → "pay with card": auto-detect by country
-      //                       (India → Razorpay/INR, everywhere else → PayPal/USD).
-      // undefined           → PayPal.
-      const gateway = usePaypal === false ? undefined : "paypal";
-      // For the auto path, let the server resolve country from IP headers (more reliable
-      // than the browser locale); for the explicit path, pass the browser hint.
+      // gateway = undefined → server auto-detects by IP country (India → Razorpay/INR, rest → PayPal/USD)
+      // gateway = "paypal"  → explicit PayPal
+      // gateway = "razorpay" → explicit Razorpay (for card payments; falls back to PayPal if USD plans not configured)
       const country = gateway ? detectCountryFromBrowser() : undefined;
-      setLastAttempt({ tier, cadence, usePaypal });
+      setLastAttempt({ tier, cadence, gateway });
 
       try {
         const payload: Record<string, unknown> = { tier, cadence };
@@ -75,7 +71,7 @@ export function useCheckout(options: UseCheckoutOptions = {}): UseCheckoutReturn
 
   const retry = useCallback(() => {
     if (lastAttempt) {
-      checkout(lastAttempt.tier, lastAttempt.cadence, lastAttempt.usePaypal);
+      checkout(lastAttempt.tier, lastAttempt.cadence, lastAttempt.gateway);
     }
   }, [lastAttempt, checkout]);
 

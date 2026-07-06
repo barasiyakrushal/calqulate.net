@@ -1,4 +1,4 @@
-import { getAccess } from "@/lib/auth";
+import { getAccess, hasPaidAccess } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { listRecords } from "@/lib/glp1/repository";
 import {
@@ -29,18 +29,23 @@ export default async function HistoryPage() {
   const access = await getAccess();
   const supabase = await createClient();
   const userId = access.userId!;
+  const paid = hasPaidAccess(access);
+
+  // Free users get a rolling 90‑day window; premium users see everything.
+  const since = paid ? undefined : new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+  const listOpts = (limit: number) => ({ limit, since } as const);
 
   const [meds, doses, weights, bodyComps, foods, waters, exercises, checkins, symptoms, labs, riskRes] = await Promise.all([
     listRecords<Medication>(supabase, "medication", userId, { limit: 20 }),
-    listRecords<DoseLog>(supabase, "doseLog", userId, { limit: 500 }),
-    listRecords<WeightLog>(supabase, "weightLog", userId, { limit: 500 }),
-    listRecords<BodyCompositionLog>(supabase, "bodyComposition", userId, { limit: 300 }),
-    listRecords<FoodLog>(supabase, "foodLog", userId, { limit: 500 }),
-    listRecords<WaterLog>(supabase, "waterLog", userId, { limit: 300 }),
-    listRecords<ExerciseLog>(supabase, "exerciseLog", userId, { limit: 300 }),
-    listRecords<CheckIn>(supabase, "checkIn", userId, { limit: 300 }),
-    listRecords<SideEffectLog>(supabase, "sideEffect", userId, { limit: 300 }),
-    listRecords<LabResult>(supabase, "labResult", userId, { limit: 300 }),
+    listRecords<DoseLog>(supabase, "doseLog", userId, listOpts(paid ? 500 : 200)),
+    listRecords<WeightLog>(supabase, "weightLog", userId, listOpts(paid ? 500 : 200)),
+    listRecords<BodyCompositionLog>(supabase, "bodyComposition", userId, listOpts(paid ? 300 : 200)),
+    listRecords<FoodLog>(supabase, "foodLog", userId, listOpts(paid ? 500 : 200)),
+    listRecords<WaterLog>(supabase, "waterLog", userId, listOpts(paid ? 300 : 200)),
+    listRecords<ExerciseLog>(supabase, "exerciseLog", userId, listOpts(paid ? 300 : 200)),
+    listRecords<CheckIn>(supabase, "checkIn", userId, listOpts(paid ? 300 : 200)),
+    listRecords<SideEffectLog>(supabase, "sideEffect", userId, listOpts(paid ? 300 : 200)),
+    listRecords<LabResult>(supabase, "labResult", userId, listOpts(paid ? 300 : 200)),
     supabase.from("risk_results").select("composite_score,composite_grade,ascvd_percent,diabetes_percent,heart_age,computed_at").eq("user_id", userId).order("computed_at", { ascending: false }),
   ]);
 

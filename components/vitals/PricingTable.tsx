@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { PLANS, type Tier } from "@/lib/payment/types/index";
+import { PLANS, type Tier, type Gateway } from "@/lib/payment/types/index";
 import { getPrice, formatPrice } from "@/lib/payment/pricing";
 import { GatewayPicker } from "@/components/payment/GatewayPicker";
 import { useCheckout } from "@/hooks/useCheckout";
@@ -13,13 +13,13 @@ export function PricingTable() {
 
   const currency = "USD";
 
-  async function subscribe(tier: Tier, usePaypal?: boolean) {
+  async function subscribe(tier: Tier, gateway?: Gateway) {
     if (tier === "free") {
       window.location.href = "/signup";
       return;
     }
     setActiveTier(tier);
-    await checkout(tier, cadence, usePaypal);
+    await checkout(tier, cadence, gateway);
     setActiveTier(null);
   }
 
@@ -92,7 +92,7 @@ export function PricingTable() {
               ) : (
                 <div className="mt-6 space-y-2">
                   <button
-                    onClick={() => subscribe(p.tier, true)}
+                    onClick={() => subscribe(p.tier, "paypal")}
                     disabled={isBusy}
                     className="w-full rounded-lg bg-blue-600 px-4 py-2.5 font-semibold text-white hover:bg-blue-700 inline-flex items-center justify-center gap-2 disabled:opacity-60"
                   >
@@ -100,7 +100,7 @@ export function PricingTable() {
                     {isBusy ? "Redirecting\u2026" : p.cta}
                   </button>
                   <button
-                    onClick={() => subscribe(p.tier, false)}
+                    onClick={() => subscribe(p.tier, "razorpay")}
                     disabled={isBusy}
                     className="w-full text-center text-xs text-gray-400 underline-offset-2 hover:text-emerald-600 hover:underline"
                   >

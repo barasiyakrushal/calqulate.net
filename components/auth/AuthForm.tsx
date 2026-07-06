@@ -26,6 +26,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next") ?? "/dashboard";
+  const reason = params.get("reason");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -74,6 +75,9 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         toast.success("Account created! Check your email to confirm.");
         return;
       }
+      if (mode === "login") {
+        await fetch("/api/auth/register-session", { method: "POST" });
+      }
       toast.success(mode === "login" ? "Welcome back!" : "Account created!");
       router.push(next);
       router.refresh();
@@ -108,6 +112,13 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           ? "Start tracking your metabolic health."
           : "Sign in to your dashboard."}
       </p>
+
+      {reason === "logged_out_elsewhere" && mode === "login" && (
+        <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+          <span>You were signed out because you logged in on another device. Only one active session is allowed per account.</span>
+        </div>
+      )}
 
       <div className="mt-5 space-y-2">
         <button
