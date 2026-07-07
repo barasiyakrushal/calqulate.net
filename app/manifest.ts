@@ -21,19 +21,13 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: "any",
       },
       {
-        src: "/calqulate-logo-512x512.png",
+        src: "/calqulate-icon-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/calqulate-logo.png",
-        sizes: "1024x1024",
-        type: "image/png",
-        purpose: "any",
-      },
-      {
-        src: "/calqulate-logo-512x512.png",
+        src: "/calqulate-icon-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",

@@ -324,23 +324,15 @@ export function Header() {
       <div className="container mx-auto px-3 sm:px-4 lg:px-6">
         <div className="flex h-[60px] items-center gap-2 sm:gap-4 lg:gap-6">
           {/* Logo */}
-          <Link href="/" onClick={closeAll} className="flex items-center gap-2 flex-shrink-0 group">
+          <Link href="/" onClick={closeAll} aria-label="Calqulate.NET — Home" className="flex-shrink-0">
             <Image
-              src="/calqulate-logo.png"
-              alt="Calqulate logo"
-              width={32}
-              height={32}
+              src="/calqulate-wordmark.png"
+              alt="Calqulate.NET"
+              width={654}
+              height={167}
               priority
-              className="h-8 w-8 rounded-lg object-contain"
+              className="h-10 w-auto object-contain"
             />
-            <span className="flex flex-col leading-none">
-              <span className="text-[17px] font-bold tracking-tight text-gray-900">
-                Calqulate<span className="text-emerald-600">.NET</span>
-              </span>
-              <span className="hidden xl:block text-[10px] text-gray-400 font-medium mt-0.5">
-                Risk-reversal for metabolic &amp; heart health
-              </span>
-            </span>
           </Link>
 
           {/* ── Desktop nav ── */}

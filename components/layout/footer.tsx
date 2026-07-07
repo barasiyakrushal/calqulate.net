@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { HeartPulse, Mail, ShieldCheck, Lock } from "lucide-react"
+import Image from "next/image"
+import { Mail, ShieldCheck, Lock } from "lucide-react"
 import { STANDALONE_QUESTIONS } from "@/app/answers/questions-data"
 import { PaymentBadges } from "./payment-badges"
 
@@ -12,15 +13,18 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="space-y-4 sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center space-x-2">
-              <HeartPulse className="h-6 w-6 text-brand" />
-              <span className="text-lg font-bold text-white">
-                Calqulate<span className="text-brand">.NET</span>
-              </span>
+            <Link href="/" aria-label="Calqulate.NET — Home" className="inline-flex">
+              <Image
+                src="/calqulate-wordmark.png"
+                alt="Calqulate.NET"
+                width={654}
+                height={167}
+                className="h-9 w-auto rounded-lg"
+              />
             </Link>
             <p className="text-sm text-white/55">
-              Calqulate is a risk-reversal service for metabolic and heart health. Track your score,
-              watch your trend, lower your risk — backed by validated clinical models.
+              Calqulate.net build for GLP-1 Medication users for tracking weight, dose, and fat vs muscle for metabolic and heart health. Track your score,
+              watch your trend, lower your risk, backed by validated clinical models.
             </p>
             <div className="space-y-2 text-sm text-white/55">
               <div className="flex items-center space-x-2">
