@@ -16,15 +16,11 @@ export interface CountryConfig {
   currency: Currency;
 }
 
-/** Map ISO country codes to payment config. IN → Razorpay/INR, everything else → PayPal/USD */
-const COUNTRY_MAP: Record<string, CountryConfig> = {
-  IN: { gateway: "razorpay", currency: "INR" },
-};
-
+/** All countries default to PayPal/USD. Razorpay is used via explicit card-button selection. */
 const DEFAULT_CONFIG: CountryConfig = { gateway: "paypal", currency: "USD" };
 
-export function getConfigForCountry(countryCode: string): CountryConfig {
-  return COUNTRY_MAP[countryCode] ?? DEFAULT_CONFIG;
+export function getConfigForCountry(_countryCode: string): CountryConfig {
+  return DEFAULT_CONFIG;
 }
 
 /**

@@ -69,15 +69,12 @@ function inferTier(planId: string): Tier {
   const proPlans = [
     process.env.RAZORPAY_PLAN_PRO_MONTHLY,
     process.env.RAZORPAY_PLAN_PRO_YEARLY,
-    process.env.RAZORPAY_PLAN_PRO_MONTHLY_INR,
-    process.env.RAZORPAY_PLAN_PRO_YEARLY_INR,
   ].filter(Boolean);
   if (proPlans.includes(planId)) return "pro";
   return "free";
 }
 
-function inferCurrency(planId: string): Currency {
-  if (planId === process.env.RAZORPAY_PLAN_PRO_MONTHLY_INR || planId === process.env.RAZORPAY_PLAN_PRO_YEARLY_INR) return "INR";
+function inferCurrency(_planId: string): Currency {
   return "USD";
 }
 
@@ -86,7 +83,7 @@ export class RazorpayProvider implements PaymentProvider {
 
   async createCheckout(input: CreateCheckoutInput): Promise<CheckoutResult> {
     const client = getClient();
-    const planId = razorpayPlanIdFor(input.tier, input.cadence, input.currency);
+    const planId = razorpayPlanIdFor(input.tier, input.cadence);
     if (!planId) throw new Error(`No plan configured for ${input.tier} ${input.cadence} ${input.currency}`);
 
     // Get or create customer
@@ -152,7 +149,7 @@ export class RazorpayProvider implements PaymentProvider {
 
     const notes = (sub as { notes?: Record<string, string> }).notes ?? {};
 
-    const currency = notes.currency === "INR" ? "INR" : "USD";
+    const currency = "USD";
 
     return {
       eventId: `${payload.event}_${sub.id}_${payload.created_at}`,

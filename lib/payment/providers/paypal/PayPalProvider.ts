@@ -95,7 +95,7 @@ export class PayPalProvider implements PaymentProvider {
   readonly name: Gateway = "paypal";
 
   async createCheckout(input: CreateCheckoutInput): Promise<CheckoutResult> {
-    const planId = paypalPlanIdFor(input.tier, input.cadence, input.currency);
+    const planId = paypalPlanIdFor(input.tier, input.cadence);
     if (!planId) throw new Error(`No plan configured for ${input.tier} ${input.cadence} ${input.currency}`);
 
     const siteUrl = input.siteUrl ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://calqulate.net";

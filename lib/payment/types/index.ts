@@ -2,7 +2,7 @@
 
 export type Tier = "free" | "pro";
 export type Gateway = "razorpay" | "paypal";
-export type Currency = "USD" | "INR";
+export type Currency = "USD";
 export type Cadence = "monthly" | "yearly";
 export type SubscriptionStatus = "active" | "inactive" | "trialing" | "canceled" | "past_due";
 
@@ -70,20 +70,14 @@ export function displaySub(cadence: Cadence): string {
     : "Billed monthly. Switch to yearly anytime.";
 }
 
-/** Razorpay-specific plan ID lookup (currency-aware) */
-export function razorpayPlanIdFor(tier: Tier, cadence: Cadence, currency?: Currency): string | undefined {
+/** Razorpay-specific plan ID lookup (always USD) */
+export function razorpayPlanIdFor(tier: Tier, cadence: Cadence): string | undefined {
   if (tier === "free") return undefined;
-  if (currency === "INR") {
-    return process.env[`RAZORPAY_PLAN_${tier.toUpperCase()}_${cadence.toUpperCase()}_INR`];
-  }
   return process.env[`RAZORPAY_PLAN_${tier.toUpperCase()}_${cadence.toUpperCase()}`];
 }
 
-/** PayPal-specific plan ID lookup (currency-aware) */
-export function paypalPlanIdFor(tier: Tier, cadence: Cadence, currency?: Currency): string | undefined {
+/** PayPal-specific plan ID lookup (always USD) */
+export function paypalPlanIdFor(tier: Tier, cadence: Cadence): string | undefined {
   if (tier === "free") return undefined;
-  if (currency === "INR") {
-    return process.env[`PAYPAL_PLAN_${tier.toUpperCase()}_${cadence.toUpperCase()}_INR`];
-  }
   return process.env[`PAYPAL_PLAN_${tier.toUpperCase()}_${cadence.toUpperCase()}`];
 }

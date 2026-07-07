@@ -5,7 +5,6 @@ import { paymentService } from "@/lib/payment/PaymentService";
 import { rateLimit, clientIp } from "@/lib/security/rateLimit";
 import { detectCountryFromHeaders, getConfigForCountry } from "@/lib/payment/country";
 import type { Tier, Cadence, Gateway } from "@/lib/payment/types/index";
-import { getPrice } from "@/lib/payment/pricing";
 
 const schema = z.object({
   gateway: z.enum(["razorpay", "paypal"]).optional(),
@@ -41,17 +40,14 @@ export async function POST(req: Request) {
     // Detect country: client-provided > server headers > default
     const country = clientCountry ?? detectCountryFromHeaders(req.headers);
 
-    // If gateway explicitly chosen by user, use it; otherwise auto-detect.
-    // Razorpay: India → INR, non-India → USD (for card payments once international approved).
-    // PayPal: always USD.
+    // Gateway: explicit user choice or auto-detect (always PayPal/USD by default).
+    // All payments are USD regardless of country.
     let config = gateway
-      ? { gateway: gateway as Gateway, currency: gateway === "razorpay" && country !== "IN" ? "USD" as const : "INR" as const }
+      ? { gateway: gateway as Gateway, currency: "USD" as const }
       : getConfigForCountry(country);
 
-    // Fallback: Razorpay USD plans not yet configured → route to PayPal.
-    // Once Razorpay approves international cards, set RAZORPAY_PLAN_PRO_MONTHLY/YEARLY
-    // env vars and this fallback drops away automatically.
-    if (config.gateway === "razorpay" && config.currency === "USD") {
+    // Safety: Razorpay plan IDs must be configured in env.
+    if (config.gateway === "razorpay") {
       const monthlyPlan = process.env.RAZORPAY_PLAN_PRO_MONTHLY;
       const yearlyPlan = process.env.RAZORPAY_PLAN_PRO_YEARLY;
       if (!monthlyPlan || monthlyPlan === '<plan_id>' || !yearlyPlan || yearlyPlan === '<plan_id>') {

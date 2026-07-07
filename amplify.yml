@@ -22,16 +22,14 @@ frontend:
         # Site URL
         - echo "NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL" >> .env.production
 
-        # Razorpay (India)
+        # Razorpay (card payments — USD)
         - echo "RAZORPAY_KEY_ID=$RAZORPAY_KEY_ID" >> .env.production
         - echo "RAZORPAY_KEY_SECRET=$RAZORPAY_KEY_SECRET" >> .env.production
         - echo "RAZORPAY_WEBHOOK_SECRET=$RAZORPAY_WEBHOOK_SECRET" >> .env.production
         - echo "RAZORPAY_PLAN_PRO_MONTHLY=$RAZORPAY_PLAN_PRO_MONTHLY" >> .env.production
         - echo "RAZORPAY_PLAN_PRO_YEARLY=$RAZORPAY_PLAN_PRO_YEARLY" >> .env.production
-        - echo "RAZORPAY_PLAN_PRO_MONTHLY_INR=$RAZORPAY_PLAN_PRO_MONTHLY_INR" >> .env.production
-        - echo "RAZORPAY_PLAN_PRO_YEARLY_INR=$RAZORPAY_PLAN_PRO_YEARLY_INR" >> .env.production
 
-        # PayPal (rest of world)
+        # PayPal (USD)
         - echo "PAYPAL_CLIENT_ID=$PAYPAL_CLIENT_ID" >> .env.production
         - echo "PAYPAL_CLIENT_SECRET=$PAYPAL_CLIENT_SECRET" >> .env.production
         - echo "PAYPAL_WEBHOOK_ID=$PAYPAL_WEBHOOK_ID" >> .env.production

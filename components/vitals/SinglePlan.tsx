@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Check, ArrowRight, Loader2, Dumbbell, ShieldCheck } from "lucide-react";
 import { GatewayPicker } from "@/components/payment/GatewayPicker";
@@ -45,23 +45,9 @@ const HIGHLIGHTS = [
 
 export function SinglePlan({ paid }: { paid?: boolean }) {
   const [cadence, setCadence] = useState<"yearly" | "monthly">("yearly");
-  const [isIndia, setIsIndia] = useState(false);
   const { loading, error, checkout, retry } = useCheckout();
 
-  // Resolve the visitor's country from server-side IP headers (reliable, not the
-  // browser locale). India → Razorpay/INR layout; everywhere else → PayPal/USD.
-  // Payment routing is decided server-side at checkout regardless, so a brief
-  // pre-detection flash never charges the wrong gateway.
-  useEffect(() => {
-    let active = true;
-    fetch("/api/geo")
-      .then((r) => r.json())
-      .then((d) => { if (active) setIsIndia(d?.country === "IN"); })
-      .catch(() => {});
-    return () => { active = false; };
-  }, []);
-
-  const currency = isIndia ? "INR" : "USD";
+  const currency = "USD";
   const price = getPrice("pro", cadence, currency);
   const formatted = formatPrice(price, currency);
   const unit = cadence === "yearly" ? "/year" : "/month";
@@ -164,7 +150,7 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
                   disabled={loading}
                   className="text-xs text-gray-400 underline-offset-2 hover:text-emerald-600 hover:underline"
                 >
-                  {isIndia ? "or pay via UPI / cards (Razorpay)" : "or pay with your card"}
+                  or pay with your card
                 </button>
               </div>
               <p className="text-center text-xs text-gray-400">
