@@ -35,13 +35,13 @@ export async function getAccess(): Promise<AccessState> {
 
   const tier = (sub?.tier as Tier) ?? "free";
 
-  // A user has "paid access" when their subscription is active/trialing AND
-  // the tier is "pro". Free-tier users get status='free' (not 'active') to
-  // avoid misleading look-alikes with real paid subscriptions.
+  // isActive means the subscription row is in a usable state.
+  // For free users this is always true (they can use the dashboard).
+  // For pro users it requires status = 'active' | 'trialing'.
   const isActive =
     sub?.status === "active" ||
     sub?.status === "trialing" ||
-    (tier === "free" && sub?.status === "free");
+    sub?.status === "free";
 
   return { userId: user.id, tier, isActive, isAdmin: false, email: user.email ?? null };
 }

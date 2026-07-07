@@ -33,16 +33,16 @@ import {
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
 
 export const metadata: Metadata = {
-  title: "Weight Loss Percentage Calculator | Track % of Body Weight Lost",
+  title: "Weight Loss Percentage Calculator: Is Your Progress Actually Good?",
   description:
-    "Free weight loss percentage calculator. Calculate the percentage of weight loss instantly in lbs or kg, track progress to your goal, and see your weekly average.",
+    "Lost weight but not sure if it's enough? Calculate your exact weight loss percentage free, compare it to healthy benchmarks (5%, 10%, 15%+), and see if you're really on track.",
   keywords:
     "weight loss percentage calculator, body percent weight loss calculator, calculate the percentage of weight loss, calculate weight loss percentage calculator, determine weight loss percentage, figure out percentage of weight loss, figure percentage of weight loss, figuring percentage of weight loss, lose weight percentage calculator, percentage of fat loss calculator, weight loss percentage cal, percent weight loss newborn",
   alternates: {
     canonical: "https://calqulate.net/health/weight-loss-percentage-calculator",
   },
   openGraph: {
-    title: "Weight Loss Percentage Calculator | Track % of Body Weight Lost",
+    title: "Weight Loss Percentage Calculator: Is Your Progress Actually Good?",
     description: "Free weight loss percentage calculator. Calculate the percentage of weight loss instantly in lbs or kg, track progress to your goal, and see your weekly average.",
     url: "https://calqulate.net/health/weight-loss-percentage-calculator",
     siteName: "Calqulate",

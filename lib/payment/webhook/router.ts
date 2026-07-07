@@ -19,6 +19,15 @@ export async function processWebhook(
 
   await logWebhook(gateway, normalized.eventId, normalized.type, body, "received");
 
+  // Razorpay sends subscription.pending (→ subscription.created) BEFORE
+  // the user completes payment.  We must NOT provision the user until the
+  // first payment is actually captured (subscription.charged).
+  if (normalized.type === "subscription.created" && normalized.status === "trialing") {
+    await logWebhook(gateway, normalized.eventId, normalized.type, body, "skipped");
+    await markEventProcessed(gateway, normalized.eventId, normalized.type, body);
+    return { received: true, status: "skipped" };
+  }
+
   // Sync subscription BEFORE marking event as processed.
   // This ensures that if syncSubscription fails, the webhook can be retried
   // and the subscription update is not silently lost.

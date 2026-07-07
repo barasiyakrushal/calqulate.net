@@ -8,7 +8,7 @@ export async function SubscriptionStatus({ userId }: { userId: string }) {
   const admin = createAdminClient();
   const { data: sub } = await admin
     .from("subscriptions")
-    .select("tier, status, gateway, gateway_subscription_id, current_period_end, created_at")
+    .select("tier, status, gateway, gateway_subscription_id, current_period_end, updated_at")
     .eq("user_id", userId)
     .maybeSingle();
 
