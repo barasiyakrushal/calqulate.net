@@ -37,17 +37,17 @@ import { RelatedCalculators } from "@/components/calculators/related-calculators
 // Gaps: "fetal ponderal index", "ponderal index chart", "corpulence index"
 // ─────────────────────────────────────────────
 export const metadata: Metadata = {
-  title: "Ponderal Index Calculator – Normal Range 11–15 for Adults & Children | Rohrer's Index",
+  title: "Ponderal Index Calculator: More Accurate Than BMI?",
   description:
-    "Calculate your Ponderal Index (Corpulence Index / Rohrer's Index) free. Normal range for adults is 11–15 kg/m³. Includes adult, child, and newborn/fetal PI formulas with reference charts.",
+    "Is your Ponderal Index more accurate than BMI for your build? Free calculator for adults, kids, and newborn IUGR screening, with normal ranges.",
   keywords:
     "ponderal index calculator, ponderal index normal range, ponderal index normal range adults 11 15, rohrer index normal values, corpulence index, ponderal index formula, ponderal index chart, fetal ponderal index, ponderal index newborn, ponderal index vs bmi, what is ponderal index, rohrer index, ponderal index definition",
   alternates: {
     canonical: "https://calqulate.net/health/ponderal-index-calculator",
   },
   openGraph: {
-    title: "Ponderal Index Calculator – Normal Range 11–15 for Adults & Children | Rohrer's Index",
-    description: "Calculate your Ponderal Index (Corpulence Index / Rohrer's Index) free. Normal range for adults is 11–15 kg/m³. Includes adult, child, and newborn/fetal PI formulas with reference charts.",
+    title: "Ponderal Index Calculator: More Accurate Than BMI?",
+    description: "Is your Ponderal Index more accurate than BMI for your build? Free calculator for adults, kids, and newborn IUGR screening, with normal ranges.",
     url: "https://calqulate.net/health/ponderal-index-calculator",
     siteName: "Calqulate",
     type: "website",
@@ -113,7 +113,7 @@ export default function PonderalIndexCalculatorPage() {
     <div className="min-h-screen flex flex-col bg-white">
       <CalculatorSchema
         name="Ponderal Index Calculator"
-        description="Calculate Ponderal Index (Corpulence Index / Rohrer's Index) for adults and children. Normal adult range is 11–15 kg/m³. Includes fetal and newborn reference values."
+        description="Is your Ponderal Index more accurate than BMI for your build? Free calculator for adults, kids, and newborn IUGR screening, with normal ranges."
         url="https://calqulate.net/health/ponderal-index-calculator"
       />
       <FAQSchema faqs={faqs} />
@@ -133,7 +133,7 @@ export default function PonderalIndexCalculatorPage() {
               Ponderal Index Calculator
             </h1>
             <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              Calculate your <strong>Ponderal Index</strong> (also called the <strong>Corpulence Index</strong> or <strong> Rohrer's Index</strong>) — a body composition measure that uses height cubed rather than height squared, giving a more accurate result than BMI for tall, short, or lean individuals.
+              Is your Ponderal Index more accurate than BMI for your build? Free calculator for adults, kids, and newborn IUGR screening — with normal ranges.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-4">

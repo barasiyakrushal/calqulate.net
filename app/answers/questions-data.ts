@@ -7,6 +7,8 @@
 export interface RelatedLink {
   label: string;
   href: string;
+  /** Render as a premium gold button — used for internal links to paid product pages. */
+  gold?: boolean;
 }
 
 export interface QA {
@@ -404,6 +406,196 @@ export const GROUPS: Group[] = [
         links: [
           { label: "How it works & pricing", href: "/how-it-works" },
           { label: "Browse all free calculators", href: "/search" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "glp1-tracker-apps",
+    title: "GLP-1 tracker & app questions",
+    blurb: "Whether a general app is enough, what to actually track, and whether your data is safe.",
+    items: [
+      {
+        q: "Do I actually need a dedicated GLP-1 tracker, or can I just use Apple Health or MyFitnessPal?",
+        a: "You can get by with a general app for a while, but it will not tell you the things that actually matter on a GLP-1. MyFitnessPal counts calories. Apple Health logs steps and weight. Neither one knows you moved from 0.25 mg to 0.5 mg last Tuesday, so neither can tell you whether this week's nausea is dose-related or just a bad week. And neither separates a 2 lb drop in fat from a 2 lb drop in muscle, which is the number that actually predicts whether you keep the weight off. A generic tracker tells you the scale moved. A GLP-1 tracker tells you why, and what it cost you. That gap is exactly what the GLP-1 Progress Tracker on Calqulate.net is built to close.",
+        links: [
+          { label: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker", gold: true },
+        ],
+      },
+      {
+        q: "What's the best app to track my shots, weight, and side effects together?",
+        a: "Honestly, most \"GLP-1 apps\" are just a weight log with a reminder bell bolted on. The useful ones let you see your dose, your weight, and your side effects on the same timeline, so you can actually connect the dots (like noticing the fatigue always hits two days after the shot, or the constipation started right when you bumped doses). Calqulate.net's GLP-1 Progress Tracker does that, and it goes one step further most trackers skip: it separates fat loss from muscle loss, since losing muscle is the thing that quietly wrecks people's metabolism after they stop the drug.",
+        links: [
+          { label: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker", gold: true },
+        ],
+      },
+      {
+        q: "How do I track injection site rotation so I stop reusing the same spot?",
+        a: "The simple version: pick four zones (left abdomen, right abdomen, left thigh, right thigh, or add the back of the arm if a caregiver is injecting you), and move to the next zone every single shot, not just when a spot feels sore. Reusing the same spot for weeks is what causes the lumpy, thickened tissue (lipohypertrophy) that makes the drug absorb unevenly, so your dose stops working as consistently. A basic paper rotation chart works fine. If you want it logged alongside your dose and weight instead of on a sticky note, that is one of the fields inside the GLP-1 Progress Tracker on Calqulate.net.",
+        links: [
+          { label: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker", gold: true },
+        ],
+      },
+      {
+        q: "Is my data safe in a GLP-1 tracker app? Do these apps sell my health data?",
+        a: "This is a fair thing to ask before you hand any app your weight, your dose, and your medical history. Some free health apps make their money by selling aggregated user data to advertisers or data brokers, which is worth knowing before you type in anything personal. Calqulate.net's answer is simple: we never sell your data. Full stop. If you want to check any app's policy before you use it, look for a real privacy policy (not just a line in the terms of service) and search for whether the company has ever been named in a data-selling story.",
+        links: [
+          { label: "Calqulate.net Privacy Policy", href: "/privacy-policy" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "glp1-missed-dose",
+    title: "Missed dose & dosing schedule",
+    blurb: "The rules are different for each drug. Here's what to do when you miss one or want to switch days.",
+    items: [
+      {
+        q: "I missed my Ozempic, Wegovy, or Mounjaro shot. What do I do now?",
+        a: "The rule is different for each drug, so check which one you are on before you do anything.\n\nFor Ozempic: take it as soon as you remember, as long as it has been 5 days or less since your missed dose. Past 5 days, skip it and take your next dose on your regular scheduled day. Never take two doses within 48 hours of each other.\n\nFor Wegovy: if your next scheduled dose is more than 2 days away, take the missed one now. If it is less than 2 days away, skip it and just take your next dose as scheduled.\n\nFor Mounjaro or Zepbound: you have a 4-day (96-hour) window to take the missed dose. Past that, skip it and resume your normal schedule. Either way, doses need to stay at least 3 days apart, since tirzepatide has a long half-life and stacking doses too close together mostly just adds nausea, not extra results.\n\nIf you have missed more than 2 weeks of doses on any of these, call your prescriber before restarting. Going back in at your old dose after a long gap can hit harder than you expect. Once you are back on schedule, Calqulate.net's GLP-1 Dose Calculator can help you sanity-check your titration timeline.",
+        links: [
+          { label: "GLP-1 Dose Calculator", href: "/health/glp-1-dose-calculator" },
+        ],
+      },
+      {
+        q: "Can I change the day of the week I take my shot?",
+        a: "Yes, as long as you respect the minimum spacing for your drug. Ozempic and Wegovy need at least 2 days between doses. Mounjaro and Zepbound need at least 3 days. So if you are on a weekly shot and want to move it from Sunday to Wednesday, just make sure you are not accidentally taking two doses closer together than that minimum. Once you land on a new day, stick with it going forward so your levels stay steady week to week.",
+        links: [
+          { label: "GLP-1 Dose Calculator", href: "/health/glp-1-dose-calculator" },
+        ],
+      },
+      {
+        q: "What happens if I take two doses too close together?",
+        a: "Mostly, you feel it in your stomach. Doubling up early raises your drug levels faster than your body has adjusted to, and the most common result is a rough day (or few days) of nausea, vomiting, or diarrhea, not a dangerous overdose in most healthy adults. That said, it is not something to shrug off. If you accidentally took two doses close together, watch for severe vomiting, signs of dehydration, or intense abdominal pain, and call your prescriber or a poison control line if any of that shows up. Going forward, tracking your last shot date somewhere you will actually see it (not just memory) is the easiest way to stop this from happening again.",
+        links: [
+          { label: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker", gold: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: "glp1-plateau",
+    title: "Weight-loss plateau questions",
+    blurb: "Why a stall after a dose bump is usually normal, and the numbers to check yourself against.",
+    items: [
+      {
+        q: "Why did my weight loss stop as soon as I stepped up to the next dose?",
+        a: "This is a real, well-documented pattern, sometimes called the \"0.5 mg plateau\" on Wegovy forums, and it is not in your head. Here is what is actually happening: the starting doses (0.25 mg and 0.5 mg on Wegovy, similar low starting doses on Mounjaro and Zepbound) exist mainly to let your body adjust and to limit nausea, not to drive maximum fat loss. The real appetite suppression and slower digestion kick in more fully at the higher maintenance doses, generally 1.7 mg and 2.4 mg for Wegovy. So a stall right after a dose increase is often your body settling into a new normal before the higher dose's full effect shows up, not a sign the drug has stopped working. Give it 3 to 4 weeks at the new dose before you decide it has stalled for real. If it is genuinely flat past that point, that is worth a conversation with your prescriber, not something to just wait out forever.",
+        links: [
+          { label: "Weight Loss % Calculator", href: "/health/weight-loss-percentage-calculator" },
+        ],
+      },
+      {
+        q: "How much weight should I have lost by month 2, 3, or 6?",
+        a: "These numbers are averages, so do not panic if you are a bit under them, but they are a useful gut check. On Wegovy, real-world data generally shows around 2 to 4% of body weight lost by month 2, 4 to 6% by month 3, and around 11% by month 6. On Zepbound or Mounjaro, people typically see 5 to 8% by around 3 months and 10 to 15% by 6 months, since tirzepatide tends to drive somewhat more total loss than semaglutide at comparable points in treatment. Where you land depends on your starting weight, your dose, your protein intake, and whether you are strength training, so treat these as a range to check yourself against, not a scoreboard. Calqulate.net's Weight Loss % Calculator will show you your own percentage so you can compare apples to apples instead of guessing from the scale number alone.",
+        links: [
+          { label: "Weight Loss % Calculator", href: "/health/weight-loss-percentage-calculator" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "glp1-side-effects",
+    title: "Side effects people track but rarely get clear answers on",
+    blurb:
+      "A note on this section: a Penn/Nature Health study published in 2026 used AI to analyze more than 400,000 Reddit posts from roughly 70,000 GLP-1 users, and found that chills, temperature swings, and menstrual cycle changes were discussed heavily by real users but are not fully reflected in official clinical trial data. That does not mean these symptoms are rare or dangerous by default, it means they are common enough that you deserve a straight answer instead of silence.",
+    items: [
+      {
+        q: "Why do I feel freezing cold all the time on Ozempic or Mounjaro? (\"Ozempic chills\")",
+        a: "You are not imagining this, and you are not alone in it. Temperature complaints, chills, feeling cold, hot flashes, and fever-like sensations without an actual fever, showed up often enough in that 2026 Reddit analysis that researchers flagged it as an under-reported symptom cluster, alongside nausea, fatigue, and constipation which are already well known. The most likely explanation is that rapid fat loss reduces your body's insulating layer, and losing weight fast can also slightly lower your resting metabolic rate, both of which make you run colder than before. It is usually not dangerous on its own. But if the cold comes with a real fever, chest pain, confusion, or you cannot get warm no matter what you do, that is a call-your-doctor situation, not a wait-it-out one.",
+        links: [
+          { label: "Metabolic Health Score", href: "/product/metabolic-health-tracker", gold: true },
+        ],
+      },
+      {
+        q: "Why is my period irregular since starting a GLP-1?",
+        a: "This is genuinely common and, for a lot of women, it settles down rather than getting worse. There are two things likely happening at once. First, GLP-1 receptors sit in brain regions involved in hormone signaling, so the drug itself may nudge your cycle a bit independent of weight loss. Second, and more commonly, losing a meaningful amount of body fat changes how much estrogen your body is producing and storing, since fat tissue itself makes and holds estrogen, and that shift can shorten, lengthen, or change the flow of your cycle. In one 2026 survey of over 1,700 women on GLP-1s, about 27% noticed some cycle change, and interestingly 45% said their periods actually became more predictable, rising to 64% among women with PCOS. There is no large controlled trial on this outside of PCOS populations yet, so if your cycle stops entirely, gets unusually heavy, or you have any chance of pregnancy (GLP-1s can increase fertility by restoring ovulation, which surprises a lot of people), talk to your doctor.",
+        links: [
+          { label: "Metabolic Health Score", href: "/product/metabolic-health-tracker", gold: true },
+        ],
+      },
+      {
+        q: "Why am I so fatigued and exhausted on a GLP-1 even though I'm doing everything right?",
+        a: "A few things are usually stacking on top of each other here. You are very likely eating fewer calories than before, since that is the entire point of the drug, and a bigger calorie deficit means less fuel for your body to run on, plain and simple. On top of that, if protein or overall food intake drops too low, you can end up short on iron, B12, or other nutrients that your energy levels depend on. Slower digestion can also mean nutrients absorb a bit more slowly. This fatigue is real, it is common enough that the 2026 Reddit analysis flagged it as discussed far more often by patients than it shows up in official trial adverse-event tables, and it is usually fixable. Check that you are hitting a reasonable protein target, that you are not accidentally under-eating overall, and ask your doctor about checking iron, B12, and vitamin D if it does not improve in a few weeks.",
+        links: [
+          { label: "TDEE Calculator", href: "/health/tdee-calculator" },
+        ],
+      },
+      {
+        q: "Is it normal to have zero appetite but feel exhausted? What should I actually eat?",
+        a: "Yes, this combination is extremely normal on a GLP-1, and it is also the exact combination that gets people into trouble if they do not adjust for it. Appetite suppression plus slower digestion means large meals feel awful, so the fix is smaller, more frequent, nutrient-dense meals rather than forcing three big plates a day. Aim for 4 to 5 small meals or snacks, prioritize protein first on your plate since that is the easiest thing to under-eat, and keep fat moderate since heavy or fried food is more likely to trigger nausea on top of low appetite. If you genuinely cannot get enough down, protein shakes, Greek yogurt, and bone broth are easier to tolerate than a full meal and still move the needle. If you are consistently unable to eat enough for more than a few days, that is worth a call to your prescriber, not something to push through alone.",
+        links: [
+          { label: "Macro Calculator", href: "/health/macro-calculator" },
+        ],
+      },
+      {
+        q: "Why don't certain foods sound good anymore? Are food aversions normal on Zepbound or Mounjaro?",
+        a: "Yes, and there is a real difference between \"less hungry\" and \"that food actively grosses me out now,\" which is what a lot of people on Zepbound and Mounjaro describe. Slower stomach emptying changes how food sits with you, and it can make smells, textures, and specific foods (meat and rich, fatty dishes are common culprits) suddenly unappealing in a way that feels different from normal fullness. Cold foods, plain foods, and lighter textures (smoothies, yogurt, melon, crackers) are usually easier to tolerate on days when nothing sounds good. This tends to ease as your body adjusts to a dose, though it can flare again after each increase. If it escalates into real vomiting, ongoing dizziness, or you cannot keep fluids down, stop toughing it out and call your provider.",
+        links: [
+          { label: "Macro Calculator", href: "/health/macro-calculator" },
+        ],
+      },
+      {
+        q: "How do I manage nausea and vomiting on a GLP-1?",
+        a: "Smaller meals, eaten slower, are the single biggest lever. Skip anything fried, very fatty, spicy, or heavily sauced while nausea is active, since fat and spice are the two things most likely to make it worse. Cold or room-temperature food tends to smell less intensely than hot food, which matters more than people expect when you are nauseated. Sip fluids between meals rather than during them, and avoid lying down right after eating. If nausea clusters around the first few days after a dose increase, that is expected and usually fades within a week or two. If you are vomiting repeatedly, cannot keep fluids down, or it is not improving as you'd expect, that is a conversation with your prescriber about slowing your titration, not something to just wait out.",
+        links: [
+          { label: "TDEE Calculator", href: "/health/tdee-calculator" },
+        ],
+      },
+      {
+        q: "Why is my hair falling out on Ozempic?",
+        a: "The drug itself is not the direct cause, the rapid weight loss is. Fast, significant weight loss is a known trigger for something called telogen effluvium, where a stress on the body pushes more hair follicles than usual into their resting phase at the same time. Instead of the normal 10 to 15% of your scalp hair resting at once, that can jump to 25% or more, which shows up as noticeably more shedding, usually starting 2 to 4 months after the weight loss began (not immediately). Low intake of protein, iron, zinc, or biotin from eating less overall can make it worse. The good news is telogen effluvium is temporary for the vast majority of people, hair growth typically resumes within a few months and looks close to normal again by 6 to 9 months, especially if you are hitting your protein target.",
+        links: [
+          { label: "Lean Body Mass Calculator", href: "/health/lean-body-mass-calculator" },
+        ],
+      },
+      {
+        q: "What is \"Ozempic face,\" and can I prevent it?",
+        a: "\"Ozempic face\" describes the hollowed cheeks, sunken eyes, and generally more aged look some people notice after significant weight loss on a GLP-1. It is not caused by the drug directly, it is caused by losing facial fat and, often, facial muscle along with body fat, especially when the weight comes off fast. Since 25 to 40% of the weight lost on these drugs can come from lean muscle rather than fat if you are not actively protecting it, less muscle and less fat under the skin means less structure holding your face's shape. The most effective prevention is not a cream, it is the same advice that protects muscle everywhere else on your body: eat enough protein, do resistance training 2 to 3 times a week, stay well hydrated, and avoid losing faster than about 1% of body weight per week if you can help it. Slower, muscle-protected weight loss gives your skin time to adjust instead of being left with nothing underneath it.",
+        links: [
+          { label: "Lean Body Mass Calculator", href: "/health/lean-body-mass-calculator" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "glp1-cost-access",
+    title: "Cost & access questions",
+    blurb: "What to do when insurance says no, and the truth about compounded semaglutide and tirzepatide.",
+    items: [
+      {
+        q: "My insurance denied my Wegovy or Zepbound refill. What are my options?",
+        a: "You generally have three real paths, and none of them require just giving up. First, ask your prescriber to submit a prior authorization with a letter of medical necessity, which is what actually overturns a lot of denials. Second, while that is in progress, both manufacturers have direct-pay options: Novo Nordisk's NovoCare Pharmacy sells Wegovy at a flat $499 a month with no insurance needed, and Eli Lilly's savings card brings Zepbound down to roughly $299 to $499 a month for the vial format if your insurance does not cover it, depending on dose. Third, some people switch to LillyDirect or NovoCare self-pay long-term if they would rather stop fighting insurance altogether. Prices and programs shift, so check the manufacturer's own savings page before you assume you are stuck paying full retail.",
+        links: [
+          { label: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker", gold: true },
+        ],
+      },
+      {
+        q: "Are compounded semaglutide and tirzepatide safe, and how do they compare on price?",
+        a: "As of 2026, compounded semaglutide and tirzepatide are largely off the table in the US outside narrow, legally defined exceptions, since the FDA ended the shortage-based enforcement discretion that allowed broad compounding in the first place, and in April 2026 the FDA moved to remove these drugs from the compounding list entirely. That change happened because of real safety problems, not just patent protection. The FDA has logged hundreds of adverse event reports tied to compounded versions, many from patients drawing incorrect doses out of multidose vials at home, some serious enough to need hospitalization, and it sent warning letters to telehealth companies in early 2026 over misleading claims about compounded products. Compounded versions were often cheaper, which is exactly why people were drawn to them, but cheaper is not worth much if the dose in the vial is not reliable. If cost is the real issue, the manufacturer savings programs above are the safer route to a lower price.",
+        links: [
+          { label: "GLP-1 Dose Calculator", href: "/health/glp-1-dose-calculator" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "glp1-off-label",
+    title: "Off-label & long-term questions",
+    blurb: "The alcohol-craving research, and what actually happens when you stop.",
+    items: [
+      {
+        q: "Can Ozempic help with alcohol cravings?",
+        a: "There is real, growing evidence that it can, though it is not an approved use yet, so no doctor can prescribe it specifically for that. A 2025 JAMA Psychiatry trial found adults with alcohol use disorder who took low-dose semaglutide drank less and craved it less than those on placebo. A 2026 Lancet trial out of Copenhagen found adding semaglutide to therapy further cut heavy drinking days in patients who also had obesity, and separate 2026 research out of UTEP linked GLP-1 use to lower rates of alcohol, opioid, nicotine, and cocaine use disorders. The likely mechanism is that GLP-1 receptors sit in brain regions tied to reward and craving, so the drug seems to dial down the pull toward a drink the same way it dials down the pull toward food, rather than targeting alcohol specifically. Since semaglutide is not FDA-approved for alcohol use disorder, this would currently only happen as an off-label conversation with your prescriber, not something to self-direct.",
+        links: [
+          { label: "Metabolic Health Score", href: "/product/metabolic-health-tracker", gold: true },
+        ],
+      },
+      {
+        q: "Do I have to stay on a GLP-1 forever?",
+        a: "No, but you should go in with real expectations about what happens if you stop. These drugs are built and marketed as long-term, chronic-use medications, and manufacturers do not provide an official tapering protocol, largely because the intended use is ongoing. That said, the data on stopping is more nuanced than \"you'll gain it all back.\" At 24 months after stopping, just over half of people (52 to 56%, depending on the drug) had kept off some or all of their weight loss, while other data shows a majority of people who lose weight regain at least a quarter of it within a year if they stop cold turkey with no other plan in place. The people who keep the most weight off tend to share two things: they protected their muscle mass while on the drug (since muscle keeps your metabolism higher after you stop), and they built real nutrition and activity habits during treatment instead of relying on the drug alone. A slow taper, done with your prescriber, also appears to help more than stopping abruptly.",
+        links: [
+          { label: "Lean Body Mass Calculator", href: "/health/lean-body-mass-calculator" },
         ],
       },
     ],

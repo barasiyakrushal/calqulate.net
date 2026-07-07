@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { ArrowRight, MessageCircleQuestion } from "lucide-react";
+import { ArrowRight, MessageCircleQuestion, Sparkles } from "lucide-react";
 import { GROUPS } from "./questions-data";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ function buildFaqJsonLd() {
       g.items.map((it) => ({
         "@type": "Question",
         name: it.q,
-        acceptedAnswer: { "@type": "Answer", text: it.a },
+        acceptedAnswer: { "@type": "Answer", text: it.a.replace(/\n+/g, " ") },
       })),
     ),
   };
@@ -89,7 +89,11 @@ export default function AnswersPage() {
                           it.q
                         )}
                       </h3>
-                      <p className="text-[15px] text-gray-700 leading-relaxed">{it.a}</p>
+                      <div className="space-y-3 text-[15px] text-gray-700 leading-relaxed">
+                        {it.a.split("\n\n").map((para, i) => (
+                          <p key={i}>{para}</p>
+                        ))}
+                      </div>
                       <div className="mt-4 flex flex-wrap items-center gap-2">
                         {it.slug && (
                           <Link
@@ -100,16 +104,28 @@ export default function AnswersPage() {
                             <ArrowRight className="h-3 w-3" />
                           </Link>
                         )}
-                        {it.links?.map((l) => (
-                          <Link
-                            key={l.href}
-                            href={l.href}
-                            className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 transition-colors"
-                          >
-                            {l.label}
-                            <ArrowRight className="h-3 w-3" />
-                          </Link>
-                        ))}
+                        {it.links?.map((l) =>
+                          l.gold ? (
+                            <Link
+                              key={l.href}
+                              href={l.href}
+                              className="group inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 px-4 py-1.5 text-xs font-bold text-amber-950 shadow-sm shadow-amber-500/30 ring-1 ring-amber-300/60 hover:from-amber-300 hover:via-yellow-300 hover:to-amber-400 hover:shadow-md hover:shadow-amber-500/40 transition-all"
+                            >
+                              <Sparkles className="h-3.5 w-3.5" />
+                              {l.label}
+                              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                            </Link>
+                          ) : (
+                            <Link
+                              key={l.href}
+                              href={l.href}
+                              className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 transition-colors"
+                            >
+                              {l.label}
+                              <ArrowRight className="h-3 w-3" />
+                            </Link>
+                          ),
+                        )}
                       </div>
                     </article>
                   ))}
