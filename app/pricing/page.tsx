@@ -9,6 +9,7 @@ import { CheckoutStatus } from "@/components/payment/CheckoutStatus";
 import { FeatureComparison } from "@/components/marketing/FeatureComparison";
 import { FreeVsPremium } from "@/components/marketing/FreeVsPremium";
 import { getAccess, hasPaidAccess } from "@/lib/auth";
+import { OFFER_ENRICHMENT } from "@/lib/seo/product-offer";
 import { Check, ArrowRight, Lock } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -51,6 +52,7 @@ export default async function PricingPage({ searchParams }: { searchParams: { fe
         "@type": "Product",
         name: "Calqulate Vitals",
         description: "Metabolic and cardiovascular risk-reversal service with longevity tracking and a GLP-1 protocol builder.",
+        image: ["https://calqulate.net/Health-personalized-dashboard-calqulate.net.webp"],
         brand: { "@type": "Brand", name: "Calqulate" },
         offers: {
           "@type": "Offer",
@@ -59,6 +61,7 @@ export default async function PricingPage({ searchParams }: { searchParams: { fe
           url: "https://calqulate.net/pricing",
           availability: "https://schema.org/InStock",
           priceValidUntil: "2027-12-31",
+          ...OFFER_ENRICHMENT,
         },
       },
       {

@@ -40,14 +40,19 @@ export default async function AnswerPage({
   const svc = qa.serviceSlug ? getService(qa.serviceSlug) : undefined;
   const paragraphs = qa.longAnswer ?? [qa.a];
 
+  // FAQPage (not QAPage): these are publisher-authored answers, not community
+  // forum threads. FAQPage avoids QAPage's required answerCount/upvoteCount/
+  // author/datePublished fields, which don't apply to editorial content.
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "QAPage",
-    mainEntity: {
-      "@type": "Question",
-      name: qa.q,
-      acceptedAnswer: { "@type": "Answer", text: paragraphs.join(" ") },
-    },
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: qa.q,
+        acceptedAnswer: { "@type": "Answer", text: paragraphs.join(" ") },
+      },
+    ],
   };
 
   // A few sibling questions for internal linking.

@@ -8,6 +8,7 @@ import { ScreenshotFrame } from "@/components/glp1/marketing/ScreenshotFrame";
 import { SinglePlan } from "@/components/vitals/SinglePlan";
 import { StickyCtaBar } from "@/components/glp1/marketing/StickyCtaBar";
 import { FreeVsPremium } from "@/components/marketing/FreeVsPremium";
+import { OFFER_ENRICHMENT } from "@/lib/seo/product-offer";
 
 // ─── Config types ─────────────────────────────────────────────────────────────
 
@@ -28,7 +29,7 @@ export type CompareVal = "yes" | "no" | "free" | "best" | "partial" | "premium";
 export interface CompareRow { feature: string; us: CompareVal; b: CompareVal; c: CompareVal }
 
 export interface TrackerLandingConfig {
-  jsonLd: { productName: string; productDescription: string; canonical: string };
+  jsonLd: { productName: string; productDescription: string; canonical: string; image: string };
   startFreeHref: string;
   hero: { badge: string; h1: string; h1Accent: string; sub: string; trustLine: string; screenshotLabel: string; screenshotSrc?: string };
   trust: { label: string; items: string[] };
@@ -78,8 +79,9 @@ export function TrackerLanding({ config: c, paid, loggedIn }: { config: TrackerL
         "@type": "Product",
         name: c.jsonLd.productName,
         description: c.jsonLd.productDescription,
+        image: [c.jsonLd.image],
         brand: { "@type": "Brand", name: "Calqulate" },
-        offers: { "@type": "Offer", price: "79", priceCurrency: "USD", url: c.jsonLd.canonical, availability: "https://schema.org/InStock", priceValidUntil: "2027-12-31" },
+        offers: { "@type": "Offer", price: "79", priceCurrency: "USD", url: c.jsonLd.canonical, availability: "https://schema.org/InStock", priceValidUntil: "2027-12-31", ...OFFER_ENRICHMENT },
       },
       { "@type": "FAQPage", mainEntity: c.faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
     ],

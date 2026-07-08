@@ -6,6 +6,7 @@ import { SinglePlan } from "@/components/vitals/SinglePlan";
 import { MetricForm } from "@/components/vitals/MetricForm";
 import { CalculatorSearch } from "@/components/search/CalculatorSearch";
 import { getAccess, hasPaidAccess } from "@/lib/auth";
+import { OFFER_ENRICHMENT } from "@/lib/seo/product-offer";
 
 export const dynamic = "force-dynamic";
 
@@ -66,12 +67,15 @@ export default async function ProductPage({
         "@type": "Product",
         name: svc.name,
         description: svc.metaDescription,
+        image: ["https://calqulate.net/Health-personalized-dashboard-calqulate.net.webp"],
         brand: { "@type": "Brand", name: "Calqulate" },
         offers: {
           "@type": "AggregateOffer",
           lowPrice: "0",
           highPrice: "119",
           priceCurrency: "USD",
+          offerCount: "2",
+          ...OFFER_ENRICHMENT,
         },
       },
       {

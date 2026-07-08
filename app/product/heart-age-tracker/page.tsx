@@ -30,6 +30,7 @@ const config: TrackerLandingConfig = {
     productDescription:
       "Calculate your heart age with the validated Framingham model and track it getting younger over time, with risk-factor breakdown and a doctor-shareable report.",
     canonical: "https://calqulate.net/product/heart-age-tracker",
+    image: "https://calqulate.net/Heart-age-calculator.webp",
   },
   startFreeHref: "/signup?next=/dashboard",
   hero: {

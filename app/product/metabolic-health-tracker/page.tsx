@@ -30,6 +30,7 @@ const config: TrackerLandingConfig = {
     productDescription:
       "Composite Metabolic Health Score with 10-year ASCVD and diabetes risk, heart age, Longevity Index and a Future You simulator, tracked over time on validated clinical models.",
     canonical: "https://calqulate.net/product/metabolic-health-tracker",
+    image: "https://calqulate.net/Health-personalized-dashboard-calqulate.net.webp",
   },
   startFreeHref: "/signup?next=/dashboard",
   hero: {

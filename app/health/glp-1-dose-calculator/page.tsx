@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import GLP1DoseCalculator from "@/components/calculators/glp-1-dose-calculator"
+import GLP1BodyCompositionWizard from "@/components/calculators/glp1-body-composition-wizard"
 import { FreeFeaturesPromo } from "@/components/glp1/marketing/FreeFeaturesPromo"
 import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
@@ -17,89 +18,86 @@ import { getAccess } from "@/lib/auth"
 import { RelatedCalculators as CatalogRelatedCalculators } from "@/components/calculators/related-calculators"
 import { EmbedCodeBox } from "@/components/embed/EmbedCodeBox"
 import {
-  FlaskConical,
-  CheckCircle2,
-  AlertTriangle,
+  Dumbbell,
+  Beef,
+  Scale,
   ShieldCheck,
-  Activity,
-  Calculator,
   ArrowRight,
   Check,
-  ClipboardList,
-  MessageCircleQuestion,
-  Stethoscope,
-  HeartHandshake,
-  Timer,
+  AlertTriangle,
   Pill,
-  Scale,
-  Zap,
+  Gauge,
+  HeartPulse,
   Sparkles,
 } from "lucide-react"
 
+const TITLE = "GLP-1 Body Composition Tracker — Are You Losing Fat or Muscle?"
+const DESCRIPTION =
+  "Free GLP-1 body composition tool. Answer a few quick questions and get an instant estimate of how much of your Ozempic, Wegovy, Mounjaro or Zepbound weight loss is fat vs. muscle — plus the fixes to protect your lean mass."
+
 export const metadata: Metadata = {
-  title: "GLP-1 Dose Calculator | Exact Syringe Units for Semaglutide & Tirzepatide",
-  description:
-    "Free GLP-1 dose calculator. Get the exact number of units to draw on your insulin syringe for compounded semaglutide and tirzepatide. Simple, accurate, and built for real people.",
+  title: `${TITLE} | Calqulate.net`,
+  description: DESCRIPTION,
   keywords:
-    "glp 1 dose calculator, glp-1 dose calculator, semaglutide dose calculator, tirzepatide dose calculator, compounded semaglutide units, insulin syringe units calculator, semaglutide syringe calculator, glp 1 weight loss calculator, ozempic dose calculator, wegovy dose calculator",
+    "glp-1 body composition, fat vs muscle loss glp-1, are you losing muscle on ozempic, ozempic muscle loss, semaglutide muscle loss, tirzepatide muscle loss, glp-1 lean mass tracker, muscle loss calculator ozempic, wegovy muscle loss, zepbound body composition, glp 1 dose calculator, muscle loss on glp-1",
   alternates: {
     canonical: "https://calqulate.net/health/glp-1-dose-calculator",
   },
   openGraph: {
-    title: "GLP-1 Dose Calculator | Exact Syringe Units for Semaglutide & Tirzepatide",
-    description: "Free GLP-1 dose calculator. Get the exact number of units to draw on your insulin syringe for compounded semaglutide and tirzepatide. Simple, accurate, and built for real people.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://calqulate.net/health/glp-1-dose-calculator",
     siteName: "Calqulate",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "GLP-1 Dose Calculator | Exact Syringe Units for Semaglutide & Tirzepatide",
-    description: "Free GLP-1 dose calculator. Get the exact number of units to draw on your insulin syringe for compounded semaglutide and tirzepatide. Simple, accurate, and built for real people.",
+    title: TITLE,
+    description: DESCRIPTION,
   },
 }
 
 const faqs = [
   {
-    question: "Is this calculator only for compounded medications?",
+    question: "How much muscle do you actually lose on a GLP-1?",
     answer:
-      "It works best for compounded semaglutide and tirzepatide, but the principles apply to any GLP-1 medication that comes as a liquid you draw into a syringe. If your medication comes in a pre-filled pen, you do not need this tool.",
+      "Research on rapid weight loss suggests that when you're not actively protecting it, roughly 25 to 40 percent of the weight you lose on a GLP-1 like semaglutide or tirzepatide can come from lean muscle rather than fat. The exact share depends heavily on how fast you're losing, whether you're eating enough protein, and whether you're doing resistance training. This tool estimates your personal split from those factors.",
   },
   {
-    question: "Can I use this for both semaglutide and tirzepatide?",
+    question: "How do I know if I'm losing fat or muscle on Ozempic?",
     answer:
-      "Yes. This GLP-1 dose calculator works for any GLP-1 receptor agonist that comes as a liquid vial. Just enter your prescribed dose in milligrams and the concentration listed on your vial label, and the calculator handles the rest.",
+      "The scale can't tell you on its own. The warning signs of muscle loss are the number dropping while you feel weaker, flatter, more tired, or 'skinny-fat' — smaller but softer. Losing faster than about 1 percent of your body weight per week, low protein intake, and no strength training all tilt the loss toward muscle. This calculator combines those signals into an estimate so you're not guessing.",
   },
   {
-    question: "What if my numbers do not match the standard doses?",
+    question: "Does this tool actually measure my body fat?",
     answer:
-      "Your doctor may prescribe a custom dose based on how your body responds to the medication. That is completely normal. Always follow your healthcare provider's specific guidance, and use this calculator to convert whatever dose they prescribe into accurate syringe units.",
+      "No. It's an educational estimate, not a DEXA scan or body-composition measurement. It infers a likely fat-versus-muscle split from your rate of loss, protein intake, and training habits, based on published research. For a precise reading you'd need a DEXA or bioimpedance scan. The point of this tool is to flag whether you're at risk, quickly and for free, so you can act before it becomes a problem.",
   },
   {
-    question: "What concentration should I enter if it is not on my vial?",
+    question: "How do I protect muscle while losing weight on a GLP-1?",
     answer:
-      "Always check your vial label or the paperwork from your pharmacy. Common concentrations for compounded semaglutide are 0.5 mg/mL, 1 mg/mL, 2 mg/mL, 2.5 mg/mL, and 5 mg/mL. If you are unsure, call your compounding pharmacy directly before drawing your dose.",
+      "Three levers, in order: eat enough protein (around 1.6 g per kg of your goal body weight — the hardest thing to hit when a GLP-1 kills your appetite), do resistance training two to three times a week so your body has a reason to keep muscle, and don't lose faster than roughly 1 percent of body weight per week. The drug creates the calorie deficit automatically; your job is to aim that deficit at fat.",
   },
   {
-    question: "Why do I need to calculate units instead of just measuring in mg?",
+    question: "Why does losing muscle matter if the scale is going down?",
     answer:
-      "Standard insulin syringes are marked in units, not milligrams. One unit on a U-100 syringe equals 0.01 mL of liquid. To draw the correct amount, you need to know how many units correspond to your prescribed milligram dose at your vial's specific concentration. This calculator does that conversion instantly.",
+      "Muscle is metabolically active tissue, so losing it lowers your resting calorie burn — which makes weight easier to regain once you taper off the medication. Muscle loss is also what leaves people 'skinny-fat' and contributes to the hollowed 'Ozempic face' look. Keeping your muscle is the single biggest predictor of whether you hold your results after stopping the drug.",
   },
   {
     question: "Is this medical advice?",
     answer:
-      "No. This is a helpful calculation tool only. It performs the math for converting a prescribed milligram dose into syringe units based on concentration. Your healthcare provider is the one who decides what dose is right for your body and health situation.",
+      "No. This is an educational tool that estimates your fat-versus-muscle split and points you to the levers that protect lean mass. It does not set your dose, diagnose anything, or replace your prescriber. Always follow your healthcare provider's guidance on dosing and health decisions.",
   },
 ]
 
-export default async function GLP1DoseCalculatorPage() {
-  const access = await getAccess();
-  const loggedIn = access.userId !== null;
+export default async function GLP1BodyCompositionPage() {
+  const access = await getAccess()
+  const loggedIn = access.userId !== null
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <CalculatorSchema
-        name="GLP-1 Dose Calculator"
-        description="Free GLP-1 dose calculator. Get exact syringe units for compounded semaglutide and tirzepatide based on your prescribed dose and vial concentration."
+        name="GLP-1 Body Composition Tracker"
+        description="Free GLP-1 body composition tool that estimates how much of your semaglutide or tirzepatide weight loss is fat vs. muscle, and how to protect your lean mass."
         url="https://calqulate.net/health/glp-1-dose-calculator"
       />
       <FAQSchema faqs={faqs} />
@@ -110,20 +108,23 @@ export default async function GLP1DoseCalculatorPage() {
       <main id="main" className="flex-1">
         {/* HERO */}
         <section className="bg-gradient-to-br from-emerald-50 via-white to-lime-50 border-b border-slate-200">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
+          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
             <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-5">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
+              <ShieldCheck className="h-3.5 w-3.5" />
               Free · Instant · No sign-up required
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              GLP-1 Dose Calculator
+              GLP-1 Body Composition Tracker — <span className="text-emerald-700">Are You Losing Fat or Muscle?</span>
             </h1>
             <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              After more than 20 years studying metabolic health and watching how these medications work in everyday life, one thing stands out above everything else: getting the dose right matters a lot. That is why we built this straightforward tool for you. Just plug in your prescribed dose and the concentration on your vial, and it tells you exactly how many units to draw on a standard U-100 insulin syringe.
+              The scale can't tell you the one thing that decides whether you keep the weight off: how much of your loss
+              is fat versus muscle. Answer a few quick questions and get an instant, personal estimate — plus the exact
+              fixes to protect your lean mass on Ozempic, Wegovy, Mounjaro or Zepbound.
             </p>
 
             <p className="mt-5 max-w-3xl border-l-4 border-emerald-500 pl-4 text-base md:text-lg font-semibold text-slate-800">
-              The app that makes sure your GLP-1 weight loss is the <span className="text-emerald-700">right</span> weight loss &mdash; <span className="text-emerald-700">fat, not muscle</span> &mdash; and never loses your data.
+              Up to <span className="text-emerald-700">40% of GLP-1 weight loss can be muscle</span> if you don't protect
+              it — and muscle is what keeps the weight off after you stop.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -131,26 +132,28 @@ export default async function GLP1DoseCalculatorPage() {
                 href="#calculator"
                 className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
               >
-                Try the Calculator ↓
+                Check my fat vs. muscle ↓
               </a>
-              <a
+              <Link
                 href="/product/glp1-progress-tracker"
                 className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-6 py-3 text-sm font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5"
               >
-                ✦ Try our Premium GLP-1 Tracker
-                <span aria-hidden>&rarr;</span>
-              </a>
+                <Sparkles className="h-4 w-4" /> Track it over time — GLP-1 Progress Tracker
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </section>
 
-        {/* USP SUMMARY (TOFU) */}
+        {/* USP SUMMARY */}
         <section className="border-b border-emerald-100 bg-white">
           <div className="mx-auto max-w-5xl px-6 py-6">
             <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 md:p-6">
               <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
               <p className="text-sm md:text-base leading-relaxed text-slate-700">
-                Calqulate.net calculates exact syringe units for compounded semaglutide or tirzepatide, concentration-aware with a titration schedule. You get precise dosing and built-in safety checks that help avoid errors.
+                Most GLP-1 trackers just log pounds. Calqulate.net estimates whether those pounds are fat or muscle,
+                flags when you're losing too fast, and shows you the two changes that protect your metabolism — so the
+                weight you lose is the weight that stays off.
               </p>
             </div>
           </div>
@@ -158,28 +161,31 @@ export default async function GLP1DoseCalculatorPage() {
 
         {/* STATS DASHBOARD */}
         <section className="border-b border-slate-200 bg-slate-50">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
+          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-4">
             {[
-              { value: "Titration", label: "Schedule" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
-              { value: "Instant", label: "Results" },
-              { value: "Private", label: "In-browser" },
+              { value: "Fat vs. muscle", label: "What you learn" },
+              { value: "~30 sec", label: "To your result" },
+              { value: "Free", label: "No sign-up" },
+              { value: "Private", label: "Nothing saved" },
             ].map((s) => (
               <div key={s.label} className="bg-white p-5 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  {s.label}
-                </p>
+                <p className="text-xl md:text-2xl font-bold text-slate-900">{s.value}</p>
+                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">{s.label}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* CALCULATOR */}
-        <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
-            <GLP1DoseCalculator />
+        {/* CALCULATOR (the conversational wizard) */}
+        <section id="calculator" className="scroll-mt-20 bg-slate-50/60">
+          <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16">
+            <div className="mx-auto mb-8 max-w-xl text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Are you losing fat or muscle?</h2>
+              <p className="mt-2 text-slate-600">
+                A few quick taps. No account, no email — your answers never leave your browser.
+              </p>
+            </div>
+            <GLP1BodyCompositionWizard />
           </div>
         </section>
 
@@ -192,115 +198,234 @@ export default async function GLP1DoseCalculatorPage() {
 
         {/* FREE GLP-1 TRACKER PROMO */}
         <FreeFeaturesPromo
-          heading="Calculated your dose? Now track it — free"
-          sub="Calqulate Vitals logs every shot, reminds you when the next is due, and tracks food, weight and side effects in one place — with medication-level curves other apps charge for."
+          heading="Got your estimate? Now watch it over time — free"
+          sub="Calqulate Vitals logs every shot and weigh-in, trends your lean mass (not just weight), and flags the week you start dropping weight too fast to be all fat — with medication-level curves other apps charge for."
           loggedIn={loggedIn}
         />
 
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
-
             <p className="text-center text-sm font-medium text-gray-500 mt-6 flex items-center justify-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-blue-600" />
-              Your data is private. We do not store your dose or any personal information.
+              <ShieldCheck className="w-5 h-5 text-emerald-600" />
+              Your data is private. We do not store your answers or any personal information.
             </p>
 
             <div className="prose prose-gray dark:prose-invert max-w-none mt-16 space-y-16">
-
-              {/* Why Accurate Dosing Matters */}
+              {/* Pillar section: how much is muscle */}
               <section className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
                 <h2 className="mb-6 text-3xl font-bold text-slate-900 flex items-center gap-2">
-                  <Activity className="w-7 h-7 text-blue-600" />
-                  Why Accurate Dosing Actually Matters
+                  <Scale className="w-7 h-7 text-emerald-600" />
+                  How much of your GLP-1 weight loss is actually muscle?
                 </h2>
                 <p className="text-lg text-slate-700 leading-relaxed">
-                  GLP-1 medications like the active ingredients in Ozempic, Wegovy, Mounjaro, and Zepbound are powerful
-                  tools for managing blood sugar and supporting weight loss. But they are also strong. They work by slowing
-                  digestion, reducing appetite, and helping your body handle glucose better.
+                  This is the quiet fear in every GLP-1 forum, and it's a legitimate one. GLP-1 medications like
+                  semaglutide (Ozempic, Wegovy) and tirzepatide (Mounjaro, Zepbound) are extremely good at one thing:
+                  taking weight off. But when weight comes off fast, a meaningful share of it can be lean muscle rather
+                  than fat — especially when appetite suppression has cratered your protein intake and you're not doing
+                  any resistance training.
                 </p>
                 <p className="text-lg text-slate-700 leading-relaxed mt-4">
-                  Start too high or jump doses too fast and you can feel pretty rough with nausea or other side effects.
-                  Go too low for too long and you might not see the results you are hoping for. The sweet spot is slow,
-                  steady increases that let your body adjust comfortably. That is exactly why proper dosing and clear
-                  calculations make such a big difference in how people feel and how well the medication works for them.
+                  Studies of rapid weight loss suggest that, unprotected, roughly <strong>25 to 40 percent</strong> of
+                  the weight lost can be lean mass. That's the number this tool is built around — because losing muscle
+                  is exactly what leaves people smaller but softer, slows the metabolism, and makes the weight easier to
+                  regain the moment they taper off the drug.
                 </p>
                 <div className="mt-6 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
-                  <p className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-2">The Core Formula</p>
-                  <div className="text-xl md:text-2xl font-black text-slate-800 font-mono flex flex-wrap items-center justify-center gap-3 text-center">
-                    Units to Draw =
-                    <span className="bg-blue-100 text-blue-900 px-4 py-2 rounded-lg">
-                      (Dose in mg / Concentration in mg/mL) x 100
-                    </span>
-                  </div>
-                  <p className="text-sm text-slate-500 text-center mt-3">
-                    This converts your milligram dose into the unit markings on a standard U-100 insulin syringe.
+                  <p className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-2">The one thing to remember</p>
+                  <p className="text-lg md:text-xl font-bold text-slate-800 text-center">
+                    A lower number on the scale isn't the goal. <span className="text-emerald-700">Less fat while
+                    keeping muscle</span> is the goal.
                   </p>
                 </div>
               </section>
 
-              {/* Common Medications and Dosing Schedules */}
+              {/* Signs: fat vs muscle */}
+              <section>
+                <h2 className="mb-8 text-3xl font-bold text-slate-900">
+                  Fat loss vs. muscle loss: how to actually tell the difference
+                </h2>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <Card className="border-emerald-100 shadow-sm">
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-bold flex items-center gap-2 text-emerald-900 mb-4">
+                        <Check className="w-6 h-6 text-emerald-600" />
+                        Signs it's mostly fat (good)
+                      </h3>
+                      <ul className="space-y-3">
+                        {[
+                          "Clothes fit looser but you still feel strong",
+                          "Losing at or under ~1% of body weight per week",
+                          "Hitting a real protein target most days",
+                          "Lifting or doing resistance work 2–3× a week",
+                          "Energy and strength holding steady",
+                        ].map((item, i) => (
+                          <li key={i} className="flex gap-3 text-slate-700 items-start">
+                            <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-rose-100 shadow-sm">
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-bold flex items-center gap-2 text-rose-900 mb-4">
+                        <AlertTriangle className="w-6 h-6 text-rose-500" />
+                        Warning signs of muscle loss
+                      </h3>
+                      <ul className="space-y-3">
+                        {[
+                          "Scale dropping fast but you feel weaker or flatter",
+                          "Losing more than ~1% of body weight per week",
+                          "Barely eating — protein has fallen off a cliff",
+                          "No strength training at all",
+                          '"Skinny-fat" look, hollowing face, low energy',
+                        ].map((item, i) => (
+                          <li key={i} className="flex gap-3 text-slate-700 items-start">
+                            <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              </section>
+
+              {/* How the tool estimates */}
+              <section className="bg-slate-900 text-slate-50 p-10 rounded-3xl">
+                <h2 className="text-3xl font-bold text-white mb-6">How this tool estimates your split</h2>
+                <p className="text-slate-300 text-lg mb-8">
+                  We don't scan your body — we read the signals that research links to muscle loss, and combine them
+                  into a personal estimate. Three of your answers do the heavy lifting:
+                </p>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    {
+                      icon: <Gauge className="w-6 h-6 text-emerald-400" />,
+                      title: "Your rate of loss",
+                      body: "From your start weight, current weight and weeks on the drug. Faster than ~1%/week tilts the loss toward muscle.",
+                    },
+                    {
+                      icon: <Beef className="w-6 h-6 text-emerald-400" />,
+                      title: "Your protein intake",
+                      body: "The single easiest thing to under-eat on a GLP-1. Low protein pushes the estimate toward more muscle loss.",
+                    },
+                    {
+                      icon: <Dumbbell className="w-6 h-6 text-emerald-400" />,
+                      title: "Your resistance training",
+                      body: "Lifting is the signal that tells your body to hold muscle in a deficit. No training raises your risk.",
+                    },
+                  ].map((c, i) => (
+                    <div key={i} className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+                      <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mb-4">
+                        {c.icon}
+                      </div>
+                      <h3 className="text-white font-bold mb-2">{c.title}</h3>
+                      <p className="text-slate-300 text-sm leading-relaxed">{c.body}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-6 text-sm text-slate-400 italic">
+                  This is an educational estimate, not a DEXA scan. For a precise reading, a DEXA or bioimpedance scan is
+                  the gold standard — but this flags your risk in seconds, for free.
+                </p>
+              </section>
+
+              {/* How to protect muscle */}
               <section>
                 <h2 className="mb-6 text-3xl font-bold text-slate-900">
-                  Common GLP-1 Medications and Typical Dosing Schedules
+                  How to protect muscle while losing fat on a GLP-1
+                </h2>
+                <p className="text-slate-700 mb-8 text-lg">
+                  The drug creates the calorie deficit for you. Your only job is to aim that deficit at fat. Three
+                  levers, in priority order:
+                </p>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    {
+                      icon: <Beef className="w-6 h-6" />,
+                      title: "1. Eat enough protein",
+                      body: "Aim for ~1.6 g per kg of your goal body weight. Treat protein as the one macro you never skip, even on low-appetite days. Shakes, Greek yogurt and lean meat make it easier.",
+                    },
+                    {
+                      icon: <Dumbbell className="w-6 h-6" />,
+                      title: "2. Lift 2–3× a week",
+                      body: "Resistance training is the signal that tells your body to keep muscle while it's shedding fat. It doesn't need to be elaborate — basic compound lifts or bands at home work.",
+                    },
+                    {
+                      icon: <Gauge className="w-6 h-6" />,
+                      title: "3. Don't lose too fast",
+                      body: "Target around 1% of body weight per week or less. Faster loss tilts the ratio toward muscle. If you're dropping quicker, it's worth talking to your prescriber about your pace.",
+                    },
+                  ].map((tip, i) => (
+                    <div key={i} className="p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
+                      <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mb-4">
+                        {tip.icon}
+                      </div>
+                      <h3 className="font-bold text-emerald-900 mb-2 text-lg">{tip.title}</h3>
+                      <p className="text-emerald-900/90 text-sm leading-relaxed">{tip.body}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Titration reference — dose still matters */}
+              <section className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+                <h2 className="mb-2 text-3xl font-bold text-slate-900 flex items-center gap-2">
+                  <Pill className="w-7 h-7 text-emerald-600" />
+                  Your dose still matters too
                 </h2>
                 <p className="text-lg text-slate-700 mb-8">
-                  Here is a simple breakdown of the most common options used in the US. Doctors usually follow these
-                  gradual step-up schedules to help your body adapt. Many people also use a glp 1 weight loss calculator
-                  alongside these schedules to track how their body is responding at each dose level.
+                  Body composition is the outcome; your titration is one of the inputs. Here are the standard step-up
+                  ladders doctors follow — a general reference, not a prescription. Slower, well-tolerated increases give
+                  your body time to adjust and make it easier to keep protein and training consistent.
                 </p>
-
                 <div className="grid md:grid-cols-2 gap-6">
                   <Card className="border-slate-200 shadow-sm">
                     <CardContent className="p-6">
                       <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-4">
-                        <Pill className="w-5 h-5 text-blue-600" />
-                        Semaglutide (Wegovy)
+                        <Pill className="w-5 h-5 text-emerald-600" /> Semaglutide (Wegovy)
                       </h3>
-                      <p className="text-sm text-slate-500 mb-4 italic">For weight loss. Most common titration schedule:</p>
                       <ul className="space-y-3">
                         {[
-                          { weeks: "Weeks 1 to 4", dose: "0.25 mg once weekly" },
-                          { weeks: "Weeks 5 to 8", dose: "0.5 mg once weekly" },
-                          { weeks: "Weeks 9 to 12", dose: "1.0 mg once weekly" },
-                          { weeks: "Weeks 13 to 16", dose: "1.7 mg once weekly" },
-                          { weeks: "Week 17 and beyond", dose: "2.4 mg once weekly (maintenance)" },
+                          { weeks: "Weeks 1–4", dose: "0.25 mg weekly" },
+                          { weeks: "Weeks 5–8", dose: "0.5 mg weekly" },
+                          { weeks: "Weeks 9–12", dose: "1.0 mg weekly" },
+                          { weeks: "Weeks 13–16", dose: "1.7 mg weekly" },
+                          { weeks: "Week 17+", dose: "2.4 mg weekly (maintenance)" },
                         ].map((item, i) => (
                           <li key={i} className="flex justify-between items-center pb-2 border-b border-slate-100 last:border-0">
                             <span className="text-sm font-medium text-slate-600">{item.weeks}</span>
-                            <span className="text-sm font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded">{item.dose}</span>
+                            <span className="text-sm font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">{item.dose}</span>
                           </li>
                         ))}
                       </ul>
-                      <p className="text-xs text-slate-500 mt-4 italic">
-                        Ozempic (for type 2 diabetes) starts the same but usually tops out at 0.5 mg, 1 mg, or up to 2 mg
-                        depending on your needs.
-                      </p>
                     </CardContent>
                   </Card>
 
                   <Card className="border-slate-200 shadow-sm">
                     <CardContent className="p-6">
                       <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-4">
-                        <Pill className="w-5 h-5 text-blue-600" />
-                        Tirzepatide (Zepbound / Mounjaro)
+                        <Pill className="w-5 h-5 text-emerald-600" /> Tirzepatide (Zepbound / Mounjaro)
                       </h3>
-                      <p className="text-sm text-slate-500 mb-4 italic">Step-up schedule increasing every 4 weeks:</p>
                       <ul className="space-y-3">
                         {[
-                          { weeks: "Weeks 1 to 4", dose: "2.5 mg once weekly" },
-                          { weeks: "Weeks 5 to 8", dose: "5 mg once weekly" },
-                          { weeks: "Every 4 weeks after", dose: "7.5 mg / 10 mg / 12.5 mg / 15 mg" },
+                          { weeks: "Weeks 1–4", dose: "2.5 mg weekly" },
+                          { weeks: "Weeks 5–8", dose: "5 mg weekly" },
+                          { weeks: "Every 4 weeks after", dose: "7.5 / 10 / 12.5 / 15 mg" },
                         ].map((item, i) => (
                           <li key={i} className="flex justify-between items-center pb-2 border-b border-slate-100 last:border-0">
                             <span className="text-sm font-medium text-slate-600">{item.weeks}</span>
-                            <span className="text-sm font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded">{item.dose}</span>
+                            <span className="text-sm font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">{item.dose}</span>
                           </li>
                         ))}
                       </ul>
-                      <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
-                        <p className="text-sm text-blue-900 font-medium">
-                          Your doctor may keep you at a certain dose longer if you are doing well or having side effects.
-                          That is completely normal and often the smartest move.
+                      <div className="mt-4 p-3 bg-emerald-50 rounded-lg border border-emerald-100">
+                        <p className="text-sm text-emerald-900 font-medium">
+                          Your prescriber may hold you at a dose longer if you're doing well or having side effects.
+                          That's completely normal and often the smartest move.
                         </p>
                       </div>
                     </CardContent>
@@ -308,374 +433,25 @@ export default async function GLP1DoseCalculatorPage() {
                 </div>
               </section>
 
-              {/* How to Use the Calculator */}
-              <section className="bg-slate-900 text-slate-50 p-10 rounded-3xl">
-                <h2 className="text-3xl font-bold text-white mb-6">
-                  How to Use the GLP-1 Dose Calculator
+              {/* Why muscle matters after you stop */}
+              <section className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 p-8 rounded-3xl border border-emerald-100">
+                <h2 className="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-2">
+                  <HeartPulse className="w-6 h-6 text-emerald-700" />
+                  Why muscle is your insurance for keeping the weight off
                 </h2>
-                <p className="text-slate-300 text-lg mb-8">
-                  It is honestly as easy as it gets. Three inputs, one result:
+                <p className="text-emerald-900 leading-relaxed mb-4">
+                  Muscle is metabolically active tissue — holding onto it keeps your daily calorie burn higher, which
+                  makes maintenance after you stop the drug far more forgiving. Someone who lost 30 lbs of mostly fat
+                  with their muscle intact has a completely different post-GLP-1 metabolism than someone who lost 30 lbs
+                  with a big chunk of muscle in there.
                 </p>
-                <div className="flex flex-col md:flex-row gap-8 justify-between">
-                  <ol className="space-y-4 text-lg font-medium text-slate-300 flex-1">
-                    <li className="flex items-start gap-3">
-                      <span className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">1</span>
-                      Enter your prescribed dose in milligrams (mg). This is what your doctor wrote down.
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">2</span>
-                      Enter the concentration of your medication in mg/mL. You will find this on your vial label.
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">3</span>
-                      Click calculate. That is all there is to it.
-                    </li>
-                  </ol>
-                  <div className="flex-1 bg-slate-800 p-6 rounded-2xl border border-slate-700">
-                    <h3 className="text-white font-bold mb-3 flex items-center gap-2">
-                      <Calculator className="w-5 h-5 text-blue-400" /> Instantly get:
-                    </h3>
-                    <ul className="space-y-2 text-slate-300 text-sm">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-4 h-4 text-blue-400 shrink-0" />
-                        Exact units to draw on your U-100 insulin syringe
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-4 h-4 text-blue-400 shrink-0" />
-                        Volume in mL for double verification
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-4 h-4 text-blue-400 shrink-0" />
-                        Clear, easy-to-read result with no confusing math
-                      </li>
-                    </ul>
-                    <p className="mt-4 text-sm text-blue-400 italic">
-                      Many people using compounded versions love this because vial strengths can vary. This keeps things
-                      precise and safe week after week.
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              {/* Problem / Solution */}
-              <section>
-                <h2 className="mb-8 text-3xl font-bold text-slate-900">
-                  Why So Many People Get the Units Wrong
-                </h2>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <Card className="border-slate-200 shadow-sm">
-                    <CardContent className="p-6">
-                      <h3 className="text-xl font-bold flex items-center gap-2 text-slate-900 mb-4">
-                        <AlertTriangle className="w-6 h-6 text-slate-500" />
-                        Most people struggle with:
-                      </h3>
-                      <ul className="space-y-4">
-                        <li className="flex gap-3 text-slate-700 italic">
-                          <span className="text-slate-400 font-bold">&ldquo;</span>
-                          My vial says 2 mg/mL but my doctor prescribed 0.5 mg. How many units do I draw?
-                        </li>
-                        <li className="flex gap-3 text-slate-700 italic">
-                          <span className="text-slate-400 font-bold">&ldquo;</span>
-                          The compounding pharmacy changed the concentration. Do I use the same units as before?
-                        </li>
-                        <li className="flex gap-3 text-slate-700 italic">
-                          <span className="text-slate-400 font-bold">&ldquo;</span>
-                          I do not want to do the math wrong and accidentally give myself too much.
-                        </li>
-                      </ul>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-blue-100 shadow-sm">
-                    <CardContent className="p-6">
-                      <h3 className="text-xl font-bold flex items-center gap-2 text-blue-900 mb-4">
-                        <CheckCircle2 className="w-6 h-6 text-blue-600" />
-                        How this calculator solves it:
-                      </h3>
-                      <ul className="space-y-3">
-                        {[
-                          "Works for any vial concentration, including custom compounded strengths",
-                          "Instantly converts your mg dose to exact U-100 syringe units",
-                          "Eliminates mental math errors that could affect your safety",
-                          "Recalculate in seconds whenever your vial concentration changes",
-                        ].map((item, i) => (
-                          <li key={i} className="flex gap-3 text-slate-700 items-start">
-                            <Check className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </div>
-              </section>
-
-              {/* Real User Dilemmas */}
-              <section className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
-                <h2 className="mb-6 text-3xl font-bold text-slate-900 flex items-center gap-2">
-                  <MessageCircleQuestion className="w-8 h-8 text-blue-600" />
-                  Real Questions People Ask About GLP-1 Dosing
-                </h2>
-                <p className="text-lg text-slate-700 mb-8">
-                  Based on real questions from people using compounded GLP-1 medications, here are the situations that
-                  come up most often and how to handle them:
+                <p className="text-emerald-900 leading-relaxed">
+                  It's also the difference behind "Ozempic face" and the skinny-fat look: less muscle and less fat under
+                  the skin means less structure holding everything up. Protecting lean mass on the way down is the single
+                  biggest predictor of whether your results last.
                 </p>
-
-                <div className="space-y-8">
-
-                  <div className="border-l-4 border-blue-500 pl-6">
-                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-2">
-                      <FlaskConical className="w-5 h-5 text-blue-600" />
-                      1. &ldquo;My pharmacy changed the concentration on my new vial. Do I use the same units?&rdquo;
-                    </h3>
-                    <p className="text-slate-700 leading-relaxed">
-                      Absolutely not. The units you draw are directly tied to the concentration. If your vial goes from
-                      1 mg/mL to 2 mg/mL, you will draw half as many units for the same milligram dose. This is one of
-                      the most common and dangerous mistakes people make with compounded medications.
-                    </p>
-                    <p className="text-slate-700 mt-2 font-medium">
-                      The fix: Every time you get a new vial, check the concentration label and run it through this
-                      calculator again. It takes about 10 seconds.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-blue-500 pl-6">
-                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-2">
-                      <AlertTriangle className="w-5 h-5 text-blue-600" />
-                      2. &ldquo;I felt terrible after my injection. Did I take too much?&rdquo;
-                    </h3>
-                    <p className="text-slate-700 leading-relaxed">
-                      Not necessarily. Nausea, feeling full quickly, and general discomfort are the most common side
-                      effects of GLP-1 medications, especially when you first start or increase the dose. These usually
-                      ease up as your body gets used to the medication. However, if symptoms are severe or you suspect
-                      you drew the wrong units, contact your prescriber or pharmacist right away.
-                    </p>
-                    <p className="text-slate-700 mt-2 font-medium">
-                      What helps: Ginger tea, smaller and more frequent meals, avoiding greasy or heavy foods right
-                      after your shot, and walking a bit after eating. Many people find symptoms become very manageable
-                      once they settle into the right dose.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-blue-500 pl-6">
-                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-2">
-                      <Timer className="w-5 h-5 text-blue-600" />
-                      3. &ldquo;I missed my injection day. What do I do?&rdquo;
-                    </h3>
-                    <p className="text-slate-700 leading-relaxed">
-                      If you remember within a few days of your scheduled dose, you can typically take it and then resume
-                      your normal weekly schedule. If it has been longer or you are close to your next scheduled dose,
-                      skip the missed one and continue as normal. Always check with your pharmacist or prescriber for
-                      the exact rule on your specific medication, since guidelines can differ slightly between semaglutide
-                      and tirzepatide.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-blue-500 pl-6">
-                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-2">
-                      <Zap className="w-5 h-5 text-blue-600" />
-                      4. &ldquo;My doctor increased my dose but I feel like it is too much. Can I stay at my current dose longer?&rdquo;
-                    </h3>
-                    <p className="text-slate-700 leading-relaxed">
-                      Yes, and this is often the smartest move. The titration schedules listed above are standard starting
-                      points, not rigid rules. If you are tolerating your current dose well and feeling good, staying
-                      there longer before moving up is a completely valid choice. Talk to your prescriber about staying
-                      at the current level for another 4 to 8 weeks.
-                    </p>
-                    <p className="text-slate-700 mt-2 font-medium">
-                      The principle: Go slow when stepping up. Your body thanks you for it. Most side effects are worst
-                      during dose increases, so patience really does pay off.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-blue-500 pl-6">
-                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-2">
-                      <Scale className="w-5 h-5 text-blue-600" />
-                      5. &ldquo;I am on GLP-1 medication but my weight loss has stalled. What is going on?&rdquo;
-                    </h3>
-                    <p className="text-slate-700 leading-relaxed">
-                      Weight loss plateaus on GLP-1 therapy are real and common. As your body adjusts, appetite
-                      suppression can become less noticeable at lower doses. This is often a signal to move to the next
-                      dose tier, though your prescriber may also look at other factors like calorie intake, sleep, and
-                      stress. Pairing this GLP-1 dose calculator with a dedicated glp 1 weight loss calculator can help
-                      you track whether your body is actually responding at each new dose level, so you can have a much
-                      more informed conversation with your doctor at your next visit.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-blue-500 pl-6">
-                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-2">
-                      <Stethoscope className="w-5 h-5 text-blue-600" />
-                      6. &ldquo;How should I store my compounded vial?&rdquo;
-                    </h3>
-                    <p className="text-slate-700 leading-relaxed">
-                      Most compounded semaglutide and tirzepatide vials should be refrigerated between 36 and 46 degrees
-                      Fahrenheit and kept away from light. Check with your specific compounding pharmacy for their
-                      instructions, as formulations can vary. Never use a vial that has been frozen, looks cloudy when
-                      it should be clear, or has visible particles floating in it.
-                    </p>
-                  </div>
-
-                  <div className="border-l-4 border-blue-500 pl-6">
-                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-2">
-                      <HeartHandshake className="w-5 h-5 text-blue-600" />
-                      7. &ldquo;People in my online group seem to be losing weight faster than me. Should I increase my dose?&rdquo;
-                    </h3>
-                    <p className="text-slate-700 leading-relaxed">
-                      Please do not let comparison drive your dosing decisions. GLP-1 response is deeply individual.
-                      Genetics, gut microbiome, baseline metabolic rate, sleep quality, stress levels, and other
-                      medications all affect how fast you respond. Someone losing 3 lbs per week on the same dose
-                      you are using is not evidence that you need more medication. It is evidence that bodies are different.
-                    </p>
-                    <p className="text-slate-700 mt-2 font-medium">
-                      The better question: Are you tolerating the medication well and seeing any positive changes at all?
-                      If yes, stay the course. Dose decisions belong with your prescriber, not your online group.
-                    </p>
-                  </div>
-
-                </div>
-              </section>
-
-              {/* Practical Tips */}
-              <section>
-                <h2 className="mb-6 text-3xl font-bold text-slate-900">
-                  Practical Tips Learned Over 20 Years in Metabolic Health
-                </h2>
-                <p className="text-slate-700 mb-6 text-lg">
-                  These are the things that actually make a difference in how people feel and how well the medication
-                  works for them. None of them are complicated, but each one matters more than most people realize.
-                </p>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {[
-                    {
-                      icon: <Timer className="w-6 h-6" />,
-                      title: "Inject on the same day each week",
-                      body: "Consistency helps keep steady medication levels in your system. Pick a day that works for your schedule and stick to it every week without exception.",
-                    },
-                    {
-                      icon: <Activity className="w-6 h-6" />,
-                      title: "Focus on protein with your meals",
-                      body: "Protein helps reduce nausea and supports muscle while you are losing fat. Aim for a protein source at every meal, even if your portions are smaller than they used to be.",
-                    },
-                    {
-                      icon: <FlaskConical className="w-6 h-6" />,
-                      title: "Stay well hydrated throughout the day",
-                      body: "It makes a surprising difference in how you feel overall, especially in the first few weeks. Aim for water spread throughout the day rather than large amounts all at once.",
-                    },
-                    {
-                      icon: <ClipboardList className="w-6 h-6" />,
-                      title: "Rotate your injection sites",
-                      body: "Common injection sites include the abdomen, outer thigh, and upper arm. Rotating between them helps prevent tissue buildup and keeps absorption consistent over time.",
-                    },
-                  ].map((tip, i) => (
-                    <div key={i} className="p-6 bg-blue-50 rounded-2xl border border-blue-100">
-                      <div className="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center mb-4">
-                        {tip.icon}
-                      </div>
-                      <h3 className="font-bold text-blue-900 mb-2 text-lg">{tip.title}</h3>
-                      <p className="text-blue-900 text-sm leading-relaxed">{tip.body}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Managing Side Effects */}
-              <section className="bg-gradient-to-br from-blue-50 to-blue-100/50 p-8 rounded-3xl border border-blue-100">
-                <h2 className="text-2xl font-bold text-blue-950 mb-4">Managing Side Effects the Natural Way</h2>
-                <p className="text-blue-900 leading-relaxed mb-4">
-                  The most common side effects are nausea, feeling full quickly, constipation, or occasional digestive
-                  discomfort, especially when you first start or increase the dose. These usually ease up quite a bit
-                  as your body gets used to the medication.
-                </p>
-                <p className="text-blue-900 leading-relaxed">
-                  Simple things that help a lot: ginger tea, smaller and more frequent meals, avoiding greasy or heavy
-                  foods right after your shot, and walking a bit after eating. Many people find symptoms become very
-                  manageable once they settle into their right dose and stop increasing it every few weeks.
-                </p>
-                <div className="mt-4 font-medium text-blue-900 bg-white inline-block px-4 py-2 rounded shadow-sm">
-                  Most side effects peak in the first 2 to 4 weeks at each new dose level, then fade significantly.
-                </div>
-              </section>
-
-              {/* Features and Who Should Use */}
-              <section className="py-8 border-t border-slate-100">
-                <div className="grid md:grid-cols-2 gap-12">
-                  <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-6">
-                      What Makes This Calculator Different
-                    </h2>
-                    <p className="text-slate-600 mb-4">Built specifically for people using compounded GLP-1 medications:</p>
-                    <ul className="space-y-3">
-                      {[
-                        "Works for any vial concentration, not just standard strengths",
-                        "Gives you units AND mL for double verification",
-                        "No signup, no email, no personal data collected",
-                        "Instant results with no page reload needed",
-                        "Mobile-friendly and loads in milliseconds",
-                        "100% private. Nothing is stored anywhere.",
-                      ].map((item, i) => (
-                        <li key={i} className="flex gap-3 text-slate-700 items-center font-medium">
-                          <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-6">
-                      Who This Tool Is For
-                    </h2>
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                      <ul className="divide-y divide-slate-100">
-                        {[
-                          "People using compounded semaglutide or tirzepatide",
-                          "Anyone whose vial concentration changed recently",
-                          "Patients new to self-injection who want to feel confident",
-                          "Anyone stepping up to a new dose and recalculating",
-                          "Caregivers helping a family member with their injections",
-                        ].map((item, i) => (
-                          <li
-                            key={i}
-                            className="p-4 flex items-center gap-3 text-slate-700 hover:bg-blue-50/50 transition-colors"
-                          >
-                            <ArrowRight className="w-4 h-4 text-blue-600" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* Common Mistakes */}
-              <section className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
-                <h2 className="mb-6 text-3xl font-bold text-slate-900">
-                  Common Mistakes When Drawing Your GLP-1 Dose
-                </h2>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="bg-white p-5 rounded-xl border border-slate-200">
-                    <p className="font-bold text-slate-900 mb-2">Using last vial&apos;s units on a new vial</p>
-                    <p className="text-sm text-slate-600">
-                      Always check the concentration of your new vial. A different strength means different units, even
-                      for the exact same milligram dose. Never assume it is the same as before.
-                    </p>
-                  </div>
-                  <div className="bg-white p-5 rounded-xl border border-slate-200">
-                    <p className="font-bold text-slate-900 mb-2">Guessing instead of calculating</p>
-                    <p className="text-sm text-slate-600">
-                      Eyeballing the syringe or estimating units is not safe with medications this potent. The math
-                      takes 10 seconds. Run the numbers every single time you draw a dose.
-                    </p>
-                  </div>
-                  <div className="bg-white p-5 rounded-xl border border-slate-200">
-                    <p className="font-bold text-slate-900 mb-2">Confusing mg and mL</p>
-                    <p className="text-sm text-slate-600">
-                      Milligrams is the dose your doctor prescribed. Milliliters is the volume in the syringe.
-                      Concentration in mg/mL is what connects the two. This calculator handles all of it automatically.
-                    </p>
-                  </div>
+                <div className="mt-4 font-medium text-emerald-900 bg-white inline-block px-4 py-2 rounded shadow-sm">
+                  The people who keep the most weight off protected their muscle while they were losing it.
                 </div>
               </section>
 
@@ -683,58 +459,24 @@ export default async function GLP1DoseCalculatorPage() {
               <ServiceCTA
                 eyebrow="Track results, not just the scale"
                 title="On a GLP-1? Prove it's working at the level that matters"
-                body="A dose schedule gets you started. What protects your results is losing fat without losing muscle, and watching your risk fall, not just the number on the scale. Calqulate Vitals tracks lean mass, builds an adaptive titration and protein plan, and flags when you're dropping weight too fast."
+                body="This snapshot is one moment in time. What protects your results is watching lean mass over time, keeping protein and training on track, and catching the weeks you drop weight too fast. Calqulate Vitals tracks fat vs. muscle, builds an adaptive titration and protein plan, and flags rebound risk before you taper off."
                 bullets={[
+                  "Lean-mass trend over time, not just weight",
                   "Adaptive titration that holds when side-effects spike",
                   "Protein target and training to protect muscle",
-                  "Heart and diabetes risk trended over time",
                   "Rebound-risk view for when you taper off",
                 ]}
                 href="/product/glp1-progress-tracker"
                 cta="Start the GLP-1 Progress Tracker"
               />
 
-              {/* In-depth, practical guide */}
-              <section className="prose prose-slate max-w-none mt-12">
-                <h2 className="text-2xl font-bold text-slate-900">How GLP-1 dosing actually works</h2>
-                <p className="text-slate-600 leading-relaxed">
-                  GLP-1 medications start low and step up on a fixed schedule. The point of starting low is tolerance, not
-                  results. Your gut needs time to adjust, so the early doses exist to reduce nausea and let you stay on the
-                  drug long enough to benefit. Semaglutide and tirzepatide each follow their own ladder, and the steps are
-                  usually four weeks apart when you are handling the current dose well.
-                </p>
-                <p className="text-slate-600 leading-relaxed">
-                  Side-effects change that timeline. If nausea, reflux or fatigue get rough, holding the current dose for an
-                  extra few weeks is normal and often smarter than pushing higher. The goal is the lowest dose that keeps
-                  appetite in check, not the highest dose on the label. This calculator maps the standard schedule so you
-                  can see where you are and what the next step looks like.
-                </p>
-
-                <h3 className="text-xl font-bold text-slate-900 mt-6">The mistake most people make</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Watching only the scale hides the real risk, which is muscle loss. When weight comes off fast, a chunk of
-                  it can be lean tissue, especially if protein is low and you are not lifting. Lose too much muscle and your
-                  metabolism slows, which makes the weight easier to regain once you taper off. Two changes prevent most of
-                  this: eat enough protein, around 1.6 grams per kilogram of your goal weight, and do resistance training
-                  two or three times a week.
-                </p>
-
-                <h3 className="text-xl font-bold text-slate-900 mt-6">What this calculator does and does not do</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  This tool estimates a typical titration schedule and injection units from public prescribing information.
-                  It is educational. It does not set your dose, account for your full medical history, or replace your
-                  prescriber. Compounded products can differ in concentration, so always confirm units against your own vial
-                  and your clinician's instructions before you draw anything.
-                </p>
-              </section>
-
               <RelatedCalculators
                 items={[
                   { label: "Lean Body Mass Calculator", href: "/health/lean-body-mass-calculator" },
                   { label: "Body Fat Calculator", href: "/health/body-fat-calculator" },
                   { label: "Macro Calculator", href: "/health/macro-calculator" },
-                  { label: "Calorie Deficit Calculator", href: "/health/calorie-deficit-calculator" },
-                  { label: "Diabetes Risk Calculator", href: "/health/diabetes-risk-calculator" },
+                  { label: "TDEE Calculator", href: "/health/tdee-calculator" },
+                  { label: "Weight Loss % Calculator", href: "/health/weight-loss-percentage-calculator" },
                   { label: "GLP-1 Progress Tracker (paid)", href: "/product/glp1-progress-tracker" },
                 ]}
               />
@@ -748,26 +490,23 @@ export default async function GLP1DoseCalculatorPage() {
                   { label: "NIDDK (NIH): Prescription medications to treat overweight and obesity", href: "https://www.niddk.nih.gov/health-information/weight-management/prescription-medications-treat-overweight-obesity" },
                 ]}
               />
-
             </div>
 
             <CatalogRelatedCalculators slug="glp-1-dose-calculator" />
 
             {/* FAQ Section */}
             <div className="mt-12 pt-8 border-t border-slate-100">
-              <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-                Frequently Asked Questions
-              </h2>
+              <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Frequently Asked Questions</h2>
               <FAQSection faqs={faqs} />
             </div>
 
             {/* Disclaimer */}
             <div className="mt-12 p-6 bg-slate-50 border border-slate-200 rounded-2xl text-center">
               <p className="text-sm text-slate-600 leading-relaxed">
-                <strong className="text-slate-900">Medical Disclaimer:</strong> This calculator is for informational
-                purposes only and should not replace medical advice. Always consult a qualified healthcare provider
-                before adjusting your GLP-1 dose, especially if you have underlying health conditions or are taking
-                other medications.
+                <strong className="text-slate-900">Medical Disclaimer:</strong> This tool is for informational purposes
+                only and provides an educational estimate, not a body-composition measurement or medical advice. Always
+                consult a qualified healthcare provider before adjusting your GLP-1 dose or making health decisions,
+                especially if you have underlying conditions or take other medications.
               </p>
             </div>
 

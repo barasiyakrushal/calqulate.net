@@ -14,6 +14,7 @@ import { StickyCtaBar } from "@/components/glp1/marketing/StickyCtaBar";
 import { MoatSection } from "@/components/marketing/MoatSection";
 import { getReviews } from "@/lib/reviews";
 import { getAccess, hasPaidAccess } from "@/lib/auth";
+import { OFFER_ENRICHMENT } from "@/lib/seo/product-offer";
 
 export const metadata: Metadata = {
   title: "GLP-1 Tracker + Heart Age & Metabolism | Calqulate",
@@ -104,6 +105,7 @@ const jsonLd = {
       name: "Calqulate Vitals — GLP-1 Tracker",
       description:
         "All-in-one GLP-1 tracker for semaglutide and tirzepatide with free medication-level curves, body composition, and bonus heart-age and metabolism trackers.",
+      image: ["https://calqulate.net/screenshots/glp1-dashboard.webp"],
       brand: { "@type": "Brand", name: "Calqulate" },
       offers: {
         "@type": "Offer",
@@ -112,6 +114,7 @@ const jsonLd = {
         url: "https://calqulate.net/product/glp1-progress-tracker",
         availability: "https://schema.org/InStock",
         priceValidUntil: "2027-12-31",
+        ...OFFER_ENRICHMENT,
       },
     },
     {
