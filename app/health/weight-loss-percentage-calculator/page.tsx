@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
-import Image from "next/image"
+import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import WeightLossPercentageCalculator from "@/components/calculators/weight-loss-percentage-calculator"
+import WeightLossPercentageWizard from "@/components/calculators/weight-loss-percentage-wizard"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
@@ -29,15 +30,16 @@ import {
   Calendar,
   Baby,
   Sparkles,
+  Syringe,
 } from "lucide-react"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
 
 export const metadata: Metadata = {
   title: "Weight Loss Percentage Calculator: Is Your Progress Actually Good?",
   description:
-    "Lost weight but not sure if it's enough? Calculate your exact weight loss percentage free, compare it to healthy benchmarks (5%, 10%, 15%+), and see if you're really on track.",
+    "Lost weight but not sure if it's enough? Calculate your exact weight loss percentage free, compare it to healthy benchmarks (5%, 10%, 15%+), check your weekly pace, and see if a GLP-1 like Ozempic or Wegovy is dropping fat or muscle.",
   keywords:
-    "weight loss percentage calculator, body percent weight loss calculator, calculate the percentage of weight loss, calculate weight loss percentage calculator, determine weight loss percentage, figure out percentage of weight loss, figure percentage of weight loss, figuring percentage of weight loss, lose weight percentage calculator, percentage of fat loss calculator, weight loss percentage cal, percent weight loss newborn",
+    "weight loss percentage calculator, body percent weight loss calculator, calculate the percentage of weight loss, calculate weight loss percentage calculator, determine weight loss percentage, figure out percentage of weight loss, lose weight percentage calculator, percentage of fat loss calculator, weight loss percentage cal, weight loss percentage on ozempic, wegovy weight loss by month, glp-1 weight loss percentage, how much weight loss on mounjaro",
   alternates: {
     canonical: "https://calqulate.net/health/weight-loss-percentage-calculator",
   },
@@ -86,6 +88,16 @@ const faqs = [
     answer:
       "Percent weight loss in newborns is a clinical measurement used by pediatricians during the first week of life. Most newborns lose 5% to 7% of birth weight in the first few days, and a loss of more than 10% is considered a medical concern. This calculator is intended for adults — newborn weight loss should always be assessed by a healthcare provider.",
   },
+  {
+    question: "What weight loss percentage is normal on Ozempic, Wegovy or Mounjaro?",
+    answer:
+      "On semaglutide (Wegovy) many people lose about 2 to 4% of body weight by month 2, 4 to 6% by month 3, and around 11% by month 6. On tirzepatide (Zepbound or Mounjaro) it tends to run higher, roughly 5 to 8% by month 3 and 10 to 15% by month 6. These are averages that depend on your starting weight, dose, protein and training, so treat them as a gut check rather than a target.",
+  },
+  {
+    question: "Is fast weight loss on a GLP-1 a problem?",
+    answer:
+      "It can be. Losing faster than about 1% of body weight per week tends to pull more from muscle, and on a GLP-1 up to 40% of the loss can be lean mass if protein and resistance training are low. The percentage on the scale looks great, but keeping muscle is what protects your metabolism and stops rebound after you taper off. If your pace is fast, prioritize protein and lifting.",
+  },
 ]
 
 export default function WeightLossPercentageCalculatorPage() {
@@ -110,16 +122,33 @@ export default function WeightLossPercentageCalculatorPage() {
               Free · Instant · No sign-up required
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              Weight Loss Percentage Calculator
+              Weight Loss Percentage Calculator, <span className="text-emerald-700">Is Your Progress Actually Good?</span>
             </h1>
+            <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
+              A 10 lb loss means very different things at 150 lbs versus 300 lbs. Answer a few quick questions to get the
+              exact percentage of body weight you have lost, how it stacks up against healthy benchmarks, your weekly
+              pace, and, if you are on a GLP-1, whether you are dropping fat or muscle.
+            </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <p className="mt-5 max-w-3xl border-l-4 border-emerald-500 pl-4 text-base md:text-lg font-semibold text-slate-800">
+              Even <span className="text-emerald-700">5% lost is a real health win</span>. Losing faster than about 1% a
+              week is where muscle starts to go.
+            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               <a
                 href="#calculator"
                 className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
               >
-                Try the Calculator ↓
+                Check my progress ↓
               </a>
+              <Link
+                href="/product/glp1-progress-tracker"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-6 py-3 text-sm font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5"
+              >
+                <Sparkles className="h-4 w-4" /> Track loss and muscle together
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </section>
@@ -156,10 +185,16 @@ export default function WeightLossPercentageCalculatorPage() {
           </div>
         </section>
 
-        {/* CALCULATOR */}
-        <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
-            <WeightLossPercentageCalculator />
+        {/* CALCULATOR (conversational wizard) */}
+        <section id="calculator" className="scroll-mt-20 bg-slate-50/60">
+          <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16">
+            <div className="mx-auto mb-8 max-w-xl text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">How much have you really lost?</h2>
+              <p className="mt-2 text-slate-600">
+                A few quick taps. No account, no email, your answers never leave your browser.
+              </p>
+            </div>
+            <WeightLossPercentageWizard />
           </div>
         </section>
 
@@ -170,6 +205,58 @@ export default function WeightLossPercentageCalculatorPage() {
               <ShieldCheck className="w-5 h-5 text-green-600" />
               Your data is private. We do not store your weight or measurements.
             </p>
+
+            {/* GLP-1 CONTEXT: benchmarks by month + strong anchor to the GLP-1 tool */}
+            <section className="mt-12 rounded-3xl bg-gradient-to-br from-emerald-900 to-emerald-800 text-white p-8 md:p-10">
+              <div className="flex items-center gap-2 mb-4">
+                <Syringe className="w-7 h-7 text-emerald-300" />
+                <h2 className="text-2xl md:text-3xl font-bold text-white m-0">Weight loss percentage on a GLP-1</h2>
+              </div>
+              <p className="text-lg text-emerald-50/90 leading-relaxed">
+                If you are on Ozempic, Wegovy, Mounjaro or Zepbound, these are the averages people tend to hit. Use them
+                as a gut check, not a scoreboard. Your starting weight, dose, protein and training all move the number.
+              </p>
+
+              <div className="mt-6 grid md:grid-cols-2 gap-4">
+                <div className="rounded-2xl bg-white/10 border border-white/20 p-5">
+                  <p className="text-sm font-bold uppercase tracking-wide text-emerald-200">Semaglutide (Wegovy)</p>
+                  <ul className="mt-3 space-y-2 text-emerald-50/90 text-sm">
+                    <li className="flex justify-between border-b border-white/10 pb-2"><span>Month 2</span><span className="font-bold">about 2 to 4%</span></li>
+                    <li className="flex justify-between border-b border-white/10 pb-2"><span>Month 3</span><span className="font-bold">about 4 to 6%</span></li>
+                    <li className="flex justify-between"><span>Month 6</span><span className="font-bold">around 11%</span></li>
+                  </ul>
+                </div>
+                <div className="rounded-2xl bg-white/10 border border-white/20 p-5">
+                  <p className="text-sm font-bold uppercase tracking-wide text-emerald-200">Tirzepatide (Zepbound / Mounjaro)</p>
+                  <ul className="mt-3 space-y-2 text-emerald-50/90 text-sm">
+                    <li className="flex justify-between border-b border-white/10 pb-2"><span>By month 3</span><span className="font-bold">about 5 to 8%</span></li>
+                    <li className="flex justify-between border-b border-white/10 pb-2"><span>By month 6</span><span className="font-bold">about 10 to 15%</span></li>
+                    <li className="flex justify-between"><span>Note</span><span className="font-bold">more than semaglutide</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-2xl bg-white/10 border border-white/20 p-5">
+                <p className="text-base font-semibold text-white">
+                  A falling percentage is only half the story. Up to 40 percent of GLP-1 weight loss can be muscle if you
+                  do not protect it. Check your split with the{" "}
+                  <Link
+                    href="/health/glp-1-dose-calculator"
+                    className="font-bold text-gold-light underline decoration-gold/50 underline-offset-2 hover:decoration-gold-light"
+                  >
+                    GLP-1 Body Composition Tracker to see if you are losing fat or muscle
+                  </Link>
+                  , or protect your muscle with the{" "}
+                  <Link
+                    href="/health/lean-body-mass-calculator"
+                    className="font-bold text-gold-light underline decoration-gold/50 underline-offset-2 hover:decoration-gold-light"
+                  >
+                    lean body mass and muscle retention calculator
+                  </Link>
+                  .
+                </p>
+              </div>
+            </section>
 
             <div className="prose prose-gray dark:prose-invert max-w-none mt-16 space-y-16">
 
@@ -543,6 +630,18 @@ export default function WeightLossPercentageCalculatorPage() {
                 <p className="text-lg text-slate-700 mb-4">
                   This calculator tells you the percentage of <em>total body weight</em> lost — which can include fat, water, glycogen, and even muscle. A true <strong>percentage of fat loss calculator</strong> requires body composition testing (DEXA scan, BodPod, or smart scale).
                 </p>
+                <p className="text-lg text-slate-700 mb-4">
+                  This matters most on a GLP-1, where fast loss can quietly come from muscle. If you are on Ozempic,
+                  Wegovy, Mounjaro or Zepbound, run the{" "}
+                  <Link href="/health/glp-1-dose-calculator" className="text-emerald-700 hover:underline font-semibold">
+                    GLP-1 Body Composition Tracker to find out if you are losing fat or muscle
+                  </Link>
+                  , then use the{" "}
+                  <Link href="/health/lean-body-mass-calculator" className="text-emerald-700 hover:underline font-semibold">
+                    lean body mass calculator
+                  </Link>{" "}
+                  to set a protein target that protects it.
+                </p>
                 <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
                   <p className="font-bold text-slate-900 mb-3">For deeper insights, combine your weight loss percentage with:</p>
                   <ul className="space-y-2">
@@ -631,6 +730,21 @@ export default function WeightLossPercentageCalculatorPage() {
                   </div>
                 </div>
               </section>
+
+              {/* Paid service CTA */}
+              <ServiceCTA
+                eyebrow="Track results, not just the scale"
+                title="Make the weight you lose the weight that stays off"
+                body="A percentage is a snapshot. What protects your results is watching your loss and your lean mass on one timeline, keeping protein and training on track, and catching the weeks you drop weight too fast to be all fat. Calqulate Vitals does exactly that, and for GLP-1 users it adds an adaptive titration and rebound-risk view."
+                bullets={[
+                  "Weight loss and lean mass on one timeline",
+                  "Projected goal date from your own pace",
+                  "Protein target built from your numbers",
+                  "Adaptive titration and rebound-risk view for GLP-1 users",
+                ]}
+                href="/product/glp1-progress-tracker"
+                cta="Start the GLP-1 Progress Tracker"
+              />
 
             </div>
 
