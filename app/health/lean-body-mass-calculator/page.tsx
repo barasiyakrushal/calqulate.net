@@ -2,104 +2,89 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import LeanBodyMassCalculator from "@/components/calculators/lean-body-mass-calculator"
+import LeanBodyMassWizard from "@/components/calculators/lean-body-mass-wizard"
 import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
-import {
-  Calculator,
-  Dumbbell,
-  Heart,
-  Info,
-  Scale,
-  Activity,
-  CheckCircle2,
-  ArrowRight,
-  Target,
-  TrendingUp,
-  AlertTriangle,
-  Zap,
-  Users,
-  BookOpen,
-  FlaskConical,
-  ShieldCheck,
-  Ruler,
-  Percent,
-  Clock,
-  Stethoscope,
-  Sparkles,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { ServiceCTA } from "@/components/seo/service-cta"
+import { SourcesSection } from "@/components/seo/sources-section"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
-import Image from "next/image"
+import {
+  Scale,
+  Dumbbell,
+  Beef,
+  Gauge,
+  ShieldCheck,
+  ArrowRight,
+  Check,
+  AlertTriangle,
+  Percent,
+  HeartPulse,
+  Syringe,
+  Sparkles,
+  FlaskConical,
+} from "lucide-react"
+
+const TITLE = "Lean Body Mass & Muscle Retention Calculator, Are You Keeping Your Muscle?"
+const DESCRIPTION =
+  "Free lean body mass calculator that answers the real question: are you keeping your muscle? Get your LBM from the Boer, James and Hume formulas, a protein target, and a muscle-retention plan. Built for anyone losing weight, including on a GLP-1."
 
 export const metadata: Metadata = {
-  title: "Lean Body Mass Calculator: Boer, James & Hume Formulas | Free LBM Calculator",
-  description:
-    "Calculate your lean body mass (LBM) using Boer, James, and Hume formulas. Free LBM calculator shows muscle, bone, and organ mass. Find your lean body weight instantly.",
+  title: `${TITLE} | Calqulate.net`,
+  description: DESCRIPTION,
   keywords:
-    "lean body mass calculator, lbm calculator, lean body mass, calculate lean body mass, lean body weight calculator, lean mass calculator, boer james hume formula, how to calculate lean body mass, lean body mass formula, what is my lean body mass",
+    "lean body mass calculator, muscle retention calculator, lbm calculator, calculate lean body mass, lean muscle mass, boer james hume formula, protein for muscle retention, keep muscle while losing weight, muscle loss on glp-1, ozempic muscle loss, lean mass on semaglutide",
   alternates: {
     canonical: "https://calqulate.net/health/lean-body-mass-calculator",
   },
   openGraph: {
-    title: "Lean Body Mass Calculator: Boer, James & Hume Formulas | Free LBM Calculator",
-    description: "Calculate your lean body mass (LBM) using Boer, James, and Hume formulas. Free LBM calculator shows muscle, bone, and organ mass. Find your lean body weight instantly.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://calqulate.net/health/lean-body-mass-calculator",
     siteName: "Calqulate",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lean Body Mass Calculator: Boer, James & Hume Formulas | Free LBM Calculator",
-    description: "Calculate your lean body mass (LBM) using Boer, James, and Hume formulas. Free LBM calculator shows muscle, bone, and organ mass. Find your lean body weight instantly.",
+    title: TITLE,
+    description: DESCRIPTION,
   },
 }
 
 const faqs = [
   {
-    question: "What is a normal Lean Body Mass?",
+    question: "What is lean body mass and why does it matter?",
     answer:
-      "Normal LBM ranges from 60-90% of total body weight. Men typically have 75-85% LBM, women have 65-75% LBM. Athletes may reach 80-90% LBM due to higher muscle mass and lower body fat.",
+      "Lean body mass is your total body weight minus all of your fat mass. It includes muscle, bone, organs, water and skin, so it represents your metabolically active tissue. It matters because muscle drives your resting calorie burn, protects your strength as you age, and is the single biggest factor in whether you keep weight off after a diet.",
   },
   {
-    question: "Is Lean Body Mass the same as Fat Free Mass?",
+    question: "How much muscle can you lose while losing weight?",
     answer:
-      "They are nearly identical but not exactly the same. Fat Free Mass (FFM) excludes all fat, while Lean Body Mass includes essential fat (about 2-3% in men, 10-12% in women). For practical purposes, the difference is minimal.",
+      "It depends entirely on how you lose it. In fast or unprotected weight loss, a large share of the loss can come from lean mass rather than fat. This is especially common on a GLP-1 medication, where up to 40 percent of the weight lost can be muscle if protein and resistance training are low. Eating enough protein and lifting protects most of it.",
   },
   {
-    question: "Which LBM formula is most accurate: Boer, James, or Hume?",
+    question: "How do I keep my muscle while losing fat?",
     answer:
-      "The Boer formula is generally considered most accurate for average adults. James formula works better for athletes and muscular individuals. Hume formula is preferred for clinical settings. We show all three so you can see the range.",
+      "Three levers, in order. First, eat enough protein, around 1.6 to 2.2 grams per kilogram of body weight. Second, do resistance training two to three times a week so your body has a reason to hold muscle. Third, keep the pace of loss at or under about 1 percent of body weight per week. The deficit takes the fat off; protein and lifting aim it away from muscle.",
   },
   {
-    question: "Can you calculate LBM without knowing your body fat %?",
+    question: "Which LBM formula is most accurate: Boer, James or Hume?",
     answer:
-      "Yes. The Boer, James, and Hume formulas estimate LBM using only your weight, height, and sex. These prediction equations give reliable estimates without requiring body fat measurement.",
+      "The Boer formula is generally most accurate for average adults, the James formula fits muscular people and athletes better, and the Hume formula is common in clinical and drug-dosing settings. We average all three so you see a realistic range instead of false precision. If you enter a body fat percentage, we use the direct method, which is more accurate.",
   },
   {
-    question: "What's the difference between LBM and BMI?",
+    question: "Can you calculate lean body mass without knowing your body fat percentage?",
     answer:
-      "BMI divides weight by height squared and cannot distinguish muscle from fat. LBM specifically measures non-fat mass. A muscular person may have high BMI but excellent LBM, showing why LBM is more useful for fitness assessment.",
+      "Yes. The Boer, James and Hume formulas estimate lean body mass from only your weight, height and sex. If you also know your body fat percentage from a DEXA scan, calipers or a smart scale, adding it makes the estimate more accurate, but it is optional.",
   },
   {
-    question: "How can I increase my Lean Body Mass?",
+    question: "Is this calculator medical advice?",
     answer:
-      "Increase LBM through resistance training 3-5 times weekly, consuming 1.6-2.2g protein per kg bodyweight, maintaining a slight calorie surplus, and getting 7-9 hours of sleep. Progressive overload in training is essential for muscle growth.",
-  },
-  {
-    question: "Is LBM more important than total weight?",
-    answer:
-      "For health and fitness, yes. LBM indicates metabolically active tissue. Higher LBM means higher basal metabolic rate, better insulin sensitivity, and stronger bones. Total weight alone cannot show if you are gaining muscle or fat.",
-  },
-  {
-    question: "How often should I measure my Lean Body Mass?",
-    answer:
-      "Track LBM every 4-6 weeks during a fitness program. Muscle growth is slow (0.5-1kg per month for beginners). More frequent measurements create noise and false expectations. Consistent timing and conditions improve accuracy.",
+      "No. This is an educational tool that estimates your lean body mass and points you to the habits that protect it. It does not diagnose anything, set a medication dose, or replace your clinician. Always work with a qualified healthcare provider on your health decisions.",
   },
 ]
 
@@ -107,8 +92,8 @@ export default function LeanBodyMassCalculatorPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <CalculatorSchema
-        name="Lean Body Mass Calculator"
-        description="Calculate lean body mass using Boer, James, and Hume formulas. Free LBM calculator estimates muscle, bone, and organ mass from weight and height."
+        name="Lean Body Mass & Muscle Retention Calculator"
+        description="Free lean body mass calculator using the Boer, James and Hume formulas, with a protein target and a muscle-retention plan for anyone losing weight, including on a GLP-1."
         url="https://calqulate.net/health/lean-body-mass-calculator"
       />
       <FAQSchema faqs={faqs} />
@@ -119,36 +104,52 @@ export default function LeanBodyMassCalculatorPage() {
       <main id="main" className="flex-1">
         {/* HERO */}
         <section className="bg-gradient-to-br from-emerald-50 via-white to-lime-50 border-b border-slate-200">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
+          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
             <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-5">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
+              <ShieldCheck className="h-3.5 w-3.5" />
               Free · Instant · No sign-up required
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              Lean Body Mass Calculator: Boer, James & Hume Formulas
+              Lean Body Mass &amp; Muscle Retention Calculator, <span className="text-emerald-700">Are You Keeping Your Muscle?</span>
             </h1>
             <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              Calculate your lean body mass (LBM) using three scientific formulas. Our free LBM calculator estimates your muscle, bone, and organ mass to give you deeper insights into your body composition.
+              Your lean body mass is the muscle, bone and tissue that keeps your metabolism high and your strength intact.
+              Answer a few quick questions to get your number from three validated formulas, a daily protein target, and a
+              clear plan to hold onto your muscle while you lose fat.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <p className="mt-5 max-w-3xl border-l-4 border-emerald-500 pl-4 text-base md:text-lg font-semibold text-slate-800">
+              Losing weight is easy to measure. <span className="text-emerald-700">Keeping your muscle</span> is the part
+              that decides whether the results last.
+            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               <a
                 href="#calculator"
                 className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
               >
-                Try the Calculator ↓
+                Check my lean mass ↓
               </a>
+              <Link
+                href="/product/glp1-progress-tracker"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-6 py-3 text-sm font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5"
+              >
+                <Sparkles className="h-4 w-4" /> Track lean mass over time
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </section>
 
-        {/* USP SUMMARY (TOFU) */}
+        {/* USP SUMMARY */}
         <section className="border-b border-emerald-100 bg-white">
           <div className="mx-auto max-w-5xl px-6 py-6">
             <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 md:p-6">
               <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
               <p className="text-sm md:text-base leading-relaxed text-slate-700">
-                Calqulate.net estimates your lean mass by averaging the Boer, James and Hume formulas for accuracy. You get a reliable figure plus protein and calorie guidance.
+                Most calculators just spit out a number. Calqulate.net averages the Boer, James and Hume formulas, turns
+                your lean mass into a real protein target, and shows you how to protect that muscle while losing fat, on a
+                GLP-1 or off it.
               </p>
             </div>
           </div>
@@ -156,583 +157,359 @@ export default function LeanBodyMassCalculatorPage() {
 
         {/* STATS DASHBOARD */}
         <section className="border-b border-slate-200 bg-slate-50">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
+          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-4">
             {[
-              { value: "3", label: "Formulas" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
-              { value: "Instant", label: "Results" },
-              { value: "Private", label: "In-browser" },
+              { value: "3 formulas", label: "Boer · James · Hume" },
+              { value: "~30 sec", label: "To your result" },
+              { value: "Free", label: "No sign-up" },
+              { value: "Private", label: "Nothing saved" },
             ].map((s) => (
               <div key={s.label} className="bg-white p-5 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  {s.label}
-                </p>
+                <p className="text-xl md:text-2xl font-bold text-slate-900">{s.value}</p>
+                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">{s.label}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* CALCULATOR */}
-        <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
-            <LeanBodyMassCalculator />
+        {/* CALCULATOR (conversational wizard) */}
+        <section id="calculator" className="scroll-mt-20 bg-slate-50/60">
+          <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16">
+            <div className="mx-auto mb-8 max-w-xl text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">What is your lean body mass?</h2>
+              <p className="mt-2 text-slate-600">
+                A few quick taps. No account, no email, your answers never leave your browser.
+              </p>
+            </div>
+            <LeanBodyMassWizard />
           </div>
         </section>
 
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
+            <p className="text-center text-sm font-medium text-gray-500 mt-6 flex items-center justify-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-emerald-600" />
+              Your data is private. We do not store your answers or any personal information.
+            </p>
 
-            <div className="prose prose-gray dark:prose-invert max-w-none mt-12 space-y-12">
-
-              {/* What is LBM - Core Definition */}
-              <section className="py-8 border-b border-gray-100">
-                <h2 className="mb-4 text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Scale className="w-6 h-6 text-green-600" />
-                  What is Lean Body Mass (LBM)?
+            <div className="prose prose-gray dark:prose-invert max-w-none mt-16 space-y-16">
+              {/* What is LBM */}
+              <section className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+                <h2 className="mb-6 text-3xl font-bold text-slate-900 flex items-center gap-2">
+                  <Scale className="w-7 h-7 text-emerald-600" />
+                  What is lean body mass, really?
                 </h2>
-                <p className="mb-4 text-gray-700 leading-relaxed">
-                  Lean Body Mass is your total body weight minus all fat mass. LBM includes everything that is not fat: muscles, bones, organs, skin, blood, and water. It represents your metabolically active tissue.
+                <p className="text-lg text-slate-700 leading-relaxed">
+                  Lean body mass, or LBM, is your total body weight minus all of your fat. It includes your muscle, bone,
+                  organs, skin, blood and water, so it represents the metabolically active tissue that actually keeps you
+                  running. When people talk about protecting their metabolism, this is the number they mean.
                 </p>
-                <p className="mb-4 text-gray-700 leading-relaxed">
-                  Unlike BMI, which can misclassify muscular individuals as overweight, lean body mass provides a clearer picture of your health. Tracking LBM helps athletes monitor muscle gain and helps dieters ensure they lose fat, not muscle.
+                <p className="text-lg text-slate-700 leading-relaxed mt-4">
+                  Unlike BMI, which cannot tell muscle from fat, lean body mass shows you the part of your weight worth
+                  keeping. Two people can weigh the same and have completely different lean mass, and that difference is
+                  what shows up in strength, energy, and how easily the weight stays off.
                 </p>
-                
-                {/* Visual Comparison Card */}
-                <Card className="not-prose border-green-200 mt-6">
-                  <CardContent className="pt-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="p-4 bg-red-50 rounded-xl border border-red-100">
-                        <h4 className="font-bold text-red-800 mb-2">BMI Limitations</h4>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>• Cannot distinguish muscle from fat</li>
-                          <li>• Misclassifies muscular people</li>
-                          <li>• No metabolic insight</li>
-                        </ul>
-                      </div>
-                      <div className="p-4 bg-green-50 rounded-xl border border-green-100">
-                        <h4 className="font-bold text-green-800 mb-2">LBM Advantages</h4>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>• Measures actual muscle mass</li>
-                          <li>• Tracks real fitness progress</li>
-                          <li>• Indicates metabolic health</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <p className="mt-4 text-gray-700">
-                  To understand your fat distribution specifically, check your <Link href="/health/body-fat-calculator" className="text-green-600 hover:underline font-medium">Body fat calculator</Link> using our dedicated calculator.
-                </p>
-              </section>
-
-              {/* Healthy LBM Percentage Table - High Value Data */}
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Percent className="w-6 h-6 text-green-600" />
-                  What's a Healthy Lean Body Mass Percentage?
-                </h2>
-                <p className="mb-4 text-gray-700">
-                  Your lean body mass percentage depends on age, sex, and activity level. Here is a complete breakdown of healthy LBM ranges:
-                </p>
-                
-                <Card className="not-prose overflow-hidden border-green-200">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-green-600 text-white">
-                        <th className="px-6 py-4 text-left font-bold">Group</th>
-                        <th className="px-6 py-4 text-left font-bold">Average LBM (% of Body Weight)</th>
-                        <th className="px-6 py-4 text-left font-bold">Notes</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-green-700">Men 20-39 years</td>
-                        <td className="px-6 py-4">75-85%</td>
-                        <td className="px-6 py-4">Peak muscle mass years</td>
-                      </tr>
-                      <tr className="bg-green-50/30">
-                        <td className="px-6 py-4 font-bold text-green-700">Women 20-39 years</td>
-                        <td className="px-6 py-4">65-75%</td>
-                        <td className="px-6 py-4">Higher essential fat needs</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-green-700">Men 40-59 years</td>
-                        <td className="px-6 py-4">70-80%</td>
-                        <td className="px-6 py-4">Natural decline begins</td>
-                      </tr>
-                      <tr className="bg-green-50/30">
-                        <td className="px-6 py-4 font-bold text-green-700">Women 40-59 years</td>
-                        <td className="px-6 py-4">60-70%</td>
-                        <td className="px-6 py-4">Hormonal changes affect composition</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-green-700">Adults 60+ years</td>
-                        <td className="px-6 py-4">-1% per year</td>
-                        <td className="px-6 py-4">Without resistance training</td>
-                      </tr>
-                      <tr className="bg-green-50/30">
-                        <td className="px-6 py-4 font-bold text-green-700">Athletes (any age)</td>
-                        <td className="px-6 py-4">80-90%</td>
-                        <td className="px-6 py-4">Elite body composition</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Card>
-              </section>
-
-              {/* Factors Affecting LBM */}
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Target className="w-6 h-6 text-green-600" />
-                  Factors That Affect Your Lean Body Mass
-                </h2>
-                <div className="grid md:grid-cols-2 gap-6 not-prose">
-                  <div className="p-5 border border-gray-100 rounded-2xl bg-white hover:border-green-300 transition-colors shadow-sm">
-                    <h4 className="font-bold text-green-800 mb-2 flex items-center gap-2">
-                      <Users className="w-4 h-4" /> Sex
-                    </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      Men typically have 10-15% higher LBM than women due to testosterone levels and lower essential fat requirements.
-                    </p>
+                <div className="mt-6 grid md:grid-cols-2 gap-6 not-prose">
+                  <div className="p-4 bg-white rounded-xl border border-rose-100">
+                    <h4 className="font-bold text-rose-800 mb-2">Why the scale misleads you</h4>
+                    <ul className="text-sm text-slate-700 space-y-1">
+                      <li>Cannot tell muscle from fat</li>
+                      <li>Hides muscle loss during a diet</li>
+                      <li>Gives no metabolic insight</li>
+                    </ul>
                   </div>
-                  <div className="p-5 border border-gray-100 rounded-2xl bg-white hover:border-green-300 transition-colors shadow-sm">
-                    <h4 className="font-bold text-green-800 mb-2 flex items-center gap-2">
-                      <Clock className="w-4 h-4" /> Age
-                    </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      After age 30, LBM declines 3-8% per decade without resistance training. This accelerates after 60.
-                    </p>
-                  </div>
-                  <div className="p-5 border border-gray-100 rounded-2xl bg-white hover:border-green-300 transition-colors shadow-sm">
-                    <h4 className="font-bold text-green-800 mb-2 flex items-center gap-2">
-                      <Dumbbell className="w-4 h-4" /> Activity Level
-                    </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      Resistance training increases LBM. Athletes maintain 80-90% LBM while sedentary adults drop to 60-70%.
-                    </p>
-                  </div>
-                  <div className="p-5 border border-gray-100 rounded-2xl bg-white hover:border-green-300 transition-colors shadow-sm">
-                    <h4 className="font-bold text-green-800 mb-2 flex items-center gap-2">
-                      <Activity className="w-4 h-4" /> Genetics
-                    </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      Muscle fiber composition, hormone levels, and metabolic rate are partially inherited and affect LBM potential.
-                    </p>
+                  <div className="p-4 bg-white rounded-xl border border-emerald-100">
+                    <h4 className="font-bold text-emerald-800 mb-2">Why lean mass tells the truth</h4>
+                    <ul className="text-sm text-slate-700 space-y-1">
+                      <li>Tracks the tissue that burns calories</li>
+                      <li>Shows if you are losing fat or muscle</li>
+                      <li>Predicts whether results last</li>
+                    </ul>
                   </div>
                 </div>
-              </section>
-
-              {/* How to Calculate LBM - Formula Section */}
-              <section>
-                <Card className="border-green-100 shadow-sm rounded-2xl overflow-hidden">
-                  <CardHeader className="bg-green-50 pb-4">
-                    <CardTitle className="flex items-center gap-2 text-xl font-bold text-green-800">
-                      <FlaskConical className="w-5 h-5" />
-                      How to Calculate Lean Body Mass: Boer, James & Hume Formulas
-                    </CardTitle>
-                    <CardDescription className="text-green-700/80">
-                      Three validated scientific formulas for estimating LBM from weight and height
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-6 space-y-6">
-                    
-                    {/* Boer Formula */}
-                    <div className="p-4 bg-white border border-green-100 rounded-xl">
-                      <h4 className="font-bold text-green-800 mb-3">Boer Formula (Most Common)</h4>
-                      <div className="bg-gray-50 p-3 rounded-lg font-mono text-sm mb-3">
-                        <p><strong>Men:</strong> LBM = 0.407 × Weight(kg) + 0.267 × Height(cm) - 19.2</p>
-                        <p className="mt-1"><strong>Women:</strong> LBM = 0.252 × Weight(kg) + 0.473 × Height(cm) - 48.3</p>
-                      </div>
-                      <p className="text-sm text-gray-600">Best for: Average adults with typical body composition</p>
-                    </div>
-
-                    {/* Hume Formula */}
-                    <div className="p-4 bg-white border border-green-100 rounded-xl">
-                      <h4 className="font-bold text-green-800 mb-3">Hume Formula (Clinical Standard)</h4>
-                      <div className="bg-gray-50 p-3 rounded-lg font-mono text-sm mb-3">
-                        <p><strong>Men:</strong> LBM = 0.32810 × Weight(kg) + 0.33929 × Height(cm) - 29.5336</p>
-                        <p className="mt-1"><strong>Women:</strong> LBM = 0.29569 × Weight(kg) + 0.41813 × Height(cm) - 43.2933</p>
-                      </div>
-                      <p className="text-sm text-gray-600">Best for: Medical and clinical applications, drug dosing calculations</p>
-                    </div>
-
-                    {/* James Formula */}
-                    <div className="p-4 bg-white border border-green-100 rounded-xl">
-                      <h4 className="font-bold text-green-800 mb-3">James Formula (For Athletes)</h4>
-                      <div className="bg-gray-50 p-3 rounded-lg font-mono text-sm mb-3">
-                        <p><strong>Men:</strong> LBM = 1.1 × Weight(kg) - 128 × (Weight/Height)²</p>
-                        <p className="mt-1"><strong>Women:</strong> LBM = 1.07 × Weight(kg) - 148 × (Weight/Height)²</p>
-                      </div>
-                      <p className="text-sm text-gray-600">Best for: Muscular individuals and athletes with higher lean mass</p>
-                    </div>
-
-                    <p className="text-sm italic text-gray-500 border-t pt-4">
-                      We display all three formulas because each was validated on different populations. The range gives you realistic expectations rather than false precision.
-                    </p>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* Direct Body Fat Method */}
-              <section className="py-8 border-b border-gray-100">
-                <h2 className="mb-4 text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Calculator className="w-6 h-6 text-green-600" />
-                  Calculate LBM from Body Fat Percentage
-                </h2>
-                <p className="mb-4 text-gray-700 leading-relaxed">
-                  If you know your body fat percentage from a DEXA scan, calipers, or bioimpedance device, you can calculate LBM directly:
-                </p>
-                <Card className="not-prose border-green-200">
-                  <CardContent className="pt-6">
-                    <div className="bg-green-50 p-4 rounded-xl border-l-4 border-green-600">
-                      <p className="font-mono text-lg font-bold text-green-800">
-                        Lean Body Mass = Weight × (1 - Body Fat %)
-                      </p>
-                      <p className="text-sm text-gray-600 mt-2">
-                        Example: 80kg person with 20% body fat → LBM = 80 × (1 - 0.20) = 64kg
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-                <p className="mt-4 text-gray-700">
-                  This method is more accurate if you have reliable body fat data. Our calculator supports both approaches.
+                <p className="mt-4 text-slate-700">
+                  To see your fat side of the picture, pair this with the{" "}
+                  <Link href="/health/body-fat-calculator" className="text-emerald-700 hover:underline font-medium">
+                    Body Fat Calculator
+                  </Link>
+                  .
                 </p>
               </section>
 
-              {/* How to Use - Step by Step */}
+              {/* Muscle retention: why it matters */}
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Info className="w-6 h-6 text-green-600" />
-                  How to Use This LBM Calculator
+                <h2 className="mb-8 text-3xl font-bold text-slate-900">
+                  Muscle retention: the number that decides if the weight stays off
                 </h2>
-                <div className="space-y-4">
-                  <div className="flex gap-4">
-                    <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-bold">1</div>
-                    <div>
-                      <p className="font-bold text-gray-800">Select Your Sex and Unit System</p>
-                      <p className="text-gray-600 text-sm">Choose Male or Female. Pick Metric (kg, cm) or Imperial (lbs, ft/in).</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-bold">2</div>
-                    <div>
-                      <p className="font-bold text-gray-800">Enter Your Weight and Height</p>
-                      <p className="text-gray-600 text-sm">Input your current body weight and height. Use realistic, positive numbers.</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-bold">3</div>
-                    <div>
-                      <p className="font-bold text-gray-800">Optional: Enter Body Fat Percentage</p>
-                      <p className="text-gray-600 text-sm">If you know your body fat %, add it for a direct LBM calculation method.</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-bold">4</div>
-                    <div>
-                      <p className="font-bold text-gray-800">Click Calculate LBM</p>
-                      <p className="text-gray-600 text-sm">See your LBM from all three formulas plus your LBM percentage.</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* Why LBM Matters - Key Benefits */}
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Heart className="w-6 h-6 text-green-600" />
-                  Why Lean Body Mass Matters for Your Health
-                </h2>
-                <div className="grid md:grid-cols-3 gap-6 not-prose">
-                  <div className="p-5 border border-green-200 rounded-2xl bg-gradient-to-br from-green-50 to-white shadow-sm">
-                    <Dumbbell className="w-8 h-8 text-green-600 mb-3" />
-                    <h4 className="font-bold text-green-800 mb-2">Fitness & Performance</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      LBM is the best metric for tracking muscle gain. It separates true muscle growth from fat accumulation for better training decisions.
-                    </p>
-                  </div>
-                  <div className="p-5 border border-green-200 rounded-2xl bg-gradient-to-br from-green-50 to-white shadow-sm">
-                    <Zap className="w-8 h-8 text-green-600 mb-3" />
-                    <h4 className="font-bold text-green-800 mb-2">Metabolic Health</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      Your LBM drives your Basal Metabolic Rate (BMR). More lean mass means you burn more calories at rest, crucial for weight management.
-                    </p>
-                  </div>
-                  <div className="p-5 border border-green-200 rounded-2xl bg-gradient-to-br from-green-50 to-white shadow-sm">
-                    <TrendingUp className="w-8 h-8 text-green-600 mb-3" />
-                    <h4 className="font-bold text-green-800 mb-2">Healthy Aging</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      Maintaining LBM prevents sarcopenia (age-related muscle loss), preserving mobility, strength, and quality of life as you age.
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              {/* 5 Expert Insights - UNIQUE VALUE */}
-              <section className="bg-white rounded-3xl p-8 text-black/90 border border-green-100 shadow-lg">
-                <h2 className="text-2xl font-bold mb-6 text-black/90 flex items-center gap-2">
-                  <BookOpen className="w-6 h-6" />
-                  5 LBM Insights Most People Don't Know
-                </h2>
-                <p className="mb-6 opacity-90">Even experienced fitness professionals often miss these critical facts about lean body mass:</p>
-                
-                <div className="space-y-4">
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    <h4 className="font-bold text-black/90 mb-1">1. LBM Includes Water Weight (40-60% of it)</h4>
-                    <p className="text-sm opacity-90">
-                      Lean body mass is not just muscle. Water makes up 40-60% of LBM. Dehydration can drop your LBM reading by 2-4kg overnight without any actual muscle loss. Always measure LBM at consistent hydration levels.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    <h4 className="font-bold text-black/90 mb-1">2. Prediction Formulas Can Be Off by 5-10% in Extreme Cases</h4>
-                    <p className="text-sm opacity-90">
-                      Boer, Hume, and James formulas were validated on average populations. If you are very tall, very short, obese, or highly muscular, these formulas may underestimate or overestimate your LBM by 5-10%. DEXA scans are more accurate for edge cases.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    <h4 className="font-bold text-black/90 mb-1">3. You Can Gain LBM While Losing Weight</h4>
-                    <p className="text-sm opacity-90">
-                      Body recomposition is real. Beginners and people returning to training can simultaneously lose fat and gain muscle, increasing LBM percentage while total weight drops. This is why tracking LBM matters more than scale weight.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    <h4 className="font-bold text-black/90 mb-1">4. LBM Affects Drug Dosing in Medicine</h4>
-                    <p className="text-sm opacity-90">
-                      Many medications (especially anesthetics, chemotherapy drugs, and antibiotics) are dosed based on LBM, not total body weight. Obese patients dosed by total weight may receive toxic doses. This is why the Hume formula is used clinically.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    <h4 className="font-bold text-black/90 mb-1">5. Muscle Loss Starts at 30 But Accelerates After 50</h4>
-                    <p className="text-sm opacity-90">
-                      Sarcopenia (muscle loss) begins around age 30 at 0.5-1% per year. After 50, it accelerates to 1-2% per year. After 70, it can reach 3% annually. Resistance training is the only proven intervention to reverse this decline.
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              {/* How to Increase LBM */}
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Dumbbell className="w-6 h-6 text-green-600" />
-                  How to Increase Your Lean Body Mass
-                </h2>
-                <p className="mb-4 text-gray-700">
-                  Building lean mass requires strategic training and nutrition. Here is what the research shows:
-                </p>
-                
-                <div className="space-y-4">
-                  <Card className="not-prose border-green-100">
-                    <CardContent className="pt-4">
-                      <div className="flex items-start gap-4">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                          <Dumbbell className="w-5 h-5 text-green-700" />
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-gray-800">Resistance Training 3-5x Per Week</h4>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Focus on compound exercises: squats, deadlifts, bench press, rows, overhead press. Progressive overload (adding weight or reps over time) is essential for muscle growth.
-                          </p>
-                        </div>
-                      </div>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <Card className="border-emerald-100 shadow-sm">
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-bold flex items-center gap-2 text-emerald-900 mb-4">
+                        <Check className="w-6 h-6 text-emerald-600" />
+                        Signs you are keeping muscle
+                      </h3>
+                      <ul className="space-y-3">
+                        {[
+                          "Losing weight but strength is holding or rising",
+                          "Hitting a real protein target most days",
+                          "Lifting or resistance training 2 to 3 times a week",
+                          "Losing at or under about 1 percent of body weight a week",
+                          "Energy steady, clothes looser but you still feel solid",
+                        ].map((item, i) => (
+                          <li key={i} className="flex gap-3 text-slate-700 items-start">
+                            <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </CardContent>
                   </Card>
-                  
-                  <Card className="not-prose border-green-100">
-                    <CardContent className="pt-4">
-                      <div className="flex items-start gap-4">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                          <Target className="w-5 h-5 text-green-700" />
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-gray-800">Protein: 1.6-2.2g per kg Bodyweight</h4>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Protein provides amino acids for muscle repair. Spread intake across 4-5 meals for optimal muscle protein synthesis. Aim for 25-40g protein per meal.
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="not-prose border-green-100">
-                    <CardContent className="pt-4">
-                      <div className="flex items-start gap-4">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                          <TrendingUp className="w-5 h-5 text-green-700" />
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-gray-800">Slight Calorie Surplus (200-500 kcal)</h4>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Building muscle requires energy. A modest surplus supports muscle growth without excessive fat gain. Track your weight weekly and adjust calories based on progress.
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="not-prose border-green-100">
-                    <CardContent className="pt-4">
-                      <div className="flex items-start gap-4">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                          <Clock className="w-5 h-5 text-green-700" />
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-gray-800">Sleep 7-9 Hours Per Night</h4>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Muscles grow during rest, not during training. Poor sleep reduces testosterone, increases cortisol, and impairs muscle protein synthesis. Prioritize recovery.
-                          </p>
-                        </div>
-                      </div>
+
+                  <Card className="border-rose-100 shadow-sm">
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-bold flex items-center gap-2 text-rose-900 mb-4">
+                        <AlertTriangle className="w-6 h-6 text-rose-500" />
+                        Signs you are losing muscle
+                      </h3>
+                      <ul className="space-y-3">
+                        {[
+                          "Scale dropping fast but you feel weaker or flatter",
+                          "Barely eating, protein has fallen off a cliff",
+                          "No strength training at all",
+                          "Losing more than about 1 percent of body weight a week",
+                          "Looking softer or more drawn even as weight drops",
+                        ].map((item, i) => (
+                          <li key={i} className="flex gap-3 text-slate-700 items-start">
+                            <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </CardContent>
                   </Card>
                 </div>
               </section>
 
-              {/* LBM vs Lean Body Weight vs Lean Muscle Mass */}
-              <section className="py-8 border-t border-gray-100">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Ruler className="w-6 h-6 text-green-600" />
-                  LBM vs Lean Body Weight vs Lean Muscle Mass: What's the Difference?
-                </h2>
-                <p className="mb-4 text-gray-700">
-                  These terms are often used interchangeably, but they have subtle differences:
+              {/* GLP-1 section with STRONG ANCHOR to the glp1 page */}
+              <section className="bg-gradient-to-br from-emerald-900 to-emerald-800 text-white p-8 md:p-10 rounded-3xl">
+                <div className="flex items-center gap-2 mb-4">
+                  <Syringe className="w-7 h-7 text-emerald-300" />
+                  <h2 className="text-3xl font-bold text-white m-0">Lean body mass on a GLP-1</h2>
+                </div>
+                <p className="text-lg text-emerald-50/90 leading-relaxed">
+                  GLP-1 medications like semaglutide (Ozempic, Wegovy) and tirzepatide (Mounjaro, Zepbound) are extremely
+                  good at taking weight off. The catch is that when weight comes off fast, a big share of it can be lean
+                  muscle rather than fat. Research on rapid weight loss suggests that, unprotected, roughly 25 to 40
+                  percent of the loss can be lean mass.
                 </p>
-                
-                <Card className="not-prose overflow-hidden border-green-200">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-green-600 text-white">
-                        <th className="px-6 py-4 text-left font-bold">Term</th>
-                        <th className="px-6 py-4 text-left font-bold">Definition</th>
-                        <th className="px-6 py-4 text-left font-bold">Includes</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-green-700">Lean Body Mass (LBM)</td>
-                        <td className="px-6 py-4">Total weight minus fat mass</td>
-                        <td className="px-6 py-4">Muscle, bone, organs, water, essential fat</td>
-                      </tr>
-                      <tr className="bg-green-50/30">
-                        <td className="px-6 py-4 font-bold text-green-700">Lean Body Weight</td>
-                        <td className="px-6 py-4">Same as LBM (alternative name)</td>
-                        <td className="px-6 py-4">Muscle, bone, organs, water, essential fat</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-green-700">Fat Free Mass (FFM)</td>
-                        <td className="px-6 py-4">Total weight minus ALL fat</td>
-                        <td className="px-6 py-4">Muscle, bone, organs, water (no fat)</td>
-                      </tr>
-                      <tr className="bg-green-50/30">
-                        <td className="px-6 py-4 font-bold text-green-700">Lean Muscle Mass</td>
-                        <td className="px-6 py-4">Only skeletal muscle tissue</td>
-                        <td className="px-6 py-4">Skeletal muscles only (not organs, bones)</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Card>
-                
-                <p className="mt-4 text-gray-700">
-                  For practical fitness purposes, LBM and lean body weight are identical. Lean muscle mass is a subset, representing only skeletal muscle without bones and organs.
+                <p className="text-lg text-emerald-50/90 leading-relaxed mt-4">
+                  That is why your lean body mass matters more than ever on these drugs. Losing muscle slows your
+                  metabolism and makes the weight easier to regain the moment you taper off. Enough protein, resistance
+                  training, and a steady pace of loss keep most of your muscle where it belongs.
                 </p>
-              </section>
-
-              {/* Accuracy Warning */}
-              <section className="border-2 border-dashed border-amber-200 p-6 rounded-2xl bg-amber-50/30">
-                <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-amber-800 uppercase tracking-tight">
-                  <AlertTriangle className="w-5 h-5" /> When Formula Estimates May Be Less Accurate
-                </h3>
-                <p className="text-sm text-gray-700 leading-relaxed mb-4">
-                  Prediction formulas work well for average adults. However, accuracy decreases for:
-                </p>
-                <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-700 list-none pl-0">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-amber-600" /> BMI over 30 (obese individuals)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-amber-600" /> Pregnant women
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-amber-600" /> Highly muscular athletes
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-amber-600" /> Elderly individuals (70+)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-amber-600" /> Very tall or very short people
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-amber-600" /> People with edema or fluid retention
-                  </li>
-                </ul>
-                <p className="text-sm text-gray-700 mt-4">
-                  For these populations, consider a DEXA scan, BodPod, or hydrostatic weighing for clinical-grade accuracy.
-                </p>
-              </section>
-
-              {/* Calculator Transparency */}
-              <section className="bg-gray-50 rounded-2xl p-6">
-                <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-green-600" />
-                  Our Calculation Transparency
-                </h2>
-                <p className="text-gray-700 mb-4">
-                  We deliberately show results from multiple formulas. Each was derived from different research populations, so presenting a range gives you scientific reality rather than false precision:
-                </p>
-                <ul className="space-y-2 text-gray-700 list-none pl-0">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-600" /> Boer, Hume, and James formulas calculated automatically
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-600" /> Direct Body Fat Method: If you enter body fat %, we calculate LBM = Weight × (1 - BF%)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-600" /> Special population warnings displayed when relevant
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-600" /> No data stored or tracked. Your privacy comes first.
-                  </li>
-                </ul>
-              </section>
-
-              {/* Related Calculators CTA */}
-              <section className="not-prose mt-12">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-gradient-to-r from-green-600 to-green-700 rounded-3xl text-white shadow-xl">
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-bold">Want More Body Composition Insights?</h3>
-                    <p className="text-gray-200 max-w-md">
-                      Calculate your Adjusted Body Weight for clinical applications like nutrition planning or medication dosing.
-                    </p>
-                  </div>
-                  <Button asChild size="lg" variant="secondary" className="whitespace-nowrap">
-                    <Link href="/health/adjusted-body-weight-calculator">
-                      Calculate Adjusted Weight <ArrowRight className="ml-2 w-4 h-4" />
-                    </Link>
-                  </Button>
+                <div className="mt-6 rounded-2xl bg-white/10 border border-white/20 p-5">
+                  <p className="text-base font-semibold text-white">
+                    Want to know your split right now? Use the{" "}
+                    <Link
+                      href="/health/glp-1-dose-calculator"
+                      className="font-bold text-gold-light underline decoration-gold/50 underline-offset-2 hover:decoration-gold-light"
+                    >
+                      GLP-1 Body Composition Tracker to find out if you are losing fat or muscle
+                    </Link>{" "}
+                    on Ozempic, Wegovy, Mounjaro or Zepbound.
+                  </p>
                 </div>
               </section>
 
+              {/* How to protect / build lean mass */}
+              <section>
+                <h2 className="mb-6 text-3xl font-bold text-slate-900">
+                  How to protect and build your lean body mass
+                </h2>
+                <p className="text-slate-700 mb-8 text-lg">
+                  Whether you are cutting fat or gaining muscle, the levers are the same three, in priority order:
+                </p>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    {
+                      icon: <Beef className="w-6 h-6" />,
+                      title: "1. Eat enough protein",
+                      body: "Aim for 1.6 to 2.2 g per kg of body weight. Protein supplies the amino acids that repair and build lean tissue. Spread it across the day, and never let a low-appetite day drop you to zero.",
+                    },
+                    {
+                      icon: <Dumbbell className="w-6 h-6" />,
+                      title: "2. Train with resistance",
+                      body: "Lift 2 to 3 times a week to keep muscle in a deficit, or 3 to 5 times to build it. Compound moves like squats, rows and presses with progressive overload do the heavy lifting.",
+                    },
+                    {
+                      icon: <Gauge className="w-6 h-6" />,
+                      title: "3. Control your pace",
+                      body: "When losing fat, target around 1 percent of body weight a week or less. Faster loss tilts the ratio toward muscle. When building, a small surplus of 200 to 500 kcal is plenty.",
+                    },
+                  ].map((tip, i) => (
+                    <div key={i} className="p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
+                      <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mb-4">
+                        {tip.icon}
+                      </div>
+                      <h3 className="font-bold text-emerald-900 mb-2 text-lg">{tip.title}</h3>
+                      <p className="text-emerald-900/90 text-sm leading-relaxed">{tip.body}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Formulas */}
+              <section className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+                <h2 className="mb-2 text-3xl font-bold text-slate-900 flex items-center gap-2">
+                  <FlaskConical className="w-7 h-7 text-emerald-600" />
+                  The formulas behind your number
+                </h2>
+                <p className="text-lg text-slate-700 mb-8">
+                  We average three validated prediction formulas so you get a realistic range instead of false precision.
+                  Each was built on a different population, and each uses only your weight, height and sex.
+                </p>
+                <div className="space-y-4 not-prose">
+                  <div className="p-4 bg-white border border-slate-200 rounded-xl">
+                    <h4 className="font-bold text-slate-900 mb-2">Boer formula (best for average adults)</h4>
+                    <div className="bg-slate-50 p-3 rounded-lg font-mono text-sm text-slate-700">
+                      <p>Men: LBM = 0.407 x weight(kg) + 0.267 x height(cm) - 19.2</p>
+                      <p className="mt-1">Women: LBM = 0.252 x weight(kg) + 0.473 x height(cm) - 48.3</p>
+                    </div>
+                  </div>
+                  <div className="p-4 bg-white border border-slate-200 rounded-xl">
+                    <h4 className="font-bold text-slate-900 mb-2">Hume formula (clinical standard)</h4>
+                    <div className="bg-slate-50 p-3 rounded-lg font-mono text-sm text-slate-700">
+                      <p>Men: LBM = 0.32810 x weight(kg) + 0.33929 x height(cm) - 29.5336</p>
+                      <p className="mt-1">Women: LBM = 0.29569 x weight(kg) + 0.41813 x height(cm) - 43.2933</p>
+                    </div>
+                  </div>
+                  <div className="p-4 bg-white border border-slate-200 rounded-xl">
+                    <h4 className="font-bold text-slate-900 mb-2">James formula (for muscular builds)</h4>
+                    <div className="bg-slate-50 p-3 rounded-lg font-mono text-sm text-slate-700">
+                      <p>Men: LBM = 1.1 x weight(kg) - 128 x (weight / height)squared</p>
+                      <p className="mt-1">Women: LBM = 1.07 x weight(kg) - 148 x (weight / height)squared</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-500 pt-2">
+                    If you enter a body fat percentage, we switch to the direct method, lean body mass = weight x (1 minus
+                    body fat), which is more accurate than any formula.
+                  </p>
+                </div>
+              </section>
+
+              {/* Healthy ranges */}
+              <section>
+                <h2 className="text-3xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                  <Percent className="w-7 h-7 text-emerald-600" />
+                  What is a healthy lean body mass percentage?
+                </h2>
+                <p className="mb-6 text-lg text-slate-700">
+                  Your lean mass as a share of body weight depends on sex, age and training. Use this as a rough guide,
+                  not a verdict.
+                </p>
+                <Card className="not-prose overflow-hidden border-emerald-200">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm min-w-[440px]">
+                      <thead>
+                        <tr className="bg-emerald-600 text-white">
+                          <th className="px-6 py-4 text-left font-bold">Group</th>
+                          <th className="px-6 py-4 text-left font-bold">Typical lean mass</th>
+                          <th className="px-6 py-4 text-left font-bold">Notes</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {[
+                          ["Men 20 to 39", "75 to 85%", "Peak muscle years"],
+                          ["Women 20 to 39", "65 to 75%", "Higher essential fat"],
+                          ["Men 40 to 59", "70 to 80%", "Natural decline begins"],
+                          ["Women 40 to 59", "60 to 70%", "Hormonal shifts"],
+                          ["Adults 60+", "Falls about 1% a year", "Without resistance training"],
+                          ["Athletes, any age", "80 to 90%", "Elite body composition"],
+                        ].map((row, i) => (
+                          <tr key={i} className={i % 2 ? "bg-emerald-50/30" : ""}>
+                            <td className="px-6 py-4 font-bold text-emerald-700">{row[0]}</td>
+                            <td className="px-6 py-4">{row[1]}</td>
+                            <td className="px-6 py-4">{row[2]}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
+              </section>
+
+              {/* Why muscle matters (aging + rebound) */}
+              <section className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 p-8 rounded-3xl border border-emerald-100">
+                <h2 className="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-2">
+                  <HeartPulse className="w-6 h-6 text-emerald-700" />
+                  Why lean mass is your insurance policy
+                </h2>
+                <p className="text-emerald-900 leading-relaxed mb-4">
+                  Muscle is metabolically active, so holding onto it keeps your daily calorie burn higher. That makes
+                  maintenance far more forgiving after a diet or after you taper off a GLP-1. Someone who lost 30 pounds
+                  of mostly fat has a very different metabolism than someone who lost 30 pounds with a big chunk of muscle
+                  mixed in.
+                </p>
+                <p className="text-emerald-900 leading-relaxed">
+                  Lean mass also protects you with age. Muscle loss starts around 30 and speeds up after 50, and it is the
+                  quiet driver behind lost strength, slower metabolism and frailty later on. Protein and lifting are the
+                  only proven ways to hold the line.
+                </p>
+                <div className="mt-4 font-medium text-emerald-900 bg-white inline-block px-4 py-2 rounded shadow-sm">
+                  The people who keep the weight off protected their muscle while they were losing it.
+                </div>
+              </section>
+
+              {/* Paid service CTA */}
+              <ServiceCTA
+                eyebrow="Track results, not just the scale"
+                title="Keep your muscle where you can see it"
+                body="A single lean-mass reading is a snapshot. What protects your results is watching lean mass over time, keeping protein and training on track, and catching the weeks you lose too fast. Calqulate Vitals trends your lean mass, builds a protein plan from your own numbers, and, for GLP-1 users, adds an adaptive titration and rebound-risk view."
+                bullets={[
+                  "Lean-mass trend over time, not just weight",
+                  "Protein target built from your body composition",
+                  "Adaptive titration for GLP-1 users",
+                  "Rebound-risk view for when you taper off",
+                ]}
+                href="/product/glp1-progress-tracker"
+                cta="Start the GLP-1 Progress Tracker"
+              />
+
+              <RelatedCalculators slug="lean-body-mass-calculator" />
+
+              <SourcesSection
+                items={[
+                  { label: "Boer P. Estimated lean body mass as an index for normalization of body fluid volumes (1984)", href: "https://pubmed.ncbi.nlm.nih.gov/6496691/" },
+                  { label: "Hume R. Prediction of lean body mass from height and weight (1966)", href: "https://pubmed.ncbi.nlm.nih.gov/5929341/" },
+                  { label: "NEJM: STEP 1 trial of semaglutide for weight management", href: "https://www.nejm.org/doi/full/10.1056/NEJMoa2032183" },
+                  { label: "NEJM: SURMOUNT-1 trial of tirzepatide", href: "https://www.nejm.org/doi/full/10.1056/NEJMoa2206038" },
+                  { label: "NIH: Sarcopenia and age-related loss of muscle mass", href: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2804956/" },
+                ]}
+              />
             </div>
 
-            <RelatedCalculators slug="lean-body-mass-calculator" />
-
-            {/* Structured FAQ UI */}
-            <div className="mt-12">
+            {/* FAQ Section */}
+            <div className="mt-12 pt-8 border-t border-slate-100">
+              <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Frequently Asked Questions</h2>
               <FAQSection faqs={faqs} />
             </div>
+
+            {/* Disclaimer */}
+            <div className="mt-12 p-6 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+              <p className="text-sm text-slate-600 leading-relaxed">
+                <strong className="text-slate-900">Medical Disclaimer:</strong> This tool is for informational purposes
+                only and provides an educational estimate, not a body-composition measurement or medical advice. Lean mass
+                includes water and can shift with hydration. Always consult a qualified healthcare provider about your
+                health decisions, especially if you have underlying conditions.
+              </p>
+            </div>
+
             <MedicalReviewerSection />
             <AuthorSection />
           </div>
         </div>
       </main>
 
-      {/* Author Schema */}
       <AuthorSchema />
 
       <Footer />

@@ -31,7 +31,7 @@ import {
   Sparkles,
 } from "lucide-react"
 
-const TITLE = "GLP-1 Body Composition Tracker — Are You Losing Fat or Muscle?"
+const TITLE = "GLP-1 Body Composition Tracker, Are You Losing Fat or Muscle?"
 const DESCRIPTION =
   "Free GLP-1 body composition tool. Answer a few quick questions and get an instant estimate of how much of your Ozempic, Wegovy, Mounjaro or Zepbound weight loss is fat vs. muscle — plus the fixes to protect your lean mass."
 
@@ -114,17 +114,17 @@ export default async function GLP1BodyCompositionPage() {
               Free · Instant · No sign-up required
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              GLP-1 Body Composition Tracker — <span className="text-emerald-700">Are You Losing Fat or Muscle?</span>
+              GLP-1 Body Composition Tracker, <span className="text-emerald-700">Are You Losing Fat or Muscle?</span>
             </h1>
             <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
               The scale can't tell you the one thing that decides whether you keep the weight off: how much of your loss
-              is fat versus muscle. Answer a few quick questions and get an instant, personal estimate — plus the exact
+              is fat versus muscle. Answer a few quick questions and get an instant, personal estimate. plus the exact
               fixes to protect your lean mass on Ozempic, Wegovy, Mounjaro or Zepbound.
             </p>
 
             <p className="mt-5 max-w-3xl border-l-4 border-emerald-500 pl-4 text-base md:text-lg font-semibold text-slate-800">
               Up to <span className="text-emerald-700">40% of GLP-1 weight loss can be muscle</span> if you don't protect
-              it — and muscle is what keeps the weight off after you stop.
+              it, and muscle is what keeps the weight off after you stop.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -138,7 +138,7 @@ export default async function GLP1BodyCompositionPage() {
                 href="/product/glp1-progress-tracker"
                 className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-6 py-3 text-sm font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5"
               >
-                <Sparkles className="h-4 w-4" /> Track it over time — GLP-1 Progress Tracker
+                <Sparkles className="h-4 w-4" /> Track it over time, GLP-1 Progress Tracker
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -152,7 +152,7 @@ export default async function GLP1BodyCompositionPage() {
               <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
               <p className="text-sm md:text-base leading-relaxed text-slate-700">
                 Most GLP-1 trackers just log pounds. Calqulate.net estimates whether those pounds are fat or muscle,
-                flags when you're losing too fast, and shows you the two changes that protect your metabolism — so the
+                flags when you're losing too fast, and shows you the two changes that protect your metabolism, so the
                 weight you lose is the weight that stays off.
               </p>
             </div>
@@ -182,7 +182,7 @@ export default async function GLP1BodyCompositionPage() {
             <div className="mx-auto mb-8 max-w-xl text-center">
               <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Are you losing fat or muscle?</h2>
               <p className="mt-2 text-slate-600">
-                A few quick taps. No account, no email — your answers never leave your browser.
+                A few quick taps. No account, no email, your answers never leave your browser.
               </p>
             </div>
             <GLP1BodyCompositionWizard />
