@@ -8,7 +8,7 @@ import { useCheckout } from "@/hooks/useCheckout";
 import { getPrice, formatPrice, displaySubtitle } from "@/lib/payment/pricing";
 
 export function PremiumPricingCard() {
-  const [cadence, setCadence] = useState<"yearly" | "monthly">("yearly");
+  const [cadence, setCadence] = useState<"yearly" | "monthly">("monthly");
   const { loading, error, checkout, retry } = useCheckout();
 
   const currency = "USD";
@@ -30,7 +30,7 @@ export function PremiumPricingCard() {
       <div className="flex items-center justify-between gap-3">
         <div className="text-sm font-bold uppercase tracking-wide text-faint">Premium</div>
         <div className="inline-flex rounded-lg border border-line p-0.5">
-          {(["yearly", "monthly"] as const).map((c) => (
+          {(["monthly", "yearly"] as const).map((c) => (
             <button
               key={c}
               type="button"

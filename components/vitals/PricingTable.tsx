@@ -7,7 +7,7 @@ import { GatewayPicker } from "@/components/payment/GatewayPicker";
 import { useCheckout } from "@/hooks/useCheckout";
 
 export function PricingTable() {
-  const [cadence, setCadence] = useState<"monthly" | "yearly">("yearly");
+  const [cadence, setCadence] = useState<"monthly" | "yearly">("monthly");
   const { loading, error, checkout, retry } = useCheckout();
   const [activeTier, setActiveTier] = useState<Tier | null>(null);
 

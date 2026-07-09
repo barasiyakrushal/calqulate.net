@@ -25,7 +25,9 @@ function passwordStrength(pw: string): { label: string; color: string; width: st
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next") ?? "/dashboard";
+  // New sign-ups land straight on the GLP-1 tracker (the primary experience);
+  // returning logins default to the metabolic overview. An explicit ?next= wins.
+  const next = params.get("next") ?? (mode === "signup" ? "/dashboard/glp1" : "/dashboard");
   const reason = params.get("reason");
 
   const [email, setEmail] = useState("");

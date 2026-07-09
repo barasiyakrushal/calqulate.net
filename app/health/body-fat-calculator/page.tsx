@@ -2,14 +2,15 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import BodyFatCalculator from "@/components/calculators/body-fat-calculator"
+import BodyFatWizard from "@/components/calculators/body-fat-wizard"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import {
   Scale,
   Ruler,
@@ -18,20 +19,19 @@ import {
   ShieldCheck,
   User,
   Users,
-  Info,
   AlertTriangle,
   CheckCircle2,
   Target,
   TrendingDown,
   Dumbbell,
-  ArrowRight,
   X,
   Check,
   Zap,
-  Stethoscope,
   Sparkles,
+  Camera,
+  Syringe,
+  ArrowRight,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
 
 export const metadata: Metadata = {
@@ -57,47 +57,31 @@ export const metadata: Metadata = {
   },
 }
 
-// Long-tail GSC queries converted to FAQs
 const faqs = [
-  {
-    question: "How do I calculate body fat percentage accurately?",
-    answer:
-      "The most accurate home method is the U.S. Navy circumference formula. Measure your waist at the narrowest point, neck just below Adam's apple, and hip at the widest point (women only). Enter these measurements along with your height into the body fat calculator. For clinical accuracy, DEXA scans or hydrostatic weighing are gold standards but require professional facilities.",
-  },
-  {
-    question: "Is a body fat calculator better than BMI?",
-    answer:
-      "Yes, for assessing health risks. BMI only measures weight vs height and cannot distinguish between muscle and fat. A muscular athlete may have a 'high' BMI but low body fat. Body fat percentage directly measures adipose tissue, which is what actually correlates with heart disease, diabetes, and metabolic health risks.",
-  },
-  {
-    question: "What is the ideal body fat percentage for women?",
-    answer:
-      "For women, healthy body fat ranges from 21-31%. Athletes typically maintain 14-20%, while fitness-focused women aim for 21-24%. Essential fat (minimum for hormonal health) is 10-13%. Women naturally carry more body fat than men due to reproductive and hormonal needs. Going below essential fat can disrupt menstruation and bone health.",
-  },
-  {
-    question: "What is the ideal body fat percentage for men?",
-    answer:
-      "For men, healthy body fat ranges from 14-24%. Athletes typically maintain 6-13%, while fitness-focused men aim for 14-17%. Essential fat (minimum for physiological function) is 2-5%. Body fat below 5% is difficult to maintain and can impair hormone production, immune function, and energy levels.",
-  },
-  {
-    question: "Can I calculate body fat at home without equipment?",
-    answer:
-      "Yes. The U.S. Navy Method only requires a soft measuring tape. Measure your waist, neck, hip (women), and height. This method has been validated against hydrostatic weighing and provides reasonably accurate estimates for most people. Smart scales with bioelectrical impedance are convenient but less accurate than circumference methods.",
-  },
   {
     question: "How accurate is the Navy body fat calculator?",
     answer:
-      "The U.S. Navy formula is accurate within 3-4% of DEXA scan results for most individuals. It is more reliable than BMI-based estimates or consumer-grade smart scales. The key to accuracy is consistent measurement technique: measure at the same time of day, use the same landmarks, and don't compress the tape too tightly.",
+      "Within about 3 to 4 percent when you measure consistently. That is accurate enough to track real change over weeks and months.",
   },
   {
-    question: "What is the difference between fat loss and weight loss?",
+    question: "What is the ideal body fat percentage for men and women?",
     answer:
-      "Weight loss includes muscle, water, and fat. Fat loss specifically targets adipose tissue while preserving muscle mass. You can lose weight but gain fat (muscle loss from crash dieting), or gain weight but lose fat (muscle gain from strength training). Body fat percentage tracks true fat loss; scale weight does not.",
+      "It depends on age and goals. For general health, aim for 10 to 20 percent (men) or 18 to 28 percent (women). See the full ranges above.",
   },
   {
-    question: "Why does the body fat calculator need hip measurement for women only?",
+    question: "Does this calculator work for both men and women?",
     answer:
-      "Women store fat differently than men due to estrogen. The female body naturally deposits fat around the hips and thighs (gynoid pattern), while men typically store fat around the abdomen (android pattern). The Navy formula accounts for this by including hip circumference in the female calculation to improve accuracy.",
+      "Yes. Select your sex and it applies the correct formula automatically.",
+  },
+  {
+    question: "How do I lower my body fat percentage?",
+    answer:
+      "Strength train, eat enough protein, keep a moderate calorie deficit, walk more and sleep well. Expect steady progress, not overnight change.",
+  },
+  {
+    question: "Why does waist measurement matter?",
+    answer:
+      "Waist size is a strong indicator of visceral fat, the type linked to heart disease and diabetes. Even if your overall percentage looks fine, a large waist is worth acting on.",
   },
 ]
 
@@ -123,19 +107,31 @@ export default function BodyFatCalculatorPage() {
               Free · Instant · No sign-up required
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              Body Fat Calculator
+              Body Fat Calculator: Find Your Real Body Fat Percentage <span className="text-emerald-700">(Male &amp; Female)</span>
             </h1>
             <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              Calculate your body fat percentage accurately using proven circumference measurements. Our free body fat calculator uses the U.S. Navy Method to estimate body fat for men and women.
+              Snap a photo and let the AI measure you, or grab a soft tape. Either way you get a reliable estimate from
+              the proven U.S. Navy method, the same one the military has used for decades.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <p className="mt-5 max-w-3xl border-l-4 border-emerald-500 pl-4 text-base md:text-lg font-semibold text-slate-800">
+              New: <span className="text-emerald-700">AI photo mode</span>. Your photo never leaves your browser.
+            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               <a
                 href="#calculator"
-                className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
               >
-                Try the Calculator ↓
+                <Camera className="h-4 w-4" /> Check my body fat ↓
               </a>
+              <Link
+                href="/product/glp1-progress-tracker"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-6 py-3 text-sm font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5"
+              >
+                <Sparkles className="h-4 w-4" /> Track fat vs muscle over time
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </section>
@@ -146,7 +142,10 @@ export default function BodyFatCalculatorPage() {
             <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 md:p-6">
               <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
               <p className="text-sm md:text-base leading-relaxed text-slate-700">
-                Calqulate.net estimates body-fat percentage from simple tape measurements using the trusted Navy method. You get an accurate figure, a fitness category and a clear goal-gap in your chosen units.
+                Your scale tells you one number. It cannot tell you what that number is made of. This body fat percentage
+                calculator estimates how much of your weight is fat versus lean mass (muscle, bone, organs and water)
+                using simple circumference measurements. That makes it far more useful than the scale or BMI, whether you
+                are losing fat, building muscle or simply staying healthy.
               </p>
             </div>
           </div>
@@ -156,10 +155,10 @@ export default function BodyFatCalculatorPage() {
         <section className="border-b border-slate-200 bg-slate-50">
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
             {[
+              { value: "AI photo", label: "Or tape measure" },
               { value: "Navy", label: "Method" },
-              { value: "2", label: "Unit systems" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
+              { value: "On-device", label: "Nothing uploaded" },
+              { value: "Free", label: "No sign-up" },
               { value: "Instant", label: "Results" },
             ].map((s) => (
               <div key={s.label} className="bg-white p-5 text-center">
@@ -172,10 +171,122 @@ export default function BodyFatCalculatorPage() {
           </div>
         </section>
 
-        {/* CALCULATOR */}
-        <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
-            <BodyFatCalculator />
+        {/* CALCULATOR (conversational wizard: photo or tape) */}
+        <section id="calculator" className="scroll-mt-20 bg-slate-50/60">
+          <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16">
+            <div className="mx-auto mb-8 max-w-xl text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">What is your body fat percentage?</h2>
+              <p className="mt-2 text-slate-600">
+                A few quick taps. Use a photo or a tape measure. No account, no email, nothing leaves your browser.
+              </p>
+            </div>
+            <BodyFatWizard />
+          </div>
+        </section>
+
+        {/* AI PHOTO MODE: how it works + honest limits */}
+        <section className="border-y border-slate-200 bg-white">
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-2">
+              <Camera className="w-7 h-7 text-emerald-600" />
+              How AI photo mode works
+            </h2>
+            <p className="mt-3 text-lg text-slate-700 leading-relaxed">
+              Taking tape measurements is fiddly, and most people do it wrong. AI photo mode skips the tape. It runs a
+              Google MediaPipe pose model directly in your browser, so your photo is never uploaded anywhere.
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { n: "1", t: "Find your body", d: "The model detects 33 body landmarks and a full silhouette of you." },
+                { n: "2", t: "Scale to real size", d: "Your silhouette height is matched to the real height you typed, giving centimetres per pixel." },
+                { n: "3", t: "Measure the rows", d: "It measures your true width at the neck, waist and hips, ignoring arms held away from your body." },
+                { n: "4", t: "Apply the Navy formula", d: "Widths plus depth become circumferences, which feed the same validated formula as tape mode." },
+              ].map((s) => (
+                <div key={s.n} className="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+                  <div className="h-9 w-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold mb-3">{s.n}</div>
+                  <h3 className="font-bold text-slate-900 mb-1">{s.t}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">{s.d}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50">
+                <h3 className="font-bold text-emerald-900 mb-2 flex items-center gap-2">
+                  <Check className="w-5 h-5" /> Add a side photo for a better estimate
+                </h3>
+                <p className="text-sm text-emerald-900/90 leading-relaxed">
+                  A front photo alone cannot see how deep your torso is front to back, so it assumes an average. A side
+                  photo measures that depth instead, which is why confidence jumps from medium to high.
+                </p>
+              </div>
+              <div className="p-5 rounded-2xl border border-amber-200 bg-amber-50">
+                <h3 className="font-bold text-amber-900 mb-2 flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5" /> What it is not
+                </h3>
+                <p className="text-sm text-amber-900/90 leading-relaxed">
+                  This is an educational estimate, not a medical device and not a DEXA scan. Lighting, baggy clothing and
+                  pose all move the number. If you want precision, use the tape, and re-measure the same way each time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* COMMIT: GLP-1 progress tracker + internal links */}
+        <section className="bg-gradient-to-br from-emerald-900 to-emerald-800 text-white">
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 md:py-16">
+            <div className="flex items-center gap-2 mb-4">
+              <Syringe className="w-7 h-7 text-emerald-300" />
+              <h2 className="text-2xl md:text-3xl font-bold text-white m-0">Now make the fat come off, and the muscle stay</h2>
+            </div>
+            <p className="text-lg text-emerald-50/90 leading-relaxed">
+              One reading is a snapshot. What decides whether the fat stays off is your lean mass, and that is exactly
+              what the scale hides. This matters most on a GLP-1, where up to 40 percent of the weight lost can be muscle
+              if you do not protect it.
+            </p>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl bg-white/10 border border-white/20 p-5">
+                <p className="font-bold text-white mb-2">If you want to lose body fat</p>
+                <p className="text-sm text-emerald-50/90 leading-relaxed">
+                  Check your pace with the{" "}
+                  <Link href="/health/weight-loss-percentage-calculator" className="font-bold text-gold-light underline underline-offset-2">
+                    weight loss percentage calculator
+                  </Link>
+                  , then set a protein target with the{" "}
+                  <Link href="/health/lean-body-mass-calculator" className="font-bold text-gold-light underline underline-offset-2">
+                    lean body mass and muscle retention calculator
+                  </Link>
+                  .
+                </p>
+              </div>
+              <div className="rounded-2xl bg-white/10 border border-white/20 p-5">
+                <p className="font-bold text-white mb-2">If you take a GLP-1</p>
+                <p className="text-sm text-emerald-50/90 leading-relaxed">
+                  Find out where you stand with the{" "}
+                  <Link href="/health/glp-1-dose-calculator" className="font-bold text-gold-light underline underline-offset-2">
+                    GLP-1 Body Composition Tracker: are you losing fat or muscle?
+                  </Link>
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/product/glp1-progress-tracker"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-gold-light to-gold px-6 py-4 text-base font-bold text-gold-ink shadow-[0_10px_28px_rgba(245,158,11,0.4)] transition-transform hover:-translate-y-0.5"
+              >
+                <Sparkles className="h-5 w-5" /> See the GLP-1 Progress Tracker
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/25 px-6 py-4 text-base font-semibold text-white transition-colors hover:bg-white/10"
+              >
+                Plans and pricing
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -183,498 +294,364 @@ export default function BodyFatCalculatorPage() {
           <div className="max-w-4xl mx-auto">
 
             <div className="prose prose-gray dark:prose-invert max-w-none mt-12 space-y-12">
-              
-              {/* Why Body Fat % Matters - Addresses "bmi to body fat" queries */}
+
+              {/* Why Body Fat Percentage Beats BMI */}
               <section className="py-8 border-b border-gray-100">
                 <h2 className="mb-4 text-2xl font-bold text-gray-800 flex items-center gap-2">
                   <Scale className="w-6 h-6 text-teal-600" />
-                  Why Body Fat Percentage Matters More Than BMI
+                  Why Body Fat Percentage Beats BMI
                 </h2>
                 <p className="mb-4 text-gray-700 leading-relaxed">
-                  BMI (Body Mass Index) only measures weight relative to height. It cannot tell you where fat is stored, how much muscle you have, or your actual metabolic risk. A muscular athlete with low body fat may be classified as "overweight" by BMI, while someone with little muscle and high body fat might appear "normal."
+                  BMI looks only at total weight and height. It cannot tell the difference between a muscular athlete and
+                  someone carrying extra fat. You can be a &quot;normal&quot; weight on BMI yet carry high visceral fat,
+                  the dangerous kind that surrounds your organs. Equally, you can be &quot;overweight&quot; on BMI yet
+                  lean and strong.
                 </p>
                 <p className="text-gray-700 leading-relaxed mb-6">
-                  <strong>Body fat percentage directly reflects what matters for health:</strong>
+                  <strong>Body fat percentage tells the real story for:</strong>
                 </p>
-                
-                <div className="grid md:grid-cols-4 gap-4 not-prose">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 not-prose">
                   <div className="p-4 bg-red-50 rounded-xl text-center">
                     <Heart className="w-8 h-8 text-red-600 mx-auto mb-2" />
-                    <p className="font-semibold text-gray-800 text-sm">Heart Health</p>
-                    <p className="text-xs text-gray-600">Visceral fat correlates with cardiovascular risk</p>
+                    <p className="font-semibold text-gray-800 text-sm">Heart and metabolic health</p>
                   </div>
                   <div className="p-4 bg-blue-50 rounded-xl text-center">
                     <Activity className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                    <p className="font-semibold text-gray-800 text-sm">Diabetes Risk</p>
-                    <p className="text-xs text-gray-600">Body fat affects insulin sensitivity</p>
+                    <p className="font-semibold text-gray-800 text-sm">Insulin sensitivity and diabetes risk</p>
                   </div>
                   <div className="p-4 bg-purple-50 rounded-xl text-center">
                     <Zap className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                    <p className="font-semibold text-gray-800 text-sm">Hormonal Health</p>
-                    <p className="text-xs text-gray-600">Fat tissue influences hormone production</p>
+                    <p className="font-semibold text-gray-800 text-sm">Hormone balance</p>
                   </div>
                   <div className="p-4 bg-green-50 rounded-xl text-center">
                     <Dumbbell className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                    <p className="font-semibold text-gray-800 text-sm">Performance</p>
-                    <p className="text-xs text-gray-600">Body composition affects athletic output</p>
+                    <p className="font-semibold text-gray-800 text-sm">Fat loss that does not cost you muscle</p>
+                  </div>
+                  <div className="p-4 bg-amber-50 rounded-xl text-center">
+                    <Target className="w-8 h-8 text-amber-600 mx-auto mb-2" />
+                    <p className="font-semibold text-gray-800 text-sm">Athletic performance, and how you look and feel</p>
                   </div>
                 </div>
-                
+
                 <p className="mt-6 text-gray-700 font-medium bg-teal-50 p-4 rounded-lg border-l-4 border-teal-500">
-                  👉 This is why fitness professionals, doctors, and athletes rely on <strong>body fat percentage calculators</strong>, not BMI alone.
+                  That is why fitness professionals, doctors and serious trainees track body fat percentage instead of
+                  relying on the scale alone.
                 </p>
               </section>
 
-              {/* Navy Method Formula - Addresses "body fat calculator by measurements" queries */}
+              {/* How to Calculate at Home (Navy Method) */}
               <section>
-                <Card className="border-teal-100 shadow-sm rounded-2xl overflow-hidden">
-                  <CardHeader className="bg-teal-50 pb-4">
-                    <CardTitle className="flex items-center gap-2 text-xl font-bold text-teal-800">
-                      <Ruler className="w-5 h-5" />
-                      The U.S. Navy Method: How to Calculate Body Fat by Measurements
-                    </CardTitle>
-                    <CardDescription className="text-teal-700/80">
-                      Proven circumference-based formulas validated against clinical methods
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-6">
-                    <div className="space-y-6">
-                      {/* Formula for Men */}
-                      <div className="p-4 bg-blue-50 rounded-xl">
-                        <div className="flex items-center gap-2 mb-3">
-                          <User className="w-5 h-5 text-blue-600" />
-                          <p className="font-bold text-blue-800">Body Fat Formula for Men</p>
-                        </div>
-                        <div className="text-sm font-mono bg-white p-3 rounded-lg border border-blue-200 text-blue-800">
-                          BF% = 86.010 × log₁₀(waist − neck) − 70.041 × log₁₀(height) + 36.76
-                        </div>
-                      </div>
-                      
-                      {/* Formula for Women */}
-                      <div className="p-4 bg-pink-50 rounded-xl">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Users className="w-5 h-5 text-pink-600" />
-                          <p className="font-bold text-pink-800">Body Fat Formula for Women</p>
-                        </div>
-                        <div className="text-sm font-mono bg-white p-3 rounded-lg border border-pink-200 text-pink-800">
-                          BF% = 163.205 × log₁₀(waist + hip − neck) − 97.684 × log₁₀(height) − 78.387
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-6 p-4 bg-gray-50 rounded-xl">
-                      <p className="text-sm text-gray-700">
-                        <strong>📌 Important:</strong> All measurements must be in the same unit (cm or inches). The calculator above handles unit conversion automatically.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* How to Measure - Step by step for "calculate body fat at home" */}
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Target className="w-6 h-6 text-teal-600" />
-                  How to Calculate Body Fat Percentage at Home
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <Ruler className="w-6 h-6 text-teal-600" />
+                  How to Calculate Body Fat Percentage at Home (U.S. Navy Method)
                 </h2>
-                <p className="mb-4 text-gray-700">Follow these steps for accurate body fat measurement using circumference:</p>
-                
+                <p className="mb-6 text-gray-700 leading-relaxed">
+                  The Navy method is one of the most practical, reliable options for home use. It is not lab-perfect, but
+                  with consistent measurements it is accurate to within about 3 to 4 percent, more than enough for
+                  tracking change over time.
+                </p>
+
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
                   <div className="p-4 bg-white border border-gray-200 rounded-xl">
-                    <h4 className="font-bold text-gray-800 mb-3">What You Need:</h4>
+                    <h4 className="font-bold text-gray-800 mb-3">What you will need:</h4>
                     <ul className="space-y-2 text-sm text-gray-700">
                       <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-green-600" /> Soft measuring tape (not metal)
+                        <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" /> A soft fabric measuring tape (not metal)
                       </li>
                       <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-green-600" /> Mirror for positioning
+                        <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" /> A mirror, or someone to help
                       </li>
                       <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-green-600" /> Normal breathing (don't suck in)
+                        <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" /> Relaxed posture and normal breathing
                       </li>
                     </ul>
                   </div>
                   <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                    <h4 className="font-bold text-amber-800 mb-3">Best Time to Measure:</h4>
+                    <h4 className="font-bold text-amber-800 mb-3">Best time to measure:</h4>
                     <p className="text-sm text-amber-700">
-                      Morning, before eating or drinking, after using the bathroom. Measure at the same time consistently for tracking progress.
+                      First thing in the morning, after using the bathroom and before eating or drinking. Repeat under the
+                      same conditions each time for the most useful trends.
                     </p>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 not-prose">
+                {/* Measurement Guide */}
+                <h3 className="text-xl font-bold text-gray-800 mb-4">Measurement Guide</h3>
+                <div className="grid gap-4 not-prose sm:grid-cols-2">
                   <div className="p-5 bg-white border-2 border-teal-200 rounded-2xl">
-                    <div className="h-10 w-10 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold mb-3">1</div>
-                    <h4 className="font-bold text-gray-800 mb-2">Measure Waist</h4>
-                    <p className="text-sm text-gray-600">At the narrowest point (usually navel level), relaxed abdomen.</p>
+                    <h4 className="font-bold text-gray-800 mb-1">Height</h4>
+                    <p className="text-sm text-gray-600">Stand straight against a wall, barefoot. Measure to the nearest 0.5 cm or 1/4 inch.</p>
                   </div>
                   <div className="p-5 bg-white border-2 border-teal-200 rounded-2xl">
-                    <div className="h-10 w-10 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold mb-3">2</div>
-                    <h4 className="font-bold text-gray-800 mb-2">Measure Neck</h4>
-                    <p className="text-sm text-gray-600">Just below Adam's apple, tape level around.</p>
+                    <h4 className="font-bold text-gray-800 mb-1">Neck</h4>
+                    <p className="text-sm text-gray-600">Just below the Adam&apos;s apple. Keep the tape level, sloping slightly down at the front. Do not tense or flare your neck.</p>
+                  </div>
+                  <div className="p-5 bg-white border-2 border-teal-200 rounded-2xl">
+                    <h4 className="font-bold text-gray-800 mb-1">Waist</h4>
+                    <p className="text-sm text-gray-600">Men, at navel level, relaxed. Women, at the narrowest point, usually just above the navel.</p>
                   </div>
                   <div className="p-5 bg-white border-2 border-pink-200 rounded-2xl">
-                    <div className="h-10 w-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold mb-3">3</div>
-                    <h4 className="font-bold text-gray-800 mb-2">Measure Hip</h4>
-                    <p className="text-sm text-gray-600">Widest part of buttocks. <span className="text-pink-600 font-semibold">(Women only)</span></p>
-                  </div>
-                  <div className="p-5 bg-white border-2 border-teal-200 rounded-2xl">
-                    <div className="h-10 w-10 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold mb-3">4</div>
-                    <h4 className="font-bold text-gray-800 mb-2">Measure Height</h4>
-                    <p className="text-sm text-gray-600">Barefoot, standing straight against a wall.</p>
+                    <h4 className="font-bold text-gray-800 mb-1">Hips <span className="text-pink-600 font-semibold">(women only)</span></h4>
+                    <p className="text-sm text-gray-600">Around the widest part of the hips and buttocks.</p>
                   </div>
                 </div>
+
+                {/* Formulas */}
+                <div className="mt-6 space-y-4 not-prose">
+                  <p className="text-sm font-semibold text-gray-700">Formulas (the calculator applies these automatically; measurements in inches):</p>
+                  <div className="p-4 bg-blue-50 rounded-xl">
+                    <div className="flex items-center gap-2 mb-3">
+                      <User className="w-5 h-5 text-blue-600" />
+                      <p className="font-bold text-blue-800">Men</p>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <div className="text-sm font-mono bg-white p-3 rounded-lg border border-blue-200 text-blue-800 whitespace-nowrap">
+                        BF% = 86.010 × log₁₀(waist − neck) − 70.041 × log₁₀(height) + 36.76
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4 bg-pink-50 rounded-xl">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Users className="w-5 h-5 text-pink-600" />
+                      <p className="font-bold text-pink-800">Women</p>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <div className="text-sm font-mono bg-white p-3 rounded-lg border border-pink-200 text-pink-800 whitespace-nowrap">
+                        BF% = 163.205 × log₁₀(waist + hip − neck) − 97.684 × log₁₀(height) − 78.387
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="mt-6 text-gray-700 font-medium bg-teal-50 p-4 rounded-lg border-l-4 border-teal-500">
+                  Pro tip: measure each spot three times and take the average. Do not suck in your stomach or pull the
+                  tape tight.
+                </p>
               </section>
 
-              {/* Body Fat Ranges - Gender specific sections for GSC queries */}
+              {/* Body Fat Percentage Ranges */}
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                   <Users className="w-6 h-6 text-teal-600" />
-                  Healthy Body Fat Percentage Ranges
+                  Body Fat Percentage Ranges (Men &amp; Women)
                 </h2>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Men's Table - Addresses "body fat calculator for men" / "body fat calculator male" */}
-                  <Card className="border-blue-200 overflow-hidden">
-                    <CardHeader className="bg-blue-600 text-white pb-3">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <User className="w-5 h-5" />
-                        Body Fat Ranges for Men
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                      <div className="overflow-x-auto">
-                      <table className="w-full text-sm min-w-[300px]">
-                        <thead className="bg-blue-50">
-                          <tr>
-                            <th className="px-4 py-3 text-left font-bold text-blue-800 whitespace-nowrap">Category</th>
-                            <th className="px-4 py-3 text-left font-bold text-blue-800 whitespace-nowrap">Body Fat %</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                          <tr>
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Essential Fat</td>
-                            <td className="px-4 py-3 text-blue-700 font-semibold whitespace-nowrap">2–5%</td>
-                          </tr>
-                          <tr className="bg-green-50">
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Athletes</td>
-                            <td className="px-4 py-3 text-green-700 font-semibold whitespace-nowrap">6–13%</td>
-                          </tr>
-                          <tr>
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Fitness</td>
-                            <td className="px-4 py-3 text-green-700 font-semibold whitespace-nowrap">14–17%</td>
-                          </tr>
-                          <tr className="bg-gray-50">
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Average</td>
-                            <td className="px-4 py-3 text-gray-700 font-semibold whitespace-nowrap">18–24%</td>
-                          </tr>
-                          <tr className="bg-red-50">
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Obese</td>
-                            <td className="px-4 py-3 text-red-700 font-semibold whitespace-nowrap">25%+</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      </div>
-                    </CardContent>
-                  </Card>
+                <p className="mb-6 text-gray-700 leading-relaxed">
+                  Healthy ranges vary by age, sex and goals. Here is the widely used American Council on Exercise (ACE)
+                  guidance:
+                </p>
 
-                  {/* Women's Table - Addresses "body fat calculator for women" / "body fat calculator female" */}
-                  <Card className="border-pink-200 overflow-hidden">
-                    <CardHeader className="bg-pink-600 text-white pb-3">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <Users className="w-5 h-5" />
-                        Body Fat Ranges for Women
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                      <div className="overflow-x-auto">
-                      <table className="w-full text-sm min-w-[300px]">
-                        <thead className="bg-pink-50">
-                          <tr>
-                            <th className="px-4 py-3 text-left font-bold text-pink-800 whitespace-nowrap">Category</th>
-                            <th className="px-4 py-3 text-left font-bold text-pink-800 whitespace-nowrap">Body Fat %</th>
+                <Card className="not-prose overflow-hidden border-gray-200">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm min-w-[360px]">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">Category</th>
+                          <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">Men</th>
+                          <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">Women</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {[
+                          ["Essential fat", "2 to 5%", "10 to 13%"],
+                          ["Athletes", "6 to 13%", "14 to 20%"],
+                          ["Fitness", "14 to 17%", "21 to 24%"],
+                          ["Average", "18 to 24%", "25 to 31%"],
+                          ["Obese", "25%+", "32%+"],
+                        ].map((row, i) => (
+                          <tr key={row[0]} className={i % 2 ? "bg-gray-50/50" : ""}>
+                            <td className="px-4 py-3 font-medium whitespace-nowrap">{row[0]}</td>
+                            <td className="px-4 py-3 text-gray-700 font-semibold whitespace-nowrap">{row[1]}</td>
+                            <td className="px-4 py-3 text-gray-700 font-semibold whitespace-nowrap">{row[2]}</td>
                           </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                          <tr>
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Essential Fat</td>
-                            <td className="px-4 py-3 text-pink-700 font-semibold whitespace-nowrap">10–13%</td>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
+
+                <p className="mt-4 text-gray-700">
+                  Women naturally carry more fat than men because of reproductive and hormonal needs.
+                </p>
+
+                <h3 className="mt-8 text-xl font-bold text-gray-800 mb-4">Realistic targets (not extremes):</h3>
+                <Card className="not-prose overflow-hidden border-gray-200">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm min-w-[360px]">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">Goal</th>
+                          <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">Men</th>
+                          <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">Women</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {[
+                          ["General health", "10 to 20%", "18 to 28%"],
+                          ["Visible definition", "12 to 15%", "20 to 24%"],
+                          ["Competition lean (hard to maintain)", "6 to 10%", "14 to 18%"],
+                        ].map((row, i) => (
+                          <tr key={row[0]} className={i % 2 ? "bg-gray-50/50" : ""}>
+                            <td className="px-4 py-3 font-medium">{row[0]}</td>
+                            <td className="px-4 py-3 text-gray-700 font-semibold whitespace-nowrap">{row[1]}</td>
+                            <td className="px-4 py-3 text-gray-700 font-semibold whitespace-nowrap">{row[2]}</td>
                           </tr>
-                          <tr className="bg-green-50">
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Athletes</td>
-                            <td className="px-4 py-3 text-green-700 font-semibold whitespace-nowrap">14–20%</td>
-                          </tr>
-                          <tr>
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Fitness</td>
-                            <td className="px-4 py-3 text-green-700 font-semibold whitespace-nowrap">21–24%</td>
-                          </tr>
-                          <tr className="bg-gray-50">
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Average</td>
-                            <td className="px-4 py-3 text-gray-700 font-semibold whitespace-nowrap">25–31%</td>
-                          </tr>
-                          <tr className="bg-red-50">
-                            <td className="px-4 py-3 font-medium whitespace-nowrap">Obese</td>
-                            <td className="px-4 py-3 text-red-700 font-semibold whitespace-nowrap">32%+</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
 
                 <div className="mt-6 p-4 bg-purple-50 border-l-4 border-purple-500 rounded-r-lg">
                   <p className="text-purple-800 text-sm">
-                    <strong>⚠️ Why Women Have Higher Essential Fat:</strong> Women naturally carry 8-12% more body fat than men due to estrogen, reproductive needs, and hormonal health. Going below essential fat levels can disrupt menstruation, bone density, and fertility.
+                    Staying too lean for too long can disrupt hormones, energy, immunity and bone health, especially for
+                    women. Speak to a doctor if you are concerned.
                   </p>
                 </div>
               </section>
 
-              {/* What's Ideal - Goal-based section */}
-              <section className="py-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <Target className="w-6 h-6 text-teal-600" />
-                  What's the "Ideal" Body Fat Percentage?
-                </h2>
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  "Ideal" depends on your personal goal, not a universal standard. Here's how to think about your target:
-                </p>
-                
-                <div className="grid md:grid-cols-3 gap-6 not-prose">
-                  <div className="p-5 bg-green-50 border border-green-200 rounded-2xl text-center">
-                    <Heart className="w-8 h-8 text-green-600 mx-auto mb-3" />
-                    <h4 className="font-bold text-green-800 mb-2">Health Goal</h4>
-                    <p className="text-2xl font-bold text-green-700 mb-1">M: 10-20% | W: 18-28%</p>
-                    <p className="text-sm text-green-600">Sustainable, reduces disease risk</p>
-                  </div>
-                  <div className="p-5 bg-blue-50 border border-blue-200 rounded-2xl text-center">
-                    <Dumbbell className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-                    <h4 className="font-bold text-blue-800 mb-2">Fitness Goal</h4>
-                    <p className="text-2xl font-bold text-blue-700 mb-1">M: 12-15% | W: 20-24%</p>
-                    <p className="text-sm text-blue-600">Visible definition, active lifestyle</p>
-                  </div>
-                  <div className="p-5 bg-orange-50 border border-orange-200 rounded-2xl text-center">
-                    <Activity className="w-8 h-8 text-orange-600 mx-auto mb-3" />
-                    <h4 className="font-bold text-orange-800 mb-2">Athletic Goal</h4>
-                    <p className="text-2xl font-bold text-orange-700 mb-1">M: 6-10% | W: 14-18%</p>
-                    <p className="text-sm text-orange-600">Competition-level, hard to maintain</p>
-                  </div>
-                </div>
-              </section>
-
-              {/* Accuracy Comparison - Addresses "accurate body fat calculator" */}
+              {/* How the Navy Method Compares */}
               <section>
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                   <ShieldCheck className="w-6 h-6 text-teal-600" />
-                  Body Fat Measurement Accuracy: Which Method is Best?
+                  How the Navy Method Compares with Other Options
                 </h2>
-                
+
                 <Card className="not-prose overflow-hidden border-gray-200">
                   <div className="overflow-x-auto">
-                  <table className="w-full text-sm min-w-[500px]">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="px-6 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Method</th>
-                        <th className="px-6 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Accuracy</th>
-                        <th className="px-6 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Accessibility</th>
-                        <th className="px-6 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Cost</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      <tr className="bg-green-50">
-                        <td className="px-6 py-4 font-bold text-green-700 whitespace-nowrap">DEXA Scan</td>
-                        <td className="px-6 py-4 whitespace-nowrap">⭐⭐⭐⭐⭐ Gold Standard</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Medical facility only</td>
-                        <td className="px-6 py-4 whitespace-nowrap">$75-150</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-blue-700 whitespace-nowrap">Bod Pod</td>
-                        <td className="px-6 py-4 whitespace-nowrap">⭐⭐⭐⭐ Very High</td>
-                        <td className="px-6 py-4 whitespace-nowrap">University/research labs</td>
-                        <td className="px-6 py-4 whitespace-nowrap">$40-75</td>
-                      </tr>
-                      <tr className="bg-orange-50">
-                        <td className="px-6 py-4 font-bold text-orange-700 whitespace-nowrap">Navy Formula (This Calculator)</td>
-                        <td className="px-6 py-4 whitespace-nowrap">⭐⭐⭐ Good (±3-4%)</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Free, at home</td>
-                        <td className="px-6 py-4 whitespace-nowrap">$0</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-gray-700 whitespace-nowrap">Smart Scales (BIA)</td>
-                        <td className="px-6 py-4 whitespace-nowrap">⭐⭐ Variable</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Home use</td>
-                        <td className="px-6 py-4 whitespace-nowrap">$30-200</td>
-                      </tr>
-                      <tr className="bg-gray-50">
-                        <td className="px-6 py-4 font-bold text-gray-500 whitespace-nowrap">BMI</td>
-                        <td className="px-6 py-4 whitespace-nowrap">⭐ Poor (not body fat)</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Free</td>
-                        <td className="px-6 py-4 whitespace-nowrap">$0</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                    <table className="w-full text-sm min-w-[640px]">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="px-5 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Method</th>
+                          <th className="px-5 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Accuracy</th>
+                          <th className="px-5 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Ease at Home</th>
+                          <th className="px-5 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Cost</th>
+                          <th className="px-5 py-4 text-left font-bold text-gray-800 whitespace-nowrap">Best For</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {[
+                          ["DEXA scan", "Highest (gold standard)", "Low", "$$$", "One-off detailed check", ""],
+                          ["Hydrostatic / Bod Pod", "Very high", "Low", "$$", "Research and clinical use", ""],
+                          ["Navy tape (this tool)", "Good (about 3 to 4%)", "Excellent", "Free", "Tracking progress", "bg-orange-50"],
+                          ["Skinfold calipers", "Good (with practice)", "High", "$", "More precise home option", ""],
+                          ["Smart scales (BIA)", "Variable", "High", "$ to $$", "Rough daily estimates", ""],
+                          ["BMI", "Poor for fat", "High", "Free", "Population screening", ""],
+                        ].map((row) => (
+                          <tr key={row[0]} className={row[5]}>
+                            <td className="px-5 py-4 font-bold text-gray-800 whitespace-nowrap">{row[0]}</td>
+                            <td className="px-5 py-4 whitespace-nowrap">{row[1]}</td>
+                            <td className="px-5 py-4 whitespace-nowrap">{row[2]}</td>
+                            <td className="px-5 py-4 whitespace-nowrap">{row[3]}</td>
+                            <td className="px-5 py-4 whitespace-nowrap">{row[4]}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </Card>
 
+                <p className="mt-4 text-gray-700 leading-relaxed">
+                  For most people, the Navy method or calipers hit the sweet spot: accurate enough, free or cheap, and
+                  easy to repeat. Track every 2 to 4 weeks.
+                </p>
                 <p className="mt-4 text-gray-700 font-medium bg-amber-50 p-4 rounded-lg border-l-4 border-amber-500">
-                  <strong>💡 Key Insight:</strong> Consistency matters more than perfection. Track changes over time using the same method. A 2% drop measured by the Navy formula is meaningful even if the absolute number isn't lab-perfect.
+                  Using calipers? Pinch at standard sites (abdomen, thigh, triceps), and use the same calipers and
+                  technique every time. Jackson-Pollock formulas cover 3-site, 4-site and 7-site measurements.
                 </p>
               </section>
 
-              {/* Common Mistakes - Practical user value */}
+              {/* Common Mistakes */}
               <section>
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                   <AlertTriangle className="w-6 h-6 text-teal-600" />
-                  Common Measurement Mistakes to Avoid
+                  Common Mistakes That Skew Your Results
                 </h2>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-red-700 flex items-center gap-2">
-                      <X className="w-5 h-5" /> Don't Do This:
-                    </h4>
-                    <ul className="space-y-2 text-sm text-gray-700">
-                      <li className="flex items-start gap-2 bg-red-50 p-3 rounded-lg">
-                        <X className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-                        Measuring after meals (bloating skews waist)
-                      </li>
-                      <li className="flex items-start gap-2 bg-red-50 p-3 rounded-lg">
-                        <X className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-                        Holding breath or sucking in stomach
-                      </li>
-                      <li className="flex items-start gap-2 bg-red-50 p-3 rounded-lg">
-                        <X className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-                        Pulling the tape too tight
-                      </li>
-                      <li className="flex items-start gap-2 bg-red-50 p-3 rounded-lg">
-                        <X className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-                        Measuring at the wrong waist position
-                      </li>
-                      <li className="flex items-start gap-2 bg-red-50 p-3 rounded-lg">
-                        <X className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
-                        Mixing cm and inches in calculations
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-green-700 flex items-center gap-2">
-                      <Check className="w-5 h-5" /> Do This Instead:
-                    </h4>
-                    <ul className="space-y-2 text-sm text-gray-700">
-                      <li className="flex items-start gap-2 bg-green-50 p-3 rounded-lg">
-                        <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                        Measure in the morning, before eating
-                      </li>
-                      <li className="flex items-start gap-2 bg-green-50 p-3 rounded-lg">
-                        <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                        Breathe normally, relaxed posture
-                      </li>
-                      <li className="flex items-start gap-2 bg-green-50 p-3 rounded-lg">
-                        <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                        Tape snug but not compressing skin
-                      </li>
-                      <li className="flex items-start gap-2 bg-green-50 p-3 rounded-lg">
-                        <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                        Use navel level for waist consistently
-                      </li>
-                      <li className="flex items-start gap-2 bg-green-50 p-3 rounded-lg">
-                        <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                        Stick to one unit system throughout
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <ul className="space-y-2 text-sm text-gray-700 not-prose">
+                  {[
+                    "Measuring after eating, bloating changes waist size",
+                    "Sucking in your stomach or holding your breath",
+                    "Measuring at different spots or times of day",
+                    "Mixing units (cm vs inches)",
+                    "Expecting one number to tell your whole story",
+                  ].map((m) => (
+                    <li key={m} className="flex items-start gap-2 bg-red-50 p-3 rounded-lg">
+                      <X className="w-4 h-4 text-red-500 mt-0.5 shrink-0" /> {m}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-4 text-gray-700 font-medium bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                  Do this instead: log your measurements and percentage in a simple spreadsheet or app, then watch the
+                  trend. Combine it with photos, how your clothes fit, strength gains and energy levels.
+                </p>
               </section>
 
-              {/* Fat Loss vs Weight Loss - Critical differentiation */}
-              <section className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              {/* Fat Loss vs Weight Loss */}
+              <section className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-6 sm:p-8">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                   <TrendingDown className="w-6 h-6 text-teal-600" />
-                  Fat Loss vs Weight Loss: The Critical Difference
+                  Fat Loss vs Weight Loss: The Real Goal
                 </h2>
                 <p className="text-gray-700 leading-relaxed mb-6">
-                  A critical insight many people miss: <strong>You can lose weight but gain fat</strong>, or <strong>gain weight but lose fat</strong>. Scale weight is a blunt instrument; body fat percentage is the precision tool for health.
+                  You can lose weight and look softer, that is fat and muscle going. You can gain weight and look leaner,
+                  that is muscle coming on. What matters is body composition, not the scale.
                 </p>
-                
-                <div className="grid md:grid-cols-2 gap-6 not-prose">
-                  <div className="p-5 bg-white border-2 border-red-200 rounded-2xl">
-                    <h4 className="font-bold text-red-700 mb-3 text-lg">Weight Loss</h4>
-                    <p className="text-gray-600 mb-3">Includes muscle, water, AND fat.</p>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      <li>• Crash diets often cause muscle loss</li>
-                      <li>• Water fluctuations mask true progress</li>
-                      <li>• Can leave you "skinny fat"</li>
-                    </ul>
-                  </div>
-                  <div className="p-5 bg-white border-2 border-green-200 rounded-2xl">
-                    <h4 className="font-bold text-green-700 mb-3 text-lg">Fat Loss</h4>
-                    <p className="text-gray-600 mb-3">Targets only excess body fat storage.</p>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      <li>• Preserves or builds muscle mass</li>
-                      <li>• Improves body composition</li>
-                      <li>• Sustainable, healthy approach</li>
-                    </ul>
-                  </div>
-                </div>
-                
+                <p className="text-gray-700 font-semibold mb-3">Prioritise:</p>
+                <ul className="space-y-2 text-sm text-gray-700 not-prose">
+                  {[
+                    "Strength training to preserve and build muscle",
+                    "A protein-rich diet",
+                    "A sustainable calorie deficit, not a crash diet",
+                    "Sleep and stress management",
+                  ].map((m) => (
+                    <li key={m} className="flex items-start gap-2 bg-white p-3 rounded-lg border border-amber-100">
+                      <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" /> {m}
+                    </li>
+                  ))}
+                </ul>
                 <p className="mt-6 text-gray-700 font-semibold text-center">
-                  👉 Focus on body composition, not just the number on the scale.
+                  If the scale stalls while your body fat percentage drops, you are winning.
                 </p>
               </section>
 
-              {/* Trust Section */}
-              <section className="bg-white rounded-3xl p-8 border border-gray-200">
+              {/* Why Use This Calculator */}
+              <section className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
                   <ShieldCheck className="w-6 h-6 text-teal-600" />
-                  Why Trust This Body Fat Calculator?
+                  Why Use This Calculator?
                 </h2>
-                <p className="mb-6 text-gray-700">We designed this calculator with accuracy and user trust as priorities:</p>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-teal-600" />
-                    <span className="text-gray-800">Uses the clinically validated U.S. Navy Method</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-teal-600" />
-                    <span className="text-gray-800">Separate formulas for men and women</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-teal-600" />
-                    <span className="text-gray-800">No data stored or tracked — complete privacy</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-teal-600" />
-                    <span className="text-gray-800">Clear explanations of what results mean</span>
-                  </div>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    "Uses the validated U.S. Navy formulas, with separate calculations for men and women",
+                    "Gives clear, actionable results with context, not just a number",
+                    "No data tracking, no ads, no products pushed at you",
+                  ].map((m) => (
+                    <div key={m} className="flex items-start gap-3 bg-gray-50 p-4 rounded-xl">
+                      <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+                      <span className="text-gray-800 text-sm">{m}</span>
+                    </div>
+                  ))}
                 </div>
-              </section>
-
-              {/* Disclaimer */}
-              <section className="border-2 border-dashed border-teal-200 p-6 rounded-2xl bg-gray-50">
-                <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-gray-800 uppercase tracking-tight">
-                  <Info className="w-5 h-5 text-teal-600" /> Health Disclaimer
-                </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  This body fat calculator provides estimates for educational purposes only. Results should not replace professional medical assessment. For clinical body composition analysis, consult a healthcare provider or certified fitness professional. If you have concerns about your body fat levels, eating habits, or body image, speak with a qualified professional.
+                <p className="mt-6 text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">Health note:</strong> this is an educational estimate. See a doctor
+                  or registered dietitian for personalised advice, especially if you have a health condition or an
+                  extreme reading.
                 </p>
               </section>
 
-              {/* CTA Section */}
-              <section className="not-prose mt-12">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-white border-2 border-teal-200 rounded-3xl shadow-sm">
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-bold text-gray-800">Complete Your Health Assessment</h3>
-                    <p className="text-gray-600 max-w-md">
-                      Now that you know your body fat percentage, check your overall fitness metrics with our BMI Calculator.
-                    </p>
-                  </div>
-                  <Button asChild size="lg" className="whitespace-nowrap bg-teal-600 hover:bg-teal-700">
-                    <Link href="/health/bmi-calculator">
-                      Calculate BMI <ArrowRight className="ml-2 w-4 h-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </section>
+              <ServiceCTA
+                eyebrow="Track results, not just the scale"
+                title="Watch your body fat fall without losing muscle"
+                body="A single reading tells you where you are. What protects your results is trending body fat and lean mass together, keeping protein and training on target, and catching the weeks you lose too fast. Calqulate Vitals does that, and for GLP-1 users it adds an adaptive titration and a rebound-risk view."
+                bullets={[
+                  "Body fat and lean mass on one timeline",
+                  "Protein target built from your own numbers",
+                  "Fat vs muscle flag when you lose too fast",
+                  "Adaptive titration and rebound-risk view for GLP-1 users",
+                ]}
+                href="/product/glp1-progress-tracker"
+                cta="Start the GLP-1 Progress Tracker"
+              />
 
             </div>
 

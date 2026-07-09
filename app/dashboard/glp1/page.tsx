@@ -47,7 +47,7 @@ import { NextDoseCard, CurrentCycleCard, PlanSummaryCard } from "@/components/gl
 import { PremiumGate, LockBadge } from "@/components/vitals/PremiumGate";
 import type { Glp1EntityName } from "@/lib/glp1/schemas";
 import Link from "next/link";
-import { Activity, Syringe, Scale, Utensils, Target, Bell, HelpCircle, ArrowRight } from "lucide-react";
+import { Activity, Syringe, Scale, Utensils, Target, Bell, HelpCircle, ArrowRight, Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -350,6 +350,36 @@ export default async function Glp1TrackerPage() {
           <PlanSummaryCard medication={medLabelForCard} dose={planDose} frequency={planFrequency} />
         </div>
       </div>
+
+      {/* ── COMMIT: soft paywall framed around their own results (free members) ── */}
+      {!paid && (
+        <div className="overflow-hidden rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-white p-5 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 text-amber-700">
+                <Sparkles className="h-4 w-4" />
+                <span className="text-xs font-bold uppercase tracking-wide">Protect your results</span>
+              </div>
+              <h2 className="mt-1 text-lg font-bold text-gray-900">
+                {journey && journey.lostLb > 0
+                  ? `You're down ${Math.round(journey.lostLb)} lb. Make sure it's fat, not muscle.`
+                  : "Make sure the weight you lose is fat, not muscle."}
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Premium unlocks fat vs. muscle tracking, your correlation engine, dosing sweet-spot, adaptive titration
+                and a doctor-ready report, the features that keep the weight off after you taper.
+              </p>
+            </div>
+            <Link
+              href="/pricing?feature=glp1-tracker"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-6 py-3 text-sm font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition hover:-translate-y-0.5"
+            >
+              <Sparkles className="h-4 w-4" /> See Premium plans
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Personal correlation engine (Premium) — which of your habits move your weekly loss */}
       {correlations.confidence !== "insufficient" && (

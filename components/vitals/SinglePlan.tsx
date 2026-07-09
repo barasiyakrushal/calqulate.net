@@ -44,7 +44,7 @@ const HIGHLIGHTS = [
 ];
 
 export function SinglePlan({ paid }: { paid?: boolean }) {
-  const [cadence, setCadence] = useState<"yearly" | "monthly">("yearly");
+  const [cadence, setCadence] = useState<"yearly" | "monthly">("monthly");
   const { loading, error, checkout, retry } = useCheckout();
 
   const currency = "USD";
@@ -65,7 +65,7 @@ export function SinglePlan({ paid }: { paid?: boolean }) {
       <div className="p-7">
         <div className="mb-5 flex justify-center">
           <div className="inline-flex rounded-lg border border-gray-200 p-1">
-            {(["yearly", "monthly"] as const).map((c) => (
+            {(["monthly", "yearly"] as const).map((c) => (
               <button
                 key={c}
                 onClick={() => setCadence(c)}

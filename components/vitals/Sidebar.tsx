@@ -20,8 +20,8 @@ import {
 import { BillingButton } from "./BillingButton";
 
 const NAV = [
+  { href: "/dashboard/glp1", label: "GLP-1 Tracker", icon: Syringe, exact: true },
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
-  { href: "/dashboard/glp1", label: "GLP-1 Tracker", icon: Syringe },
   { href: "/dashboard/weight", label: "Weight Tracker", icon: Scale },
   { href: "/dashboard/future", label: "Future You", icon: TrendingUp },
   { href: "/dashboard/protocol", label: "Autopilot", icon: Compass },

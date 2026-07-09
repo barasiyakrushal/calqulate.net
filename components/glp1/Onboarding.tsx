@@ -24,7 +24,7 @@ const COMPOUNDS = [
   { value: "retatrutide", label: "Retatrutide", ladder: ["2", "4", "8", "12"] },
 ];
 
-const STEPS = ["Profile", "Medication", "Lifestyle", "Prediction", "Weekly plan", "Start"];
+const STEPS = ["Profile", "Medication", "Lifestyle", "Prediction", "Weekly plan", "Unlock"];
 
 /**
  * 6-step first-time setup. Each step returns immediate insight, then the final
@@ -89,7 +89,9 @@ export function Onboarding() {
     : step === 1 ? Boolean(compound && doseMg)
     : true;
 
-  async function finish() {
+  // Commit phase: we always save their plan first (so nothing is lost), then send
+  // them either straight into the tracker (free path) or to the premium paywall.
+  async function finish(dest: "tracker" | "premium" = "tracker") {
     setSaving(true);
     setError("");
     try {
@@ -106,7 +108,8 @@ export function Onboarding() {
         await createRecord("doseLog", { medicationId: med.id, takenAt: new Date(injDate).toISOString(), amountMg: Number(doseMg) });
       }
       if (targetKg > 0) window.localStorage.setItem("glp1_goal_kg", String(round(targetKg, 1)));
-      window.location.href = "/dashboard/glp1"; // full reload → fresh dashboard
+      // full reload → fresh dashboard, or the paywall framed around their goal
+      window.location.href = dest === "premium" ? "/pricing?feature=glp1-tracker" : "/dashboard/glp1";
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "Could not save. Please try again.");
       setSaving(false);
@@ -227,15 +230,35 @@ export function Onboarding() {
           </Step>
         )}
 
-        {/* ── Step 6: Start ── */}
+        {/* ── Step 6: Commit — soft paywall framed around their goal ── */}
         {step === 5 && (
-          <Step title="You're all set" sub="We'll save your medication and first weigh-in, then open your dashboard.">
+          <Step title="You're all set" sub="Your plan is ready. Start free, or unlock the features that protect your results.">
             <div className="rounded-2xl bg-emerald-50 p-5 text-center">
               <Trophy className="mx-auto h-8 w-8 text-emerald-600" />
               <p className="mt-2 text-sm text-gray-700">
                 Tracking <b>{COMPOUNDS.find((c) => c.value === compound)?.label.split(" (")[0]}</b>, goal <b>{targetLb} lb</b>.
                 Your coach, medication-level curve and weekly plan are ready.
               </p>
+            </div>
+
+            {/* Premium pitch tied to the goal they just told us */}
+            <div className="mt-4 rounded-2xl border-2 border-gold/40 bg-gradient-to-br from-amber-50 to-white p-5">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-gold" />
+                <span className="text-sm font-bold uppercase tracking-wide text-gold-ink">Premium, to hit {targetLb} lb the right way</span>
+              </div>
+              <ul className="mt-3 space-y-2">
+                {[
+                  `Fat vs. muscle tracking, so your ${round(lostLb, 0) || ""} lb comes off as fat`,
+                  "Adaptive titration that holds when side effects spike",
+                  "Your personal correlation engine and dosing sweet spot",
+                  "Doctor-ready PDF report and rebound-risk view",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-2 text-sm text-gray-700">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /> {b}
+                  </li>
+                ))}
+              </ul>
             </div>
             {error && <p className="mt-3 text-center text-sm text-red-600">{error}</p>}
           </Step>
@@ -254,9 +277,14 @@ export function Onboarding() {
               Continue <ArrowRight className="ml-1 h-4 w-4" />
             </Button>
           ) : (
-            <Button onClick={finish} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700">
-              {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />} Start my journey
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" onClick={() => finish("tracker")} disabled={saving} className="text-gray-600 hover:text-gray-900">
+                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Start free
+              </Button>
+              <Button onClick={() => finish("premium")} disabled={saving} className="bg-gradient-to-r from-gold-light to-gold text-gold-ink hover:opacity-90">
+                <Sparkles className="mr-2 h-4 w-4" /> Go Premium
+              </Button>
+            </div>
           )}
         </div>
       </div>
