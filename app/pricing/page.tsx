@@ -139,7 +139,7 @@ export default async function PricingPage({ searchParams }: { searchParams: { fe
         </section>
 
         {/* Luxe gold band — one plan, three trackers */}
-        <PremiumTrackersBand paid={paid} />
+        <PremiumTrackersBand />
 
         {/* Full feature comparison vs competitors */}
         <FeatureComparison />

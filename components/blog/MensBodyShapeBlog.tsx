@@ -8,14 +8,12 @@ import {
   shapePresets,
   maleShapeFaqs,
 } from "@/lib/blog/male-body-shape-data";
-import MaleBodyShape3D from "@/components/calculators/MaleBodyShape3D";
 import MaleBodyShapeChart from "@/components/charts/MaleBodyShapeChart";
 import MensBodyShapeGuidePdfButton from "@/components/plans/MensBodyShapeGuidePdfButton";
 
-// ── EMBEDDED CALCULATOR ────────────────────────────────────────────
-// The official body shape calculator, for a saved, exact result. If your
-// reusable export lives at a different path, adjust this one import line.
-import BodyShapeCalculator from "@/components/calculators/body-shape-calculator";
+// The premium 3D body-shape experience (measure -> morph -> analysis), shared
+// with the standalone /health/body-shape-calculator page.
+import BodyShapeExperience from "@/components/body-shape/BodyShapeExperience";
 
 const CALC_HREF = "/health/body-shape-calculator";
 
@@ -234,12 +232,12 @@ export default function MensBodyShapeBlog({ blog }: Props) {
               See Your Shape in 3D
             </h2>
             <p className="mt-2 text-slate-600">
-              Move the sliders or tap a shape. The figure rebuilds to match, spins
-              on its own, and you can grab it to rotate. Your shape is read live
-              from the ratios as you change them.
+              Switch to Male, enter your four measurements, and watch a neutral 3D
+              body morph into your real silhouette. Rotate it, zoom in, and read
+              your shape and waist-to-hip ratio below.
             </p>
           </div>
-          <MaleBodyShape3D />
+          <BodyShapeExperience />
         </section>
 
         {/* ── HOW TO MEASURE ────────────────────────── */}
@@ -353,11 +351,12 @@ export default function MensBodyShapeBlog({ blog }: Props) {
                     Free Tool
                   </span>
                   <h2 className="mt-3 text-2xl font-bold text-slate-900 md:text-3xl">
-                    Get Your Exact Body Shape
+                    Want a saved, shareable result?
                   </h2>
                   <p className="mt-2 text-slate-600">
-                    Switch to Male, enter your four measurements, and get your
-                    shape plus your waist-to-hip ratio in seconds.
+                    You just measured your shape in 3D above. Open the full Body Shape
+                    Calculator to compare shapes, download a report, and see your GLP-1
+                    fat-vs-muscle context.
                   </p>
                 </div>
                 <Link
@@ -367,10 +366,6 @@ export default function MensBodyShapeBlog({ blog }: Props) {
                   Open full page ↗
                 </Link>
               </div>
-
-              {/* ▼▼▼  ACTUAL CALCULATOR COMPONENT  ▼▼▼ */}
-              <BodyShapeCalculator />
-              {/* ▲▲▲  END CALCULATOR  ▲▲▲ */}
             </div>
           </div>
         </section>

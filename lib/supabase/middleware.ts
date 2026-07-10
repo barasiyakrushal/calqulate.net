@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { applySecurityHeaders } from "@/lib/security/headers";
 import { resolveIsAdmin } from "@/lib/admin-core";
+import { getSupabaseSessionId } from "@/lib/supabase/session-id";
 
 // Polyfill process.version for Edge Runtime if missing (used by @supabase/supabase-js).
 // This prevents webpack build warnings and runtime errors in the middleware.
@@ -46,7 +47,8 @@ export async function updateSession(request: NextRequest) {
 
   // Single-device login enforcement — only for authenticated dashboard/admin
   // pages (skip API routes and static assets).
-  if (user && session?.id && !path.startsWith("/api/") && !path.startsWith("/auth/")) {
+  const sessionId = getSupabaseSessionId(session);
+  if (user && sessionId && !path.startsWith("/api/") && !path.startsWith("/auth/")) {
     try {
       const { data: activeSession } = await supabase
         .from("user_sessions")
@@ -55,7 +57,7 @@ export async function updateSession(request: NextRequest) {
         .is("revoked_at", null)
         .maybeSingle();
 
-      if (activeSession && activeSession.session_id !== session.id) {
+      if (activeSession && activeSession.session_id !== sessionId) {
         const url = request.nextUrl.clone();
         url.pathname = "/login";
         url.searchParams.set("reason", "logged_out_elsewhere");

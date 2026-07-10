@@ -588,7 +588,7 @@ function ResultView({
 }: {
   answers: Answers
   result: Result
-  overlayRef: React.RefObject<HTMLCanvasElement | null>
+  overlayRef: React.MutableRefObject<HTMLCanvasElement | null>
   onBack: () => void
   onRestart: () => void
 }) {

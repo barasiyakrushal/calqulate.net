@@ -307,6 +307,8 @@ export const blogs: Blog[] = [
     description:
       "Up to a third of the weight you lose on Ozempic, Wegovy, or Mounjaro can be muscle — not fat. Learn why your bathroom scale is lying to you, and how to track your body composition so you lose fat, keep muscle, and avoid \"skinny fat\" and \"Ozempic face.\"",
     category: "Health & Fitness",
+    intent: "Track body composition on a GLP-1",
+    uspFeature: "GLP-1 body composition tracker + fat-vs-muscle estimate",
     featuredImage: "/images/blogs/ozempic-muscle-loss-cover.png",
     readTime: "10 min read",
     publishedAt: "2026-06-30",

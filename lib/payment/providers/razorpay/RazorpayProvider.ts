@@ -95,7 +95,9 @@ export class RazorpayProvider implements PaymentProvider {
 
     // Create subscription — no trial: the first cycle is charged immediately on
     // authentication, matching the PayPal path (immediate payment).
-    const sub = await client.subscriptions.create({
+    // `customer_id` binds the subscription to a Razorpay customer. The SDK
+    // request type omits it, so annotate the body to include it explicitly.
+    const subBody: Parameters<typeof client.subscriptions.create>[0] & { customer_id?: string } = {
       plan_id: planId,
       customer_id: customerId,
       total_count: totalCount,
@@ -107,7 +109,8 @@ export class RazorpayProvider implements PaymentProvider {
         currency: input.currency,
         country: input.country ?? "",
       },
-    }) as any;
+    };
+    const sub = await client.subscriptions.create(subBody) as any;
 
     const subscription = sub as RazorpaySubscription;
     const siteUrl = input.siteUrl ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://calqulate.net";
@@ -202,7 +205,10 @@ export class RazorpayProvider implements PaymentProvider {
         "";
       // If customer already exists, search by email and return existing
       if (/already exists/i.test(desc)) {
-        const existing = await client.customers.all({ email }) as unknown as { items: RazorpayCustomer[] };
+        // Look up the existing customer by email. The SDK pagination type omits
+        // the `email` filter, so annotate the options to include it.
+        const listOpts: Parameters<typeof client.customers.all>[0] & { email?: string } = { email };
+        const existing = await client.customers.all(listOpts) as unknown as { items: RazorpayCustomer[] };
         const found = existing?.items?.[0];
         if (found?.id) return found.id;
       }

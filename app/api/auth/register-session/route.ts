@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { getSupabaseSessionId } from "@/lib/supabase/session-id";
 
 /**
  * Registers the current Supabase auth session as the "active" session for
@@ -17,7 +18,7 @@ export async function POST(_req: Request) {
 
   // Get the current Supabase session ID
   const { data: { session } } = await supabase.auth.getSession();
-  const sessionId = session?.id ?? session?.access_token?.slice(0, 32);
+  const sessionId = getSupabaseSessionId(session);
   if (!sessionId) {
     return NextResponse.json({ error: "No active session found" }, { status: 400 });
   }
