@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import IdealBodyWeightCalculator from "@/components/calculators/ideal-body-weight-calculator"
+import IdealWeightExperience from "@/components/ideal-weight/IdealWeightExperience"
 import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
@@ -114,7 +114,7 @@ export default function IdealBodyWeightCalculatorPage() {
           <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
             <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-5">
               <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
-              Free · Instant · No sign-up required
+              Your healthiest weight, personalized in a minute
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
               Ideal Body Weight Calculator
@@ -150,26 +150,29 @@ export default function IdealBodyWeightCalculatorPage() {
         <section className="border-b border-slate-200 bg-slate-50">
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
             {[
-              { value: "4", label: "Formulas" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
-              { value: "Instant", label: "Results" },
-              { value: "Private", label: "In-browser" },
+              { value: "4", label: "Formulas", sub: "Medical standard" },
+              { value: "Ideal", label: "Weight range", sub: "Personalized" },
+              { value: "BMI", label: "Health status", sub: "Instant" },
+              { value: "Goal", label: "Weight plan", sub: "Safe target" },
+              { value: "100%", label: "Private", sub: "In-browser" },
             ].map((s) => (
               <div key={s.label} className="bg-white p-5 text-center">
                 <p className="text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
                 <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
                   {s.label}
                 </p>
+                <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                  {s.sub}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* CALCULATOR */}
-        <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
-            <IdealBodyWeightCalculator />
+        {/* CALCULATOR — a guided ideal-weight health assessment */}
+        <section id="calculator" className="scroll-mt-20 bg-slate-50/60">
+          <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-16">
+            <IdealWeightExperience />
           </div>
         </section>
 

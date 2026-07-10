@@ -17,7 +17,7 @@ import IdealWeightGuidePdfButton from "@/components/plans/IdealWeightGuidePdfBut
 // Direct widget. Same component your
 // /health/ideal-body-weight-calculator page uses. If your reusable export
 // lives at a different path, adjust this one import line.
-import IdealBodyWeightCalculator from "@/components/calculators/ideal-body-weight-calculator";
+import IdealWeightExperience from "@/components/ideal-weight/IdealWeightExperience";
 
 const CALC_HREF = "/health/ideal-body-weight-calculator";
 
@@ -304,9 +304,9 @@ export default function IdealWeightByHeightAgeBlog({ blog }: Props) {
                 </Link>
               </div>
 
-              {/* ▼▼▼  ACTUAL CALCULATOR COMPONENT  ▼▼▼ */}
-              <IdealBodyWeightCalculator />
-              {/* ▲▲▲  END CALCULATOR  ▲▲▲ */}
+              {/* ▼▼▼  GUIDED IDEAL-WEIGHT ASSESSMENT  ▼▼▼ */}
+              <IdealWeightExperience />
+              {/* ▲▲▲  END  ▲▲▲ */}
             </div>
           </div>
         </section>
