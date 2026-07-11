@@ -2,90 +2,147 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import DressSizeCalculator from "@/components/calculators/dress-size-calculator"
+import DressSizeAssistant from "@/components/dress-size/DressSizeAssistant"
+import {
+  SizeJourney, AccuracyComparison, MeasurementGuide, CountryConverter,
+  BetweenSizesTree, ReturnRisk, SameSizeDifferentBody, BrandFit, DressLength,
+  IllustrationSlot,
+} from "@/components/dress-size/DressSizeVisuals"
 import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
+import { SourcesSection } from "@/components/seo/sources-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
-import { Ruler, HeartPulse, UserCheck, Shield, BookOpen, Calculator as CalculatorIcon , Stethoscope } from "lucide-react"
-import { Sparkles, Activity, Shirt, Dumbbell, Smile } from "lucide-react"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
+import {
+  Ruler, Sparkles, ShieldCheck, ArrowRight, Shirt, Globe, Heart,
+  Info, AlertTriangle,
+} from "lucide-react"
+
+const TITLE = "Dress Size Calculator: What Size Dress Am I?"
+const DESCRIPTION =
+  "Free dress size calculator. Enter your bust, waist and hips to find your US, UK, EU, AU and India dress size, with body shape, brand fit and between-sizes guidance so you order the right size first time."
 
 export const metadata: Metadata = {
-  title: "Dress Size Calculator – Find Your Perfect Fit in Seconds",
-  description:
-    "Find your perfect dress size instantly with our free dress size calculator. Enter bust, waist & hip measurements and get accurate sizes for US, UK, India & EU brands. Stop guessing and avoid costly returns!",
+  title: TITLE,
+  description: DESCRIPTION,
   keywords:
-    "dress size calculator, what size dress am i, dress size chart female, women's dress size calculator, plus size dress size calculator, wedding dress size calculator, dress size calculator based on weight and height, dress size converter, US UK EU India dress size, online dress size finder",
-  alternates: {
-    canonical: "https://calqulate.net/health/dress-size-calculator",
-  },
+    "dress size calculator, what dress size am i, what size dress am i, dress size by measurements, dress size calculator based on weight and height, us uk eu dress size converter, how to measure bust waist hips, wedding dress size calculator, between sizes, brand sizing",
+  alternates: { canonical: "https://calqulate.net/health/dress-size-calculator" },
   openGraph: {
-    title: "Dress Size Calculator – Find Your Perfect Fit in Seconds",
-    description: "Find your perfect dress size instantly with our free dress size calculator. Enter bust, waist & hip measurements and get accurate sizes for US, UK, India & EU brands. Stop guessing and avoid costly returns!",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://calqulate.net/health/dress-size-calculator",
     siteName: "Calqulate",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Dress Size Calculator – Find Your Perfect Fit in Seconds",
-    description: "Find your perfect dress size instantly with our free dress size calculator. Enter bust, waist & hip measurements and get accurate sizes for US, UK, India & EU brands. Stop guessing and avoid costly returns!",
-  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 }
+
+const SHAPES = [
+  {
+    name: "Hourglass", src: "/images/dress-size/shape-hourglass.webp",
+    alt: "Hourglass body shape silhouette with balanced bust and hips and a defined waist",
+    best: "Wrap, bodycon, fit and flare, belted",
+    avoid: "Shapeless shift and boxy cuts that hide the waist",
+    size: "Size to your bust or hips, whichever is larger, then have the waist taken in.",
+  },
+  {
+    name: "Pear", src: "/images/dress-size/shape-pear.webp",
+    alt: "Pear body shape silhouette with hips wider than bust",
+    best: "A-line, fit and flare, off shoulder, statement necklines",
+    avoid: "Tight pencil skirts and clingy fabric across the hip",
+    size: "Size to your hips. The bust will almost always need taking in.",
+  },
+  {
+    name: "Apple", src: "/images/dress-size/shape-apple.webp",
+    alt: "Apple body shape silhouette carrying width through the midsection",
+    best: "Empire waist, wrap, A-line, structured V necks",
+    avoid: "Bodycon and anything with a tight waistband",
+    size: "Size to your bust. Look for an empire line that skims rather than cinches.",
+  },
+  {
+    name: "Rectangle", src: "/images/dress-size/shape-rectangle.webp",
+    alt: "Rectangle body shape silhouette with bust waist and hips similar in width",
+    best: "Peplum, ruffles, belted, sheath with detail at the waist",
+    avoid: "Straight shift dresses with no shaping",
+    size: "Your three measurements are close, so you usually fit one clean size. Add a belt for shape.",
+  },
+  {
+    name: "Inverted triangle", src: "/images/dress-size/shape-inverted-triangle.webp",
+    alt: "Inverted triangle body shape silhouette with shoulders and bust wider than hips",
+    best: "A-line, full skirts, V necks, anything that adds volume below",
+    avoid: "Shoulder detail, puff sleeves, halter necks",
+    size: "Size to your bust and shoulders, then take in the waist and hip.",
+  },
+]
 
 const faqs = [
   {
-    question: "How do I use the dress size calculator?",
+    question: "What size dress am I?",
     answer:
-      "Simply enter your bust, waist, and hip measurements. You can also add your height, weight, body shape, dress style, and preferred brand for a smarter, more personalised recommendation. The calculator instantly returns your size across US, UK, EU, and Indian sizing standards.",
+      "Your dress size is decided by your bust, waist and hip measurements, not by your height or weight. Measure all three, then match your largest measurement to a size chart. A US 8 typically fits a 35 to 36 inch bust, a 28 to 29 inch waist and a 38 to 39 inch hip. Brand grading then moves that by up to a full size either way.",
   },
   {
-    question: "Why am I a different size in different brands?",
+    question: "How do I know my dress size without trying anything on?",
     answer:
-      "Brands use different size standards and vanity sizing, so a Medium in Zara may be a Large in H&M for the exact same measurements. Our brand-specific selector accounts for these differences so you get the right size for each retailer, not just a generic number.",
+      "Take three measurements with a soft tape: bust at the fullest point, waist at the narrowest point, and hips at the widest point. Enter them into the calculator on this page. If the three land in different sizes, buy for the largest one, because taking a seam in is far easier than letting it out.",
   },
   {
-    question: "What measurements do I need for the dress size calculator?",
+    question: "Can height and weight predict my dress size?",
     answer:
-      "You need your bust (fullest part of your chest), waist (narrowest point above your belly button), and hips (widest part). For the most accurate results, also select your body shape, dress style, and fit preference. All measurements can be entered in inches or centimetres.",
+      "They can estimate it, but they cannot replace measurements. Two women who are both 165 cm and 60 kg can wear sizes two apart, because dress sizing is built around bust, waist and hip proportions rather than total mass. Use height and weight only as a rough starting point.",
   },
   {
-    question: "What should I do if I fall between two sizes?",
+    question: "What is a US 8 in UK and EU sizes?",
     answer:
-      "Our calculator's Smart Between-Sizes Logic tells you exactly which direction to go based on the dress style and fabric. For bodycon or structured dresses, size up. For stretchy or relaxed styles, you can size down. The calculator always explains its recommendation.",
+      "A US 8 is a UK 12, an EU 40, an Australian 12, and roughly an M or 38 in India. The measurements behind it are about a 35 to 36 inch bust, a 28 to 29 inch waist and a 38 to 39 inch hip.",
   },
   {
-    question: "How does the plus size dress size calculator work?",
+    question: "Should I size up or size down if I am between sizes?",
     answer:
-      "The plus size section uses a separate chart that accounts for different proportions and comfort allowances. Enter your measurements normally and the calculator will automatically include plus size results (1X, 2X, 3X) alongside standard sizing.",
+      "It depends on the fabric and the cut. If the fabric has stretch and the style is relaxed, size down, because it will give as you wear it. If the fabric is woven with no stretch and the dress is structured or fitted, size up and have it taken in. For a stretchy bodycon, stay true to size.",
   },
   {
-    question: "Can I use this for wedding dress sizing?",
+    question: "How should I measure my bust, waist and hips?",
     answer:
-      "Yes. Wedding dresses typically run one to two sizes smaller than ready-to-wear. When you select 'Wedding / Bridal' as your dress style, the calculator adjusts its recommendation accordingly and always advises sizing up when you are between sizes for formal wear.",
+      "Bust: around the fullest part of your chest, level under the arms, wearing a non-padded bra. Waist: the narrowest part of your torso, usually just above the navel. Hips: the widest part of your hips and seat, about 7 to 9 inches below your waist. Keep the tape snug but never tight, and do not hold your breath.",
   },
   {
-    question: "How accurate is the dress size calculator based on weight and height?",
+    question: "Why does the same dress size fit differently at Zara, H&M and Shein?",
     answer:
-      "Height and weight provide a useful starting estimate, especially when you don't have a measuring tape, but they cannot account for body proportions. Always use your bust, waist, and hip measurements for the most accurate result. The calculator uses weight and height as a secondary input only.",
+      "Because there is no legal standard for a dress size. Every brand grades to its own fit model. Zara and H&M generally run small, Shein runs very small, and US high street brands like Old Navy often run large. Always check the garment measurements listed on the product page rather than trusting the size label.",
   },
   {
-    question: "Does my body shape affect which dress size I should buy?",
+    question: "What size wedding dress should I order?",
     answer:
-      "Yes, significantly. An hourglass figure may need to size up for hip fit in a bodycon dress, while a pear shape may need a different size on top versus bottom. Our body shape input works alongside your measurements to flag these fit issues before you buy. You can also check our Body Shape Calculator at calqulate.net/health/body-shape-calculator to find your shape first.",
+      "Bridal sizing typically runs one to two sizes smaller than high street, so a street size 8 is often a bridal 10 or 12. Always order to your largest measurement, usually the bust, and budget for alterations. Nearly every wedding dress is altered, and taking a dress in is routine while letting it out may be impossible.",
+  },
+  {
+    question: "Does body shape change my dress size?",
+    answer:
+      "It does not change the number on the label, but it changes which size actually fits and which styles work. A pear shape sizes to the hip and takes the bust in. An apple sizes to the bust and looks for an empire line. Two women with the same bust measurement can need different sizes because of where the rest of their width sits.",
+  },
+  {
+    question: "What dress length should I wear for my height?",
+    answer:
+      "Under 5 feet 2 inches, a standard midi often falls like a maxi, so look for petite ranges. Between 5 feet 2 and 5 feet 8, standard lengths usually work as designed. At 5 feet 9 and above, a standard maxi frequently lands at the ankle rather than the floor, so tall ranges are worth seeking out.",
+  },
+  {
+    question: "What is the most common reason dresses get returned?",
+    answer:
+      "Fit, and specifically the bust. It is the hardest area to alter and the first place a dress pulls. Waist comes second, usually because the buyer sized to their bust and ignored a smaller waist. Buying for your largest measurement and checking the brand's own garment measurements removes most of that risk.",
   },
 ]
 
 export default function DressSizeCalculatorPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <CalculatorSchema
         name="Dress Size Calculator"
-        description="Find your perfect dress size instantly using bust, waist, and hip measurements. Get accurate sizes for US, UK, EU, and India brands with smart fit advice for every body shape and dress style."
+        description="Find your dress size from your bust, waist and hip measurements, converted across US, UK, EU, AU and India sizing."
         url="https://calqulate.net/health/dress-size-calculator"
       />
       <FAQSchema faqs={faqs} />
@@ -95,662 +152,371 @@ export default function DressSizeCalculatorPage() {
 
       <main id="main" className="flex-1">
         {/* HERO */}
-        <section className="bg-gradient-to-br from-emerald-50 via-white to-lime-50 border-b border-slate-200">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
+        <section className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 border-b border-slate-200">
+          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
             <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-5">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
-              Free · Instant · No sign-up required
+              <Shirt className="h-3.5 w-3.5" />
+              Order the right size the first time
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              What Size Dress Am I? Free Dress Size Calculator
+              Dress Size Calculator: <span className="text-emerald-700">What Size Dress Am I?</span>
             </h1>
             <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              Stop guessing your dress size. Our Dress Size Calculator uses your bust, waist, and hip measurements to give you accurate sizes across US, UK, EU, and Indian brands — with smart advice for your body shape, dress style, and fit preference.
+              Enter your bust, waist and hips and get your size in US, UK, EU, Australian and Indian sizing, adjusted for
+              your body shape, the dress style and how you like things to fit.
             </p>
-
-            <div className="mt-6 flex flex-wrap items-center gap-4">
-              <a
-                href="#calculator"
-                className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
-              >
-                Try the Calculator ↓
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a href="#calculator" className="rounded-xl bg-emerald-700 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-800">
+                Find my dress size ↓
+              </a>
+              <a href="#measure" className="rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                How to measure
               </a>
             </div>
           </div>
         </section>
 
-        {/* USP SUMMARY (TOFU) */}
-        <section className="border-b border-emerald-100 bg-white">
-          <div className="mx-auto max-w-5xl px-6 py-6">
-            <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 md:p-6">
-              <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
-              <p className="text-sm md:text-base leading-relaxed text-slate-700">
-                Calqulate.net converts your measurements into the right dress size, mapped across US, UK, EU and India charts. You get one clear answer that removes online-shopping guesswork.
+        {/* 30-SECOND ANSWER (AI Overview target) */}
+        <section className="border-b border-slate-200 bg-white">
+          <div className="mx-auto max-w-5xl px-6 py-8">
+            <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50/70 p-6 md:p-7">
+              <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-800">
+                <Sparkles className="h-4 w-4" /> The 30-second answer
+              </p>
+              <p className="text-base md:text-lg leading-relaxed text-slate-800">
+                Your dress size depends primarily on your <strong>bust, waist and hip measurements</strong>, not on your
+                height or weight alone. The Calqulate.net Dress Size Calculator compares your measurements against US, UK,
+                EU and Indian sizing standards while adjusting for body shape, dress style and fit preference. Instead of
+                showing one number, it recommends the size most likely to fit comfortably across different brands.
               </p>
             </div>
           </div>
         </section>
 
-        {/* STATS DASHBOARD */}
+        {/* STATS */}
         <section className="border-b border-slate-200 bg-slate-50">
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
             {[
-              { value: "US / UK / EU", label: "Sizes" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
-              { value: "Instant", label: "Results" },
-              { value: "Private", label: "In-browser" },
+              { value: "3", label: "Measurements", sub: "Bust waist hips" },
+              { value: "5", label: "Size systems", sub: "US UK EU AU IN" },
+              { value: "Shape", label: "Aware", sub: "Not just numbers" },
+              { value: "Brand", label: "Adjusted", sub: "Zara to Shein" },
+              { value: "100%", label: "Private", sub: "In-browser" },
             ].map((s) => (
               <div key={s.label} className="bg-white p-5 text-center">
                 <p className="text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  {s.label}
-                </p>
+                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">{s.label}</p>
+                <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-400">{s.sub}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* CALCULATOR */}
-        <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
-            <DressSizeCalculator />
+        {/* THE ASSISTANT: a conversation, not a form */}
+        <section id="calculator" className="scroll-mt-20 bg-slate-50/60">
+          <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-16">
+            <div className="mx-auto mb-8 max-w-xl text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Your personal shopping assistant</h2>
+              <p className="mt-2 text-slate-600">
+                Not a size chart. Tell it the occasion, the brand and the fabric, and it will tell you which size to
+                actually order, and why.
+              </p>
+            </div>
+            <DressSizeAssistant />
           </div>
         </section>
 
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto space-y-14">
 
-            <div className="prose prose-gray dark:prose-invert max-w-none mt-12 space-y-16">
+            {/* INTENT 1: WHAT DRESS SIZE AM I */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-2">
+                <Shirt className="h-6 w-6 text-emerald-700" />
+                What dress size am I?
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                The fastest way to find your dress size is by measuring your bust, waist and hips. Those three numbers are
+                what every size chart in the world is built around. Height and weight are not, which is why a friend who
+                weighs the same as you can wear a different size.
+              </p>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                Unlike a basic size chart, the Calqulate.net Dress Size Calculator compares multiple sizing systems and
+                explains why a recommendation was made, taking your body shape, the dress style and your fit preference
+                into account.
+              </p>
+              <div className="mt-6">
+                <SizeJourney />
+              </div>
+            </section>
 
-              {/* Why Sizing Feels Confusing */}
-              <section className="py-8">
-                <h2 className="mb-4 text-2xl font-semibold text-gray-800 border-b border-gray-200 pb-2">
-                  Why Women&apos;s Dress Sizing Feels So Confusing
-                </h2>
+            {/* INTENT 3: HOW TO MEASURE */}
+            <section id="measure" className="scroll-mt-20">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-2">
+                <Ruler className="h-6 w-6 text-emerald-700" />
+                How to measure yourself for the perfect dress size
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                Three measurements, five minutes, and a soft tape. Getting these right is the single highest-value thing
+                you can do to stop dresses going back.
+              </p>
+              <div className="mt-6">
+                <MeasurementGuide />
+              </div>
+            </section>
 
-                <p className="mb-3 text-gray-700 leading-relaxed">
-                  Buying dresses online shouldn&apos;t feel confusing. One brand says you&apos;re a Medium.
-                  Another says Large. You wait for delivery, try it on, and it still doesn&apos;t fit. Sound
-                  familiar?
-                </p>
+            {/* INTENT 2: HEIGHT AND WEIGHT */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
+                Can height and weight predict your dress size?
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                Height and weight can estimate a likely dress size, but they cannot replace body measurements. Two women
+                with the same height and weight can wear different dress sizes because of differences in bust, waist and
+                hip proportion, muscle mass, and how each brand grades its patterns.
+              </p>
+              <div className="mt-6">
+                <AccuracyComparison />
+              </div>
+              <p className="mt-4 text-slate-700 leading-relaxed">
+                For the most accurate recommendation, use the calculator with your actual bust, waist and hip measurements
+                rather than height and weight alone.
+              </p>
+            </section>
 
-                <p className="mb-3 text-gray-700 leading-relaxed">
-                  Women&apos;s sizing isn&apos;t universal. Brands use vanity sizing, body shapes differ, and
-                  international standards vary wildly. US vs UK vs India vs EU sizes don&apos;t match. Weight
-                  changes, pregnancy, or lifestyle shifts affect fit. Plus-size options often have completely
-                  different proportions.
-                </p>
+            {/* THE SECRET WEAPON */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
+                Why two women with the same height and weight wear different sizes
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                This is the misconception behind most bad online orders. Weight is a total. A dress is cut to a shape.
+              </p>
+              <div className="mt-6">
+                <SameSizeDifferentBody />
+              </div>
+            </section>
 
-                <p className="text-gray-700 leading-relaxed">
-                  That&apos;s why a reliable dress size chart and smart converter are essential — and why our
-                  calculator goes beyond a simple chart to act as your personal fit advisor.
-                </p>
+            {/* INTENT 4: COUNTRY CONVERSION */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-2">
+                <Globe className="h-6 w-6 text-emerald-700" />
+                US, UK, EU and India dress size conversion
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                A US 8 is a UK 12 and an EU 40. The rule of thumb is that UK sizes run four numbers above US, and EU sizes
+                run thirty-two above US. Tap any size below to convert it instantly and see the measurements behind it.
+              </p>
+              <div className="mt-6">
+                <CountryConverter />
+              </div>
+            </section>
 
-                <Card className="mt-8 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="flex items-center gap-2 text-lg font-medium text-gray-800">
-                      <CalculatorIcon className="w-5 h-5 text-emerald-600" />
-                      TL;DR — What Our Dress Size Calculator Does for You
-                    </CardTitle>
-                    <CardDescription className="text-gray-600">
-                      A quick look at why this is more than a basic size chart
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <ul className="list-disc pl-5 space-y-2 text-gray-700 text-sm">
-                      <li>Get your accurate size in seconds across US, UK, EU, and India.</li>
-                      <li>Avoid wrong online purchases and costly returns.</li>
-                      <li>Stop confusion between different brands and countries.</li>
-                      <li>Get smart between-sizes advice based on dress style and fabric.</li>
-                      <li>Understand how your body shape affects fit — not just your measurements.</li>
-                      <li>Shop with total confidence every time.</li>
-                    </ul>
-                  </CardContent>
-                </Card>
-              </section>
+            {/* INTENT 6: BRAND SIZING */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
+                Why Zara, H&amp;M, Shein and ASOS all fit differently
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                There is no law that defines a dress size. Each brand fits its patterns to its own house model, then
+                grades up and down from there. That is why you can hold three dresses in three different sizes and all
+                three fit.
+              </p>
+              <div className="mt-6">
+                <BrandFit />
+              </div>
+            </section>
 
-              {/* How to Use */}
-              <section>
-                <h2 className="mb-2 font-semibold">
-                  <b>How to Use Our Dress Size Calculator (It&apos;s Super Easy)</b>
-                </h2>
-                <p className="mb-2">
-                  You don&apos;t need a tailor. Just three key measurements — and a few optional inputs to
-                  unlock smarter recommendations:
-                </p>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>
-                    <b>Bust</b> — Wrap the tape around the fullest part of your chest.
-                  </li>
-                  <li>
-                    <b>Waist</b> — Measure at the narrowest point, usually above your belly button.
-                  </li>
-                  <li>
-                    <b>Hips</b> — Measure at the widest part of your hips and bottom.
-                  </li>
-                </ul>
-                <p className="mt-3">
-                  Pro Tip: Stand straight, wear light clothing or underwear, and keep the tape level.
-                  Measure in centimetres or inches — the calculator handles both.
-                </p>
-                <p className="mt-3">
-                  For a smarter result, also select your <b>body shape</b>, <b>dress style</b>, and
-                  <b> preferred brand</b>. Not sure about your body shape? Use our{" "}
-                  <Link href="https://calqulate.net/health/body-shape-calculator" className="text-emerald-700 underline underline-offset-2 hover:text-emerald-900 font-medium">
-                    Body Shape Calculator
-                  </Link>{" "}
-                  first for the most accurate dress size result.
-                </p>
-              </section>
+            {/* INTENT 10: BETWEEN SIZES */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
+                Should you size up or size down when you are between sizes?
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                There is no universal rule, and anyone who gives you one is guessing. The right answer depends on the
+                fabric and the cut. Answer two questions and you will know.
+              </p>
+              <div className="mt-6">
+                <BetweenSizesTree />
+              </div>
+            </section>
 
-              {/* Standard Size Chart */}
-              <section>
-                <Card className="not-prose">
-                  <CardHeader>
-                    <CardTitle>Standard Women&apos;s Dress Size Chart (US, UK, EU, India)</CardTitle>
-                    <CardDescription>
-                      Use this as a quick reference. Always check the brand&apos;s own chart before buying.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm border-collapse">
-                        <thead>
-                          <tr>
-                            <th className="border px-2 py-2 text-left">Size</th>
-                            <th className="border px-2 py-2 text-left">US</th>
-                            <th className="border px-2 py-2 text-left">UK</th>
-                            <th className="border px-2 py-2 text-left">EU</th>
-                            <th className="border px-2 py-2 text-left">Bust (in)</th>
-                            <th className="border px-2 py-2 text-left">Waist (in)</th>
-                            <th className="border px-2 py-2 text-left">Hips (in)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="border px-2 py-2">XS</td>
-                            <td className="border px-2 py-2">2</td>
-                            <td className="border px-2 py-2">6</td>
-                            <td className="border px-2 py-2">34</td>
-                            <td className="border px-2 py-2">32–33</td>
-                            <td className="border px-2 py-2">24–25</td>
-                            <td className="border px-2 py-2">34–35</td>
-                          </tr>
-                          <tr>
-                            <td className="border px-2 py-2">S</td>
-                            <td className="border px-2 py-2">4–6</td>
-                            <td className="border px-2 py-2">8–10</td>
-                            <td className="border px-2 py-2">36–38</td>
-                            <td className="border px-2 py-2">34–35</td>
-                            <td className="border px-2 py-2">26–27</td>
-                            <td className="border px-2 py-2">36–37</td>
-                          </tr>
-                          <tr>
-                            <td className="border px-2 py-2">M</td>
-                            <td className="border px-2 py-2">8–10</td>
-                            <td className="border px-2 py-2">12–14</td>
-                            <td className="border px-2 py-2">40–42</td>
-                            <td className="border px-2 py-2">36–38</td>
-                            <td className="border px-2 py-2">28–30</td>
-                            <td className="border px-2 py-2">38–40</td>
-                          </tr>
-                          <tr>
-                            <td className="border px-2 py-2">L</td>
-                            <td className="border px-2 py-2">12–14</td>
-                            <td className="border px-2 py-2">16–18</td>
-                            <td className="border px-2 py-2">44–46</td>
-                            <td className="border px-2 py-2">39–41</td>
-                            <td className="border px-2 py-2">31–33</td>
-                            <td className="border px-2 py-2">41–43</td>
-                          </tr>
-                          <tr>
-                            <td className="border px-2 py-2">XL</td>
-                            <td className="border px-2 py-2">16</td>
-                            <td className="border px-2 py-2">20</td>
-                            <td className="border px-2 py-2">48</td>
-                            <td className="border px-2 py-2">42–44</td>
-                            <td className="border px-2 py-2">34–36</td>
-                            <td className="border px-2 py-2">44–46</td>
-                          </tr>
-                          <tr>
-                            <td className="border px-2 py-2">2XL</td>
-                            <td className="border px-2 py-2">18</td>
-                            <td className="border px-2 py-2">22</td>
-                            <td className="border px-2 py-2">50</td>
-                            <td className="border px-2 py-2">45–47</td>
-                            <td className="border px-2 py-2">37–39</td>
-                            <td className="border px-2 py-2">47–49</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-3">
-                      Note: Indian sizes often align closer to UK but can run smaller — always check
-                      brand-specific charts. To convert inches to cm, multiply by 2.54.
-                    </p>
-                  </CardContent>
-                </Card>
-              </section>
+            {/* INTENT 9: BODY SHAPE */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-2">
+                <Heart className="h-6 w-6 text-emerald-700" />
+                Dress size by body shape
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                Your measurements say what size. Your shape says which size actually fits, and which styles are worth
+                buying. If you are not sure which shape you are, start with the{" "}
+                <Link href="/health/body-shape-calculator" className="font-semibold text-emerald-700 hover:underline">
+                  Calqulate.net Body Shape Calculator
+                </Link>
+                , then come back here.
+              </p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {SHAPES.map((s) => (
+                  <div key={s.name} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-[0_10px_40px_-24px_rgba(6,110,67,0.35)]">
+                    <IllustrationSlot src={s.src} alt={s.alt} aspect="aspect-[3/4]" />
+                    <h3 className="mt-3 font-bold text-slate-900">{s.name}</h3>
+                    <dl className="mt-2 space-y-1.5 text-[13px] leading-relaxed">
+                      <div>
+                        <dt className="inline font-bold text-emerald-800">Best: </dt>
+                        <dd className="inline text-slate-600">{s.best}</dd>
+                      </div>
+                      <div>
+                        <dt className="inline font-bold text-slate-700">Avoid: </dt>
+                        <dd className="inline text-slate-600">{s.avoid}</dd>
+                      </div>
+                      <div className="rounded-xl bg-emerald-50 p-2">
+                        <dt className="inline font-bold text-emerald-900">Sizing: </dt>
+                        <dd className="inline text-emerald-900/90">{s.size}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                ))}
+              </div>
+            </section>
 
-              {/* Plus Size Chart */}
-              <section>
-                <Card className="not-prose">
-                  <CardHeader>
-                    <CardTitle>Plus Size Dress Size Chart</CardTitle>
-                    <CardDescription>
-                      For plus size shopping, proportions matter even more. Our calculator accounts for
-                      comfort and flattering cuts, not just number matching.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm border-collapse">
-                        <thead>
-                          <tr>
-                            <th className="border px-2 py-2 text-left">Size</th>
-                            <th className="border px-2 py-2 text-left">US (W)</th>
-                            <th className="border px-2 py-2 text-left">Bust (in)</th>
-                            <th className="border px-2 py-2 text-left">Waist (in)</th>
-                            <th className="border px-2 py-2 text-left">Hips (in)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="border px-2 py-2">1X</td>
-                            <td className="border px-2 py-2">14–16W</td>
-                            <td className="border px-2 py-2">44–45.5</td>
-                            <td className="border px-2 py-2">36–38</td>
-                            <td className="border px-2 py-2">46–48</td>
-                          </tr>
-                          <tr>
-                            <td className="border px-2 py-2">2X</td>
-                            <td className="border px-2 py-2">18–20W</td>
-                            <td className="border px-2 py-2">47–49</td>
-                            <td className="border px-2 py-2">39–41</td>
-                            <td className="border px-2 py-2">49–51</td>
-                          </tr>
-                          <tr>
-                            <td className="border px-2 py-2">3X</td>
-                            <td className="border px-2 py-2">22–24W</td>
-                            <td className="border px-2 py-2">51–54</td>
-                            <td className="border px-2 py-2">44–46</td>
-                            <td className="border px-2 py-2">53–56</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </CardContent>
-                </Card>
-              </section>
+            {/* INTENT 8: DRESS LENGTH */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Dress length by height</h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                Size and length are two different problems. A dress can fit perfectly and still be the wrong length,
+                because brands cut to a sample model who is usually around 5 feet 8.
+              </p>
+              <div className="mt-6">
+                <DressLength />
+              </div>
+            </section>
 
-              {/* Body Shape & Dress Fit */}
-              <section>
-                <h2 className="mb-2 font-semibold">
-                  <b>Why Your Body Shape Changes How a Dress Fits</b>
-                </h2>
-                <p className="mb-2">
-                  A size chart gives you a number. Your body shape tells you whether that number will
-                  actually fit. An hourglass figure may need to size up to accommodate hips in a bodycon
-                  style. A pear shape often needs a different size on top versus bottom. A rectangle shape
-                  may find that structured dresses fit better than wrap styles at the same size.
-                </p>
-                <p className="mb-2">
-                  That&apos;s why our calculator asks for your body shape alongside your measurements. Not
-                  sure what shape you are? Our{" "}
-                  <Link href="https://calqulate.net/health/body-shape-calculator" className="text-emerald-700 underline underline-offset-2 hover:text-emerald-900 font-medium">
-                    Body Shape Calculator
-                  </Link>{" "}
-                  will tell you in seconds. And if you want to go deeper,{" "}
-                  <Link href="https://calqulate.net/blog/female-body-shapes-explained" className="text-emerald-700 underline underline-offset-2 hover:text-emerald-900 font-medium">
-                    our guide to female body shapes explained
-                  </Link>{" "}
-                  covers styling, fit tips, and dress recommendations for every shape.
-                </p>
+            {/* INTENT 5: WEDDING */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Wedding dress size guide</h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                Bridal sizing is its own world, and it will shock you if nobody warns you. It typically runs{" "}
+                <strong>one to two sizes smaller</strong> than high street, so a street size 8 is commonly a bridal 10 or
+                12. This is not a comment on your body. It is a hangover from decades-old bridal patterns.
+              </p>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                {[
+                  { t: "Order to your largest measurement", d: "Almost always the bust. A bridal seamstress can take a dress in easily. Letting one out is often impossible, because there is no seam allowance to work with." },
+                  { t: "Budget for alterations", d: "Nearly every wedding dress is altered. Treat alterations as part of the price, not as a failure of sizing." },
+                  { t: "Order early", d: "Made-to-order gowns commonly take four to six months, plus six to eight weeks for fittings. Ordering late is what forces bad size decisions." },
+                  { t: "Do not order to a goal weight", d: "Order for the body you have. A dress can be taken in at a final fitting. It cannot be conjured larger." },
+                ].map((c) => (
+                  <div key={c.t} className="rounded-2xl border border-slate-200 bg-white p-5">
+                    <h3 className="font-bold text-slate-900">{c.t}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{c.d}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
 
-                <div className="grid md:grid-cols-2 gap-6 not-prose mt-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Hourglass</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm space-y-2">
-                      <p>Balanced bust and hips with a defined waist.</p>
-                      <p><b>Fit tip:</b> Wrap dresses and fitted styles work beautifully. Size by your hips first.</p>
-                      <p><b>Between sizes:</b> Size up — your waist can always be belted.</p>
-                    </CardContent>
-                  </Card>
+            {/* INTENT 11: RETURN RISK */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Why dresses get returned</h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                Fit is the single biggest reason clothing goes back, and it is almost entirely avoidable. Knowing where
+                orders fail tells you exactly what to check before you click buy.
+              </p>
+              <div className="mt-6">
+                <ReturnRisk />
+              </div>
+            </section>
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Pear (Triangle)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm space-y-2">
-                      <p>Wider hips than bust and shoulders.</p>
-                      <p><b>Fit tip:</b> A-line and fit-and-flare dresses are your best friend. Size by your hips.</p>
-                      <p><b>Between sizes:</b> Size up for bodycon; standard size for A-line.</p>
-                    </CardContent>
-                  </Card>
+            {/* PETITE, TALL, PLUS */}
+            <section>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Petite, tall and plus size ranges</h2>
+              <div className="mt-5 grid gap-4 sm:grid-cols-3">
+                {[
+                  { t: "Petite", d: "For roughly 5 feet 3 and under. Not a smaller size, but the same size cut with a shorter torso, a higher waist and a shorter hem. If dresses always look like they are wearing you, this is why." },
+                  { t: "Tall", d: "For roughly 5 feet 9 and over. Longer torso, longer sleeves, longer hem. A standard maxi that lands at your ankle is the clearest sign you should be shopping tall." },
+                  { t: "Plus size", d: "Typically US 14 and up. Grading is not simply scaled up, so measurements matter even more. Always check the garment measurements rather than trusting the label." },
+                ].map((c) => (
+                  <div key={c.t} className="rounded-2xl border border-slate-200 bg-white p-5">
+                    <h3 className="font-bold text-slate-900">{c.t}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{c.d}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Apple (Round)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm space-y-2">
-                      <p>Fuller bust and midsection, narrower hips.</p>
-                      <p><b>Fit tip:</b> Empire waist and V-neck dresses elongate and flatter. Size by your bust.</p>
-                      <p><b>Between sizes:</b> Size up for comfort through the torso.</p>
-                    </CardContent>
-                  </Card>
+            {/* HOW WE DETERMINE DRESS SIZE (EEAT) */}
+            <section className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8">
+              <h2 className="mt-0 text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                <Info className="h-5 w-5 text-emerald-700" /> How we determine your dress size
+              </h2>
+              <p className="mt-3 text-slate-700 leading-relaxed">
+                We map your bust, waist and hip measurements onto standard apparel size charts, which are built on the
+                same body dimensions used in the ISO and ASTM apparel sizing standards. Where your three measurements fall
+                into different sizes, we recommend the larger, because taking a garment in is a routine alteration while
+                letting it out often is not. We then adjust for body shape, dress style and fit preference, and convert the
+                result across US, UK, EU, Australian and Indian systems. We do not store your measurements, and nothing
+                leaves your browser.
+              </p>
+              <p className="mt-3 flex items-start gap-2 text-sm leading-relaxed text-slate-500">
+                <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
+                No sizing standard is legally binding on brands. Treat any calculated size as a strong starting point, and
+                always check the garment measurements published on the product page before ordering.
+              </p>
+            </section>
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Rectangle (Athletic)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm space-y-2">
-                      <p>Similar bust, waist, and hip measurements.</p>
-                      <p><b>Fit tip:</b> Peplum, ruffles, and tiered styles add shape. Size by your bust.</p>
-                      <p><b>Between sizes:</b> Size down for bodycon; size up for layered styles.</p>
-                    </CardContent>
-                  </Card>
+            {/* REFERENCES */}
+            <SourcesSection
+              items={[
+                { label: "ISO 8559: Size designation of clothes and body measurement definitions", href: "https://www.iso.org/standard/61686.html" },
+                { label: "ASTM D5585: Standard tables of body measurements for adult female misses figure type", href: "https://www.astm.org/d5585-11r21.html" },
+                { label: "ASTM D6960: Standard tables of body measurements for plus size women", href: "https://www.astm.org/d6960_d6960m-22.html" },
+                { label: "Zara size guide", href: "https://www.zara.com/us/en/help/size-guide" },
+                { label: "ASOS size guide", href: "https://www.asos.com/us/size-guide/" },
+              ]}
+            />
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Inverted Triangle</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm space-y-2">
-                      <p>Broader shoulders and bust with narrower hips.</p>
-                      <p><b>Fit tip:</b> Flared skirts and full dresses balance your silhouette. Size by your bust.</p>
-                      <p><b>Between sizes:</b> Size up for shoulder comfort; choose styles with flare below.</p>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Also check your Face Shape</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm space-y-2">
-                      <p>Neckline choice is just as important as dress style for an overall flattering look.</p>
-                      <p>
-                        Use our{" "}
-                        <Link href="https://calqulate.net/health/face-shape-calculator" className="text-emerald-700 underline underline-offset-2 hover:text-emerald-900 font-medium">
-                          Face Shape Calculator
-                        </Link>{" "}
-                        to find necklines and collar styles that complement your face shape.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-              </section>
-
-              {/* Dress Style & Fabric Matters */}
-              <section>
-                <Card className="not-prose">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Shirt className="w-5 h-5 text-emerald-600" />
-                      Does Dress Style Affect Which Size You Should Buy?
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-sm space-y-3">
-                    <p>
-                      Yes — and this is one of the most overlooked factors in online dress shopping. The same
-                      measurements can require two different sizes depending on the dress style and fabric.
-                    </p>
-                    <ul className="list-disc pl-4 space-y-2">
-                      <li>
-                        <b>Bodycon / Fitted:</b> Size up if you are between sizes. These styles are
-                        unforgiving — a tight bodycon dress shows every fit issue.
-                      </li>
-                      <li>
-                        <b>A-line / Fit &amp; Flare:</b> True to size in most cases. The flared skirt hides
-                        hip measurement differences.
-                      </li>
-                      <li>
-                        <b>Maxi / Shift:</b> Relaxed fit. You can often size down if you prefer a less
-                        voluminous look.
-                      </li>
-                      <li>
-                        <b>Wrap dresses:</b> Adjustable fit. True to size or size down for a closer look.
-                      </li>
-                      <li>
-                        <b>Wedding / Bridal:</b> Always size up. Bridal dresses run one to two sizes smaller
-                        than ready-to-wear and can be taken in by a tailor.
-                      </li>
-                      <li>
-                        <b>Stretch fabric:</b> You can usually size down one size. Non-stretch structured
-                        fabric: size up or true to size.
-                      </li>
-                    </ul>
-                    <p>
-                      Our calculator&apos;s dress style selector accounts for all of these scenarios
-                      automatically.
-                    </p>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* Brand Differences */}
-              <section>
-                <Card className="not-prose">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <BookOpen className="w-5 h-5" />
-                      Why Every Brand Fits Differently — And How to Stop Guessing
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-sm space-y-3">
-                    <p>
-                      Vanity sizing means brands label larger sizes as smaller numbers to make customers feel
-                      better. Different target body shapes (petite, tall, curvy, athletic) also change how a
-                      garment is cut. Manufacturing country standards add another layer of inconsistency.
-                    </p>
-                    <p>
-                      Our brand-specific selector covers 20+ popular international and Indian brands including
-                      Zara, H&M, ASOS, Shein, Myntra, Mango, Forever 21, and more. When you select your
-                      brand, the calculator adjusts its recommendation based on how that brand&apos;s sizing
-                      runs relative to standard measurements.
-                    </p>
-                    <p>
-                      If your brand isn&apos;t listed, select &quot;Other&quot; and use your measurements
-                      against the standard chart — then check the brand&apos;s own size guide to confirm.
-                    </p>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* Special Occasion */}
-              <section>
-                <h2 className="mb-2 font-semibold">
-                  <b>Special Occasion: Wedding Dress Size Calculator</b>
-                </h2>
-                <p className="mb-3">
-                  For bridal or wedding guest dresses, go by your largest measurement and always consider
-                  alterations. Wedding dresses often run one to two sizes smaller than ready-to-wear, so
-                  sizing up and consulting the designer&apos;s own chart is essential.
-                </p>
-                <p className="mb-3">
-                  If you are between sizes in bridal wear, always choose the larger one. A dress can be
-                  taken in by a skilled seamstress; letting it out is far harder and sometimes impossible.
-                  Our calculator flags this automatically when you select the Wedding / Bridal dress style.
-                </p>
-                <p>
-                  This also applies to other formal occasions: prom dresses, bridesmaid dresses, and
-                  occasion wear from designer labels. Always size up and plan for a fitting.
-                </p>
-              </section>
-
-              {/* Features Card */}
-              <section>
-                <Card className="not-prose">
-                  <CardHeader>
-                    <CardTitle>Features of Our Dress Size Calculator</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-sm">
-                    <ul className="list-disc pl-4 space-y-2">
-                      <li>
-                        <b>Multi-Region Sizing:</b> Instantly returns US, UK, EU, and India sizes from one
-                        set of measurements.
-                      </li>
-                      <li>
-                        <b>Brand-Specific Selector:</b> Accounts for how 20+ popular brands size relative to
-                        standard measurements.
-                      </li>
-                      <li>
-                        <b>Dress Style Advisor:</b> Adjusts recommendations based on bodycon, A-line, wrap,
-                        maxi, wedding, and more.
-                      </li>
-                      <li>
-                        <b>Fit Preference Toggle:</b> Choose tight, comfortable, relaxed, or oversized —
-                        your preference shifts the final recommendation.
-                      </li>
-                      <li>
-                        <b>Smart Between-Sizes Logic:</b> Clear advice on whether to size up or down based
-                        on style, fabric, and body shape.
-                      </li>
-                      <li>
-                        <b>Return Risk Meter:</b> See your estimated return risk (Low / Medium / High) and
-                        the reason, so you can shop with confidence.
-                      </li>
-                      <li>
-                        <b>Body Shape Integration:</b> Works alongside your body shape for dramatically more
-                        accurate results.
-                      </li>
-                      <li>
-                        <b>Height &amp; Weight Input:</b> Useful secondary input when a measuring tape is
-                        not available.
-                      </li>
-                      <li>
-                        <b>Metric &amp; Imperial:</b> Enter measurements in cm or inches — the calculator
-                        handles both and converts automatically.
-                      </li>
-                      <li>
-                        <b>Safe &amp; Private:</b> No data stored — your measurements stay on your device.
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* Benefits */}
-              <section>
-                <Card className="not-prose">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <UserCheck className="w-5 h-5" />
-                      Benefits of Using Our Dress Size Calculator
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-sm space-y-2">
-                    <p>
-                      <b>Stop the cycle of wrong orders and returns.</b>
-                      <br />
-                      Know your correct size before you buy — not after it arrives.
-                    </p>
-                    <p>
-                      <b>Shop confidently across brands and countries.</b>
-                      <br />
-                      US, UK, EU, and India sizes explained and converted instantly.
-                    </p>
-                    <p>
-                      <b>Get style-specific advice, not just a number.</b>
-                      <br />
-                      Bodycon fits very differently from a maxi — our calculator knows this.
-                    </p>
-                    <p>
-                      <b>Understand your between-sizes situation once and for all.</b>
-                      <br />
-                      Clear, reasoned guidance on which size to pick every time.
-                    </p>
-                    <p>
-                      <b>Find your size for special occasions without stress.</b>
-                      <br />
-                      Wedding dresses, plus size, post-pregnancy, and more — all covered.
-                    </p>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* What's Unique */}
-              <section>
-                <Card className="not-prose">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-emerald-600" />
-                      What&apos;s Unique About Our Calculator?
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-sm space-y-3">
-                    <p>
-                      Most dress size tools give you a chart. We give you a smart advisor. Our calculator
-                      combines your measurements, body shape, dress style, brand, and fit preference to
-                      return a personalised recommendation — not a generic number.
-                    </p>
-                    <ul className="list-disc pl-4 space-y-1">
-                      <li>
-                        Explains <em>why</em> it recommends a size, not just what size to buy.
-                      </li>
-                      <li>
-                        Covers the full size spectrum including plus size (1X, 2X, 3X) and petite
-                        considerations.
-                      </li>
-                      <li>
-                        Integrates with our{" "}
-                        <Link href="https://calqulate.net/health/body-shape-calculator" className="text-emerald-700 underline underline-offset-2 hover:text-emerald-900 font-medium">
-                          Body Shape Calculator
-                        </Link>{" "}
-                        for a complete fit picture.
-                      </li>
-                      <li>Flags return risk so you can decide whether to order one size or two.</li>
-                      <li>
-                        Covers special cases: wedding dresses, post-pregnancy sizing, and international
-                        shopping.
-                      </li>
-                    </ul>
-                    <p>
-                      You deserve clothes that fit perfectly and make you feel amazing. No more guessing
-                      &quot;What size dress am I?&quot; — just reliable, stress-free shopping.
-                    </p>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* Embrace Your Size */}
-              <section>
-                <h2 className="mb-2">
-                  <b>The Right Size Is the One That Fits — Not the Smallest Number</b>
-                </h2>
-                <p>
-                  It&apos;s easy to get caught up in the number on the label, but dress sizes are not
-                  standardised and they vary between brands, countries, and decades. A size is just a
-                  measurement — it says nothing about you.
-                </p>
-                <p className="mt-3">
-                  Our mission is to help you find clothes that fit your body well and make you feel
-                  confident — not to chase a smaller label. Whether you are shopping for everyday wear,
-                  a special occasion, or exploring international brands for the first time, our dress size
-                  calculator is here to make it simple and stress-free.
-                </p>
-              </section>
-
-            </div>
-
-            <RelatedCalculators slug="dress-size-calculator" />
-
-            {/* Structured FAQ UI */}
-            <div className="mt-12">
+            {/* FAQ */}
+            <div className="pt-4 border-t border-slate-200">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8 text-center">
+                Common dress size questions
+              </h2>
               <FAQSection faqs={faqs} />
             </div>
 
-            {/* Author Badge Section */}
+            {/* RELATED */}
+            <div>
+              <h2 className="text-xl font-bold text-slate-900 mb-4">You may also like</h2>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  { href: "/health/body-shape-calculator", label: "Body Shape Calculator", desc: "Find your shape in 3D before you choose a size" },
+                  { href: "/health/body-fat-calculator", label: "Body Fat Calculator", desc: "What your measurements say about composition" },
+                  { href: "/health/ideal-body-weight-calculator", label: "Ideal Body Weight Calculator", desc: "What you should weigh for your height" },
+                  { href: "/health/bmi-calculator", label: "BMI Calculator", desc: "Where your weight sits on the medical scale" },
+                ].map((r) => (
+                  <Link key={r.href} href={r.href} className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition-colors hover:border-emerald-300 hover:bg-emerald-50/40">
+                    <ArrowRight className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-700" />
+                    <span>
+                      <span className="block font-semibold text-slate-900">{r.label}</span>
+                      <span className="block text-sm text-slate-500">{r.desc}</span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <p className="text-center text-sm font-medium text-slate-500 flex items-center justify-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-emerald-600" />
+              Your measurements are private. Nothing is stored and nothing leaves your browser.
+            </p>
+
+            <RelatedCalculators slug="dress-size-calculator" />
+
             <MedicalReviewerSection />
             <AuthorSection />
           </div>
         </div>
       </main>
 
-      {/* Author Schema */}
       <AuthorSchema />
-
       <Footer />
     </div>
   )
