@@ -251,7 +251,7 @@ export function Onboarding() {
                 {[
                   `Fat vs. muscle tracking, so your ${round(lostLb, 0) || ""} lb comes off as fat`,
                   "Adaptive titration that holds when side effects spike",
-                  "Your personal correlation engine and dosing sweet spot",
+                  "Find out why your progress slowed, and when to raise your dose",
                   "Doctor-ready PDF report and rebound-risk view",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-2 text-sm text-gray-700">

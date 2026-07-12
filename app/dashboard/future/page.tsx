@@ -16,7 +16,7 @@ export default async function FuturePage() {
   if (!paid) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold">Future You — trajectory simulator</h1>
+        <h1 className="text-2xl font-bold">Future You: see where this is heading</h1>
         <Paywall feature="the Future You simulator" />
       </div>
     );

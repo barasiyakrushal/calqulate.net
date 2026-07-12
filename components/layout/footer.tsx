@@ -13,7 +13,7 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="space-y-4 sm:col-span-2 lg:col-span-1">
-            <Link href="/" aria-label="Calqulate.NET — Home" className="inline-flex">
+            <Link href="/" aria-label="Calqulate.NET Home" className="inline-flex">
               <Image
                 src="/calqulate-wordmark.png"
                 alt="Calqulate.NET"
@@ -23,8 +23,9 @@ export function Footer() {
               />
             </Link>
             <p className="text-sm text-white/55">
-              Calqulate.net build for GLP-1 Medication users for tracking weight, dose, and fat vs muscle for metabolic and heart health. Track your score,
-              watch your trend, lower your risk, backed by validated clinical models.
+              Lose weight you can actually keep off. Calqulate tracks every injection, shows you how much of your loss
+              is fat and how much is muscle, and warns you before a plateau lands. Built for people on Ozempic, Wegovy,
+              Mounjaro and Zepbound, on validated clinical models.
             </p>
             <div className="space-y-2 text-sm text-white/55">
               <div className="flex items-center space-x-2">
@@ -119,12 +120,12 @@ export function Footer() {
             <div className="max-w-md space-y-1.5 text-center text-xs text-white/55 lg:text-right">
               <p>
                 <span className="font-semibold text-white/80">🇺🇸 In the USA &amp; worldwide:</span>{" "}
-                buy your subscription securely with <span className="text-white/80">PayPal</span> — credit
+                buy your subscription securely with <span className="text-white/80">PayPal</span>. Credit
                 &amp; debit cards (Visa, Mastercard, Amex) accepted, no PayPal account required.
               </p>
               <p>
                 <span className="font-semibold text-white/80">🇮🇳 In India:</span>{" "}
-                pay via <span className="text-white/80">Razorpay</span> — UPI, cards, netbanking &amp; wallets.
+                pay via <span className="text-white/80">Razorpay</span>. UPI, cards, netbanking &amp; wallets.
               </p>
               <p className="text-white/40">
                 Payments are processed by PCI-DSS compliant gateways. We never store your card details.
@@ -135,10 +136,10 @@ export function Footer() {
 
         <div className="mt-8 space-y-2 border-t border-white/10 pt-8">
           <p className="text-center text-sm text-white/55">
-            &copy; {new Date().getFullYear()} Calqulate.NET — All rights reserved.
+            &copy; {new Date().getFullYear()} Calqulate.NET. All rights reserved.
           </p>
           <p className="text-center text-xs text-white/40">
-            Educational decision-support — not medical, legal, or financial advice.
+            Educational decision-support, not medical, legal, or financial advice.
           </p>
         </div>
       </div>

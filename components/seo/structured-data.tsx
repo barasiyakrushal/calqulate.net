@@ -80,7 +80,7 @@ export function OrganizationSchema() {
     name: "Calqulate",
     alternateName: "Calqulate.net",
     description:
-      "Calqulate is a metabolic and cardiovascular risk-reversal service. It turns a person's numbers and lab values into a tracked Metabolic Health Score plus validated clinical risk scores (10-year ASCVD heart risk, heart age via Framingham, and type-2 diabetes risk via FINDRISC), follows them over time, and surfaces the single highest-impact change to lower that risk. It also offers 50+ free, no-login health calculators.",
+      "Calqulate helps people on GLP-1 medications lose weight they can actually keep off. It tracks every injection, separates how much of a person's loss is fat from how much is muscle, warns them before a plateau lands, and turns their numbers and lab values into a tracked Metabolic Health Score plus validated clinical risk scores (10-year ASCVD heart risk, heart age via Framingham, and type-2 diabetes risk via FINDRISC). Built for Ozempic, Wegovy, Mounjaro and Zepbound. The health calculators are free and need no login.",
     url: "https://calqulate.net/",
     logo: "https://calqulate.net/calqulate-logo.png",
     image: "https://calqulate.net/calqulate-logo.png",
@@ -88,7 +88,7 @@ export function OrganizationSchema() {
       "@type": "Brand",
       name: "Calqulate Vitals",
       description:
-        "Calqulate Vitals is the paid risk-reversal service: a personal trajectory engine and a counterfactual next-lever simulator that track your Metabolic Health Score, heart age, and GLP-1 progress over time.",
+        "Calqulate Vitals is the paid membership: a personal health trajectory engine that shows you when you will reach your goal weight, why your loss slowed, whether you are ready to increase your dose, and whether you are losing fat or the muscle that keeps the weight off.",
     },
     founder: [
       {

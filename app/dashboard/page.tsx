@@ -139,7 +139,7 @@ export default async function DashboardPage() {
           <NextLeversPanel levers={levers} />
         </div>
       ) : (
-        <PremiumGate locked feature="Trajectory & next-levers simulator" description="Your 8-week forecast and personalized, ranked highest-impact levers." />
+        <PremiumGate locked feature="See when you will reach your goal" description="Your 8-week forecast, plus the single change that will help you most." />
       )}
 
       <section className="rounded-2xl border bg-white p-6">

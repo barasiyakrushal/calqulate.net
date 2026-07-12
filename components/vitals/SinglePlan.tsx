@@ -6,40 +6,28 @@ import { GatewayPicker } from "@/components/payment/GatewayPicker";
 import { useCheckout } from "@/hooks/useCheckout";
 import type { Gateway } from "@/lib/payment/types/index";
 import { getPrice, formatPrice, displaySubtitle } from "@/lib/payment/pricing";
+import { PREMIUM_FEATURES } from "@/lib/features";
 
 const GOLD_BTN =
   "flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-light to-gold px-4 py-3 font-bold text-gold-ink shadow-[0_8px_20px_rgba(245,158,11,.35)] transition-all duration-150 hover:-translate-y-0.5 disabled:opacity-60";
 
-const FEATURES = [
-  "Trend chart (score / ASCVD / diabetes / heart-age)",
-  "Trajectory panel (8-week forecast)",
-  "Next-levers simulator",
-  "Add-a-measurement form (full biometric, durable save)",
-  "Download PDF report",
-  "Today’s forecast (appetite/energy/side-effects)",
-  "Progress & prediction chart (projection + plateau)",
-  "“What moves your results” correlation engine",
-  "Dosing sweet-spot",
-  "GLP-1 Doctor PDF report",
-  "Fat-vs-muscle trend + muscle-loss flag",
-  "Multi-compound support (GLP-1/peptide/TRT)",
-  "Refill tracker (supply, copay, prior-auth)",
-  "Unlimited smart food estimator",
-  "Trajectory simulator (optimistic/realistic/pessimistic)",
-  "Adaptive protocol builder (Autopilot)",
-  "Unlimited measurement history",
-];
+/**
+ * Driven from the feature registry, never hand-maintained. This list used to be a
+ * hardcoded copy and it had already drifted out of sync with what we actually
+ * gate, which is the exact failure lib/features.ts exists to prevent.
+ */
+const FEATURES = PREMIUM_FEATURES.map((f) => f.label);
 
 const HIGHLIGHTS = [
   {
     icon: Dumbbell,
-    title: "Fat-loss vs. muscle-loss detection",
-    body: "Know exactly what you’re burning on a GLP-1 — so you never end up “skinny-fat”.",
+    title: "Make sure you are losing fat, not muscle",
+    body: "Up to 40% of GLP-1 weight loss can be muscle. Muscle is what keeps the weight off, so we watch it for you.",
   },
   {
     icon: ShieldCheck,
-    title: "Your history is never lost",
-    body: "Switch or replace your device and your full health timeline follows you, securely.",
+    title: "Keep your complete treatment history forever",
+    body: "Change your phone, change your doctor, change your medication. Your full timeline follows you.",
   },
 ];
 

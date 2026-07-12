@@ -115,7 +115,7 @@ export default async function PricingPage({ searchParams }: { searchParams: { fe
           <div className="container mx-auto px-3 sm:px-4">
             <FreeVsPremium
               heading="What’s free vs. Premium"
-              subheading="Every logging tool, the PK-curve teaser, the trial benchmark and the shareable scorecard stay free forever. Premium unlocks the predictions: forecasts, simulators, your correlation engine, muscle-loss insight, multi-compound and unlimited history."
+              subheading="Free covers today: log every dose, watch your weight, see how much medication is still working. Premium tells you what happens next: when you will hit your goal, why your progress slowed, and whether you are losing fat or the muscle that keeps it off."
             />
           </div>
         </section>

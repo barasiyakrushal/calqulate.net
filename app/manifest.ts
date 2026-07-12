@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Calqulate — Smart Health Calculators & Vitals Tracker",
+    name: "Calqulate Vitals: Lose Weight You Can Actually Keep Off",
     short_name: "Calqulate",
     description:
-      "Calculate your health metrics, track Metabolic Health Score, heart age, and disease risk — all in one place.",
+      "Most GLP-1 users watch the scale. Calqulate watches what the scale cannot. Track every injection, see how much of your loss is fat and how much is muscle, and spot a plateau before it lands.",
     start_url: "/",
     scope: "/",
     display: "standalone",

@@ -8,8 +8,8 @@ import { FEATURE_AREAS } from "@/lib/features";
  * home, how-it-works and the product pages.
  */
 export function FreeVsPremium({
-  heading = "What’s free vs. Premium",
-  subheading = "The whole logging engine is free forever. Premium unlocks the forward-looking, personalized layer — forecasts, simulators and your correlation engine.",
+  heading = "Everything you need to start is free",
+  subheading = "Free covers today: log every dose, watch your weight, see how much medication is still working. Premium tells you what happens next: when you will hit your goal, why progress slowed, and whether you are losing fat or muscle.",
   showCta = false,
   className = "",
 }: {

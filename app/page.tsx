@@ -9,6 +9,11 @@ import { FounderVision } from "@/components/marketing/FounderVision"
 import { SocialProof } from "@/components/marketing/SocialProof"
 import { PremiumTrackersBand } from "@/components/marketing/PremiumTrackersBand"
 import { GLP1StorySlides } from "@/components/marketing/GLP1StorySlides"
+import { WhyPeopleFail, Glp1Journey, FreeThenPremium } from "@/components/marketing/Glp1Platform"
+import {
+  MuscleStat, WhatAreYouLosing, Transformation, TrajectoryTimeline,
+  FoundersStory, FinalPromise,
+} from "@/components/marketing/Trajectory"
 import { getAccess, hasPaidAccess } from "@/lib/auth"
 
 import {
@@ -411,12 +416,12 @@ const faqs = [
   {
     question: "I already use MyFitnessPal. Why do I need this?",
     answer:
-      "Generic trackers are designed just for counting calories. Calqulate is built specifically for people on GLP-1 medications for weight loss (Ozempic, Wegovy, Mounjaro). We monitor the unique side effects of these glucagon-like peptide-1 (GLP-1) drugs—like rapid muscle loss, extreme drops in appetite, and metabolic changes—so you lose weight safely.",
+      "Generic trackers are designed just for counting calories. Calqulate is built specifically for people on GLP-1 medications for weight loss (Ozempic, Wegovy, Mounjaro). We monitor the unique side effects of these glucagon-like peptide-1 (GLP-1) drugs, things like rapid muscle loss, extreme drops in appetite, and metabolic changes, so you lose weight safely.",
   },
   {
     question: "Which GLP-1 is best for weight loss?",
     answer:
-      "The best GLP-1 for weight loss depends on you — tirzepatide (Mounjaro, Zepbound) tends to drive the largest average loss, while semaglutide (Ozempic, Wegovy) is a proven all-rounder, and Rybelsus is the oral GLP-1 pill option. Whichever GLP-1 drug or shot you're on, what actually protects your results is tracking fat vs. muscle, not just the scale.",
+      "The best GLP-1 for weight loss depends on you. Tirzepatide (Mounjaro, Zepbound) tends to drive the largest average loss, while semaglutide (Ozempic, Wegovy) is a proven all-rounder, and Rybelsus is the oral GLP-1 pill option. Whichever GLP-1 drug or shot you're on, what actually protects your results is tracking fat vs. muscle, not just the scale.",
     link: { label: "Compare the best GLP-1s for weight loss →", href: "/answers/best-glp-1-for-weight-loss" },
   },
   {
@@ -552,19 +557,30 @@ export default async function HomePage() {
               <div className="lg:col-span-6 text-center lg:text-left lg:pl-8 xl:pl-14">
                 <div className="mb-5 sm:mb-6 inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-bold uppercase tracking-wide text-brand-800">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-brand" />
-                  For GLP-1 medication users, Ozempic, Wegovy &amp; Mounjaro
+                  Built for Ozempic, Wegovy, Mounjaro &amp; Zepbound
                 </div>
 
                 <h1 className="animate-hero-in text-balance text-3xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.07] tracking-tight text-ink">
-                  Stop GLP-1 Muscle Loss:{" "}
-                  <span className="hero-shimmer">Track Metabolism &amp; Look Younger.</span>
+                  Lose weight you can{" "}
+                  <span className="hero-shimmer">actually keep off.</span>
                 </h1>
 
-                <p className="mx-auto mt-5 sm:mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-copy lg:mx-0">
-                  Up to 40% of GLP-1 weight loss is actually muscle. Stop letting the scale lie to you. Track your
-                  GLP-1 shots, monitor your Metabolism Score, and reverse your Heart Age to ensure you burn 100% fat -
-                  so you look and feel 15 years younger.
+                <p className="mx-auto mt-5 sm:mt-6 max-w-xl text-lg sm:text-xl leading-relaxed text-copy lg:mx-0">
+                  Most GLP-1 users watch the scale.{" "}
+                  <strong className="font-semibold text-ink">Calqulate watches what the scale cannot.</strong>
                 </p>
+
+                {/* three outcomes, not thirty features */}
+                <div className="mt-6 flex flex-wrap justify-center gap-2.5 lg:justify-start">
+                  {["Lose fat.", "Keep muscle.", "Stay healthy."].map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full bg-white px-4 py-2 text-sm font-bold text-ink shadow-sm ring-1 ring-line"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
 
                 <div className="mx-auto mt-6 sm:mt-8 max-w-md lg:mx-0">
                   <SearchBar placeholder="Search free tools... e.g. glp-1 dose, heart age" className="h-13 rounded-xl border border-line bg-white text-base shadow-md" />
@@ -616,6 +632,24 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ── 2. THE PROBLEM: one number nobody forgets ─────────────────────── */}
+        <MuscleStat />
+
+        {/* ── 2b. PROVE IT: let them feel the difference themselves ─────────── */}
+        <WhatAreYouLosing />
+
+        {/* ── 2c. WHY PEOPLE FAIL: the six things nobody warns them about ───── */}
+        <WhyPeopleFail />
+
+        {/* ── 3. THE TRANSFORMATION: before vs with Calqulate ───────────────── */}
+        <Transformation />
+
+        {/* ── 4. THE TRAJECTORY: today -> week 2 -> month 2 -> 6mo -> 1 year ── */}
+        <TrajectoryTimeline />
+
+        {/* ── 5. PRODUCT WALKTHROUGH: calculate -> track -> understand -> improve */}
+        <Glp1Journey />
 
         {/* ── PREMIUM TRACKERS BAND (luxe, top-of-funnel) ──────────────────── */}
         <PremiumTrackersBand />
@@ -718,7 +752,7 @@ export default async function HomePage() {
           <div className="container relative mx-auto px-3 sm:px-4 max-w-6xl">
             <div className="text-center mb-10 sm:mb-12 max-w-2xl mx-auto">
               <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-gold-light to-gold px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-gold-ink">
-                ✦ Mission control for your body
+                ✦ Your daily health operating system
               </span>
               <h2 id="advanced-platform" className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">More than a tracker &mdash; a model of your future self</h2>
               <p className="mt-3 text-sm sm:text-base text-gray-400">
@@ -750,13 +784,16 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── FREE vs PREMIUM (before founder vision — keeps the conversion flow) ── */}
+        {/* ── FREE IS TODAY, PREMIUM IS THE FUTURE (the story, then the table) ── */}
         {!paid && (
-          <section className="bg-white py-12 sm:py-16">
-            <div className="container mx-auto px-3 sm:px-4">
-              <FreeVsPremium showCta />
-            </div>
-          </section>
+          <>
+            <FreeThenPremium loggedIn={loggedIn} />
+            <section className="bg-white py-12 sm:py-16">
+              <div className="container mx-auto px-3 sm:px-4">
+                <FreeVsPremium showCta />
+              </div>
+            </section>
+          </>
         )}
 
         {/* ── SECTION E: PRICING ───────────────────────────────────────────── */}
@@ -785,37 +822,6 @@ export default async function HomePage() {
             <p className="mt-8 text-center text-xs text-gray-400">
               Educational decision-support - not medical advice. Cancel anytime.
             </p>
-          </div>
-        </section>
-
-        {/* ── UNIQUE VALUE PROPOSITION ──────────────────────────────────────── */}
-        <section className="py-12 sm:py-16 bg-white border-b border-gray-100">
-          <div className="container mx-auto px-3 sm:px-4">
-            <div className="max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 text-center">
-                <div className="p-6">
-                  <div className="text-4xl font-extrabold text-emerald-600 mb-1">50+</div>
-                  <div className="text-sm font-semibold text-gray-700 mb-2">Health Calculators</div>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    From BMI to cardiovascular risk, find every health metric covered in one place.
-                  </p>
-                </div>
-                <div className="p-6 border-x border-gray-100">
-                  <div className="text-4xl font-extrabold text-emerald-600 mb-1">100%</div>
-                  <div className="text-sm font-semibold text-gray-700 mb-2">Actionable Insights</div>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Receive a clear explanation of your results alongside specific, practical recommendations.
-                  </p>
-                </div>
-                <div className="p-6">
-                  <div className="text-4xl font-extrabold text-emerald-600 mb-1">0</div>
-                  <div className="text-sm font-semibold text-gray-700 mb-2">Data Stored or Sold</div>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Your health is private. Everything runs in your browser. Nothing leaves your device.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -1087,7 +1093,7 @@ export default async function HomePage() {
               <div className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-emerald-400/15 blur-3xl" />
               <Image
                 src="/why-calqulate.webp"
-                alt="Why Calqulate — clinically grounded formulas, built for real people, 100% private, trusted by thousands, instant results, and track change over time"
+                alt="Why Calqulate: clinically grounded formulas, built for real people, 100% private, trusted by thousands, instant results, and track change over time"
                 width={1536}
                 height={1024}
                 sizes="(max-width: 1024px) 100vw, 1024px"
@@ -1155,6 +1161,9 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* ── 8. TRUST: why we built this, in our own words ─────────────────── */}
+        <FoundersStory />
+
         {/* ── SOCIAL PROOF: testimonials, stats, success stories ───────────── */}
         <SocialProof />
 
@@ -1199,75 +1208,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── SECTION I: FINAL CTA (service-led, dual path) ────────────────── */}
-        <section className="relative overflow-hidden py-12 sm:py-16" style={{ background: LUXE_BG }}>
-          {/* Angled diagonal bands (Razorpay-style, emerald palette) */}
-          <svg
-            className="pointer-events-none absolute inset-0 h-full w-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            {/* top steep bands */}
-            <polygon points="0,0 100,0 100,4 0,48" fill="rgba(16,185,129,0.12)" />
-            <polygon points="0,48 100,4 100,14 0,66" fill="rgba(16,185,129,0.07)" />
-            {/* gold accent edge on the top diagonal */}
-            <polyline points="0,48 100,4" fill="none" stroke="rgba(245,158,11,0.55)" strokeWidth="0.4" vectorEffect="non-scaling-stroke" />
-            {/* bottom steep bands */}
-            <polygon points="0,100 100,100 100,58 0,96" fill="rgba(6,95,70,0.38)" />
-            <polygon points="0,96 100,58 100,70 0,100" fill="rgba(16,185,129,0.09)" />
-            {/* gold accent edge on the bottom diagonal */}
-            <polyline points="0,96 100,58" fill="none" stroke="rgba(245,158,11,0.45)" strokeWidth="0.4" vectorEffect="non-scaling-stroke" />
-          </svg>
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(245,158,11,0.55), transparent)" }} />
-          <div className="container relative mx-auto px-3 sm:px-4 text-center">
-            <h2 id="final-cta" className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-              Watch your disease risk drop, not just the scale.
-            </h2>
-            <p className="text-white/70 text-base sm:text-lg mb-6 sm:mb-8 max-w-xl mx-auto">
-              Know your score, track your trend, lower your risk. Start free &mdash; upgrade only when you
-              want to save and reverse it.
-            </p>
-            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-              {paid ? (
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-gold-light to-gold hover:opacity-95 text-gold-ink font-bold px-8 rounded-xl shadow-[0_8px_20px_rgba(245,158,11,.35)]"
-                  asChild
-                >
-                  <Link href="/dashboard">
-                    Go to dashboard
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              ) : (
-                <>
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-gold-light to-gold hover:opacity-95 text-gold-ink font-bold px-8 rounded-xl shadow-[0_8px_20px_rgba(245,158,11,.35)]"
-                    asChild
-                  >
-                    <Link href={loggedIn ? "/dashboard" : "/signup"}>
-                      Start free
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white px-8 rounded-xl font-semibold"
-                    asChild
-                  >
-                    <Link href="/pricing">See Premium plans</Link>
-                  </Button>
-                </>
-              )}
-            </div>
-            <p className="mt-8 text-xs text-white/45">
-              Educational decision-support - not medical, legal, or financial advice.
-            </p>
-          </div>
-        </section>
+        {/* ── 9. THE CLOSER: an emotional promise, not a feature list ────────── */}
+        <FinalPromise loggedIn={loggedIn} />
 
       </main>
 

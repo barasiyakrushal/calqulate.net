@@ -366,8 +366,8 @@ export default async function Glp1TrackerPage() {
                   : "Make sure the weight you lose is fat, not muscle."}
               </h2>
               <p className="mt-1 text-sm text-gray-600">
-                Premium unlocks fat vs. muscle tracking, your correlation engine, dosing sweet-spot, adaptive titration
-                and a doctor-ready report, the features that keep the weight off after you taper.
+                Premium shows you whether you are losing fat or muscle, why your progress slowed, when you are ready to
+                raise your dose, and gives you a report your doctor can actually use.
               </p>
             </div>
             <Link
@@ -384,7 +384,7 @@ export default async function Glp1TrackerPage() {
       {/* Personal correlation engine (Premium) — which of your habits move your weekly loss */}
       {correlations.confidence !== "insufficient" && (
         <div id="drivers" className="scroll-mt-24">
-          <PremiumGate locked={!paid} feature="Correlation engine" description="Which of your own habits — sleep, protein, injection site — actually move your weekly loss." blur>
+          <PremiumGate locked={!paid} feature="Find out why your progress slowed" description="Which of your own habits, from sleep to protein to injection site, actually move your weekly loss." blur>
             <CorrelationInsights result={correlations} />
           </PremiumGate>
         </div>
@@ -408,7 +408,7 @@ export default async function Glp1TrackerPage() {
           nextDoseLabel={nextDoseLabel}
           pushEnabled={pushEnabled}
         />
-        <PremiumGate locked={!paid} feature="Refill tracker" description="Supply projection, copay and prior-auth tracking.">
+        <PremiumGate locked={!paid} feature="Never run out of medication" description="Supply projection, copay and prior-authorisation tracking.">
           <RefillTracker
             medication={activeMed ? { id: activeMed.id, name: activeMedName!, doseIntervalHours: activeMed.doseIntervalHours } : null}
             latestRefill={latestRefill ? { filledDate: latestRefill.filledDate, dosesSupplied: latestRefill.dosesSupplied, pharmacy: latestRefill.pharmacy, copayUsd: latestRefill.copayUsd, priorAuthStatus: latestRefill.priorAuthStatus } : null}
@@ -451,7 +451,7 @@ export default async function Glp1TrackerPage() {
       {/* Dosing sweet spot (Premium) — most loss for the least side effects, from your data */}
       {showSweetSpot && (
         <div id="sweet-spot" className="scroll-mt-24">
-          <PremiumGate locked={!paid} feature="Dosing sweet-spot" description="The dose that gave you the most loss for the least side effects, from your own data." blur>
+          <PremiumGate locked={!paid} feature="Know when to raise your dose" description="The dose that gave you the most loss for the least side effects, from your own data." blur>
             <SweetSpotCard result={sweet} />
           </PremiumGate>
         </div>

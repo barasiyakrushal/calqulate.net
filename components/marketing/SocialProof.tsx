@@ -9,9 +9,9 @@ import { getReviews } from "@/lib/reviews";
  * guarantee) instead of fabricated quotes — never placeholder testimonials.
  */
 const TRUST = [
-  { icon: BadgeCheck, t: "Validated clinical models", d: "Pooled Cohort Equations, Framingham & FINDRISC — methodology shown on every result." },
+  { icon: BadgeCheck, t: "Validated clinical models", d: "Pooled Cohort Equations, Framingham & FINDRISC. Methodology shown on every result." },
   { icon: Lock, t: "Private by design", d: "Encrypted, backed up, and never sold. Export or delete anytime." },
-  { icon: ShieldCheck, t: "Your data is never lost", d: "Durable saves, version history and a restore flow — the #1 thing other apps get wrong." },
+  { icon: ShieldCheck, t: "Your data is never lost", d: "Durable saves, version history and a restore flow, the #1 thing other apps get wrong." },
   { icon: RefreshCw, t: "Cancel anytime", d: "One click, no retention maze. Switch monthly ↔ yearly whenever you like." },
 ];
 
@@ -38,7 +38,7 @@ export function SocialProof() {
           <>
             <div className="text-center mb-10">
               <span className="text-xs font-semibold uppercase tracking-widest text-emerald-600 mb-3 block">What members say</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Real people, real numbers moving</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">People who kept it off</h2>
             </div>
             <div className="grid gap-5 md:grid-cols-2">
               {reviews.map((t) => (
@@ -65,7 +65,7 @@ export function SocialProof() {
               <div className="relative aspect-[5/4] w-full overflow-hidden rounded-3xl ring-1 ring-emerald-100 shadow-xl bg-white">
                 <Image
                   src="/why-people-trust-calqulate.webp"
-                  alt="Why people trust Calqulate — validated models, private by design, durable data and cancel anytime"
+                  alt="Why people trust Calqulate: validated models, private by design, durable data and cancel anytime"
                   fill
                   sizes="(max-width: 1500px) 100vw, 50vw"
                   className="object-contain"

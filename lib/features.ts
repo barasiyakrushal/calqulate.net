@@ -41,54 +41,62 @@ export interface FeatureDef {
   note?: string;
 }
 
+/**
+ * Labels are written as OUTCOMES, not features.
+ *
+ * Patients do not buy a "correlation engine". They buy knowing why their weight
+ * loss stalled. Every label below answers "what does this do for me", because
+ * that is what someone on Ozempic is actually shopping for. The `key` is what
+ * gates the UI, so keys never change when copy does.
+ */
 export const FEATURES: FeatureDef[] = [
   // ── Overview ──
-  { key: "metabolicScore", label: "Metabolic health score", tier: "free", area: "Overview" },
-  { key: "longevityHero", label: "Longevity Hero (headline number)", tier: "free", area: "Overview" },
-  { key: "bodyAvatar", label: "3D Body Avatar", tier: "free", area: "Overview" },
-  { key: "trackerCards", label: "Tracker cards", tier: "free", area: "Overview" },
-  { key: "trendChart", label: "Trend chart (score / ASCVD / diabetes / heart-age)", tier: "premium", area: "Overview" },
-  { key: "trajectoryPanel", label: "Trajectory panel (8-week forecast)", tier: "premium", area: "Overview" },
-  { key: "nextLevers", label: "Next-levers simulator", tier: "premium", area: "Overview" },
-  { key: "addMeasurement", label: "Add-a-measurement form (full biometric, durable save)", tier: "premium", area: "Overview" },
-  { key: "downloadReport", label: "Download PDF report", tier: "premium", area: "Overview" },
+  { key: "metabolicScore", label: "See your whole metabolic health as one score", tier: "free", area: "Overview" },
+  { key: "longevityHero", label: "See how your habits are shaping your lifespan", tier: "free", area: "Overview" },
+  { key: "bodyAvatar", label: "Watch your body change in 3D", tier: "free", area: "Overview" },
+  { key: "trackerCards", label: "Keep your key health numbers in one place", tier: "free", area: "Overview" },
+  { key: "trendChart", label: "Watch your heart and diabetes risk fall over time", tier: "premium", area: "Overview" },
+  { key: "trajectoryPanel", label: "See when you will reach your goal weight", tier: "premium", area: "Overview" },
+  { key: "nextLevers", label: "Know the single change that will help you most", tier: "premium", area: "Overview" },
+  { key: "addMeasurement", label: "Save full check-ins and build a real history", tier: "premium", area: "Overview" },
+  { key: "downloadReport", label: "Download your full health report", tier: "premium", area: "Overview" },
 
   // ── GLP-1 Tracker ──
-  { key: "onboarding", label: "6-step onboarding wizard", tier: "free", area: "GLP-1 Tracker" },
-  { key: "coachBanner", label: "Contextual coach banner", tier: "free", area: "GLP-1 Tracker" },
-  { key: "pkCurve", label: "PK curve (simplified, “today’s %”)", tier: "free", area: "GLP-1 Tracker" },
-  { key: "benchmark", label: "Clinical-study benchmark (simple verdict)", tier: "free", area: "GLP-1 Tracker" },
-  { key: "journeyCoach", label: "Journey coach", tier: "free", area: "GLP-1 Tracker" },
-  { key: "scorecard", label: "Shareable scorecard", tier: "free", area: "GLP-1 Tracker" },
-  { key: "quickLog", label: "Quick log (dose, weight, food, symptoms)", tier: "free", area: "GLP-1 Tracker" },
-  { key: "trackMore", label: "Track more (body comp, labs, exercise)", tier: "free", area: "GLP-1 Tracker" },
-  { key: "foodEstimator", label: "Smart food estimator", tier: "free", area: "GLP-1 Tracker", note: "capped" },
-  { key: "doseReminders", label: "Dose reminders", tier: "free", area: "GLP-1 Tracker" },
-  { key: "reconstitution", label: "Reconstitution calculator", tier: "free", area: "GLP-1 Tracker" },
-  { key: "timeline", label: "Recent-entries timeline", tier: "free", area: "GLP-1 Tracker" },
-  { key: "durableSave", label: "Durable save + soft-delete/restore", tier: "free", area: "GLP-1 Tracker" },
-  { key: "todayForecast", label: "Today’s forecast (appetite/energy/side-effects)", tier: "premium", area: "GLP-1 Tracker" },
-  { key: "progressChart", label: "Progress & prediction chart (projection + plateau)", tier: "premium", area: "GLP-1 Tracker" },
-  { key: "correlationEngine", label: "“What moves your results” correlation engine", tier: "premium", area: "GLP-1 Tracker" },
-  { key: "sweetSpot", label: "Dosing sweet-spot", tier: "premium", area: "GLP-1 Tracker" },
-  { key: "doctorReport", label: "Doctor PDF report", tier: "premium", area: "GLP-1 Tracker" },
-  { key: "muscleTrend", label: "Fat-vs-muscle trend + muscle-loss flag", tier: "premium", area: "GLP-1 Tracker" },
-  { key: "multiCompound", label: "Multi-compound support (GLP-1/peptide/TRT)", tier: "premium", area: "GLP-1 Tracker" },
-  { key: "refillTracker", label: "Refill tracker (supply, copay, prior-auth)", tier: "premium", area: "GLP-1 Tracker" },
-  { key: "foodEstimatorUnlimited", label: "Unlimited smart food estimator", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "onboarding", label: "Get set up in under two minutes", tier: "free", area: "GLP-1 Tracker" },
+  { key: "coachBanner", label: "Be told what to do next, every time you open it", tier: "free", area: "GLP-1 Tracker" },
+  { key: "pkCurve", label: "See how much medication is still working today", tier: "free", area: "GLP-1 Tracker" },
+  { key: "benchmark", label: "Know if you are on track against the clinical trials", tier: "free", area: "GLP-1 Tracker" },
+  { key: "journeyCoach", label: "See how far you have actually come", tier: "free", area: "GLP-1 Tracker" },
+  { key: "scorecard", label: "Share a progress scorecard you are proud of", tier: "free", area: "GLP-1 Tracker" },
+  { key: "quickLog", label: "Log a dose, weight, meal or symptom in seconds", tier: "free", area: "GLP-1 Tracker" },
+  { key: "trackMore", label: "Track body composition, labs and workouts too", tier: "free", area: "GLP-1 Tracker" },
+  { key: "foodEstimator", label: "Find out how much protein is really in your meal", tier: "free", area: "GLP-1 Tracker", note: "capped" },
+  { key: "doseReminders", label: "Never miss an injection", tier: "free", area: "GLP-1 Tracker" },
+  { key: "reconstitution", label: "Draw the right dose from a compounded vial", tier: "free", area: "GLP-1 Tracker" },
+  { key: "timeline", label: "See everything you have logged, in one timeline", tier: "free", area: "GLP-1 Tracker" },
+  { key: "durableSave", label: "Never lose an entry, and undo any delete", tier: "free", area: "GLP-1 Tracker" },
+  { key: "todayForecast", label: "Know how today will feel before it happens", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "progressChart", label: "Watch your progress week by week, and see plateaus coming", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "correlationEngine", label: "Find out exactly why your weight loss slowed", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "sweetSpot", label: "Know when you are ready, or not ready, to increase your dose", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "doctorReport", label: "Bring organized progress reports to your appointments", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "muscleTrend", label: "Make sure you are losing fat, not the muscle that keeps weight off", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "multiCompound", label: "Track more than one medication at the same time", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "refillTracker", label: "Never run out of medication", tier: "premium", area: "GLP-1 Tracker" },
+  { key: "foodEstimatorUnlimited", label: "Check the protein in as many meals as you like", tier: "premium", area: "GLP-1 Tracker" },
 
   // ── Future You / Autopilot ──
-  { key: "trajectorySimulator", label: "Trajectory simulator (optimistic/realistic/pessimistic)", tier: "premium", area: "Future You" },
-  { key: "autopilot", label: "Adaptive protocol builder (Autopilot)", tier: "premium", area: "Autopilot" },
+  { key: "trajectorySimulator", label: "See your best case, likely case and worst case", tier: "premium", area: "Future You" },
+  { key: "autopilot", label: "Get a plan that adapts as your body changes", tier: "premium", area: "Autopilot" },
 
   // ── History / Settings / Help ──
-  { key: "history90", label: "Measurement history (rolling 90 days)", tier: "free", area: "History" },
-  { key: "historyUnlimited", label: "Unlimited measurement history", tier: "premium", area: "History" },
-  { key: "helpGuide", label: "In-app help guide", tier: "free", area: "Settings" },
-  { key: "settings", label: "Settings panel", tier: "free", area: "Settings" },
-  { key: "notificationSettings", label: "Notification settings", tier: "free", area: "Settings" },
-  { key: "billing", label: "Subscription status / manage billing", tier: "free", area: "Settings" },
-  { key: "privacyExport", label: "Privacy & data export", tier: "free", area: "Settings" },
+  { key: "history90", label: "Look back over your last 90 days", tier: "free", area: "History" },
+  { key: "historyUnlimited", label: "Keep your complete treatment history forever", tier: "premium", area: "History" },
+  { key: "helpGuide", label: "Get help without leaving the app", tier: "free", area: "Settings" },
+  { key: "settings", label: "Stay in control of your account", tier: "free", area: "Settings" },
+  { key: "notificationSettings", label: "Choose how and when we remind you", tier: "free", area: "Settings" },
+  { key: "billing", label: "Manage your subscription in one click", tier: "free", area: "Settings" },
+  { key: "privacyExport", label: "Export or permanently delete your data, any time", tier: "free", area: "Settings" },
 ];
 
 const BY_KEY: Record<FeatureKey, FeatureDef> = Object.fromEntries(FEATURES.map((f) => [f.key, f])) as Record<FeatureKey, FeatureDef>;

@@ -15,10 +15,10 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://calqulate.net";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Stop GLP-1 Muscle Loss: Track Metabolism & Look Younger",
+  title: "Lose Weight You Can Actually Keep Off | Calqulate Vitals GLP-1 Tracker",
   description:
-    "Stop GLP-1 muscle loss. The only app to track your dosage, Metabolism Score, and Heart Age. Burn pure fat, protect muscle, and look 15 years younger.",
-  keywords: "calqulate.net, Glp-1 tracker",
+    "Most GLP-1 users watch the scale. Calqulate watches what the scale cannot. Track every injection, know how much of your loss is fat and how much is muscle, and see a plateau coming before it happens. Built for Ozempic, Wegovy, Mounjaro and Zepbound. Free calculators, forever.",
+  keywords: "glp-1 tracker, ozempic tracker, wegovy tracker, mounjaro tracker, zepbound, muscle loss on glp-1, semaglutide dose calculator, calqulate.net",
   generator: "Calqulate",
   robots: "index, follow",
   applicationName: "Calqulate",
@@ -31,24 +31,26 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "Calqulate - Professional Calculators",
-    description: "Free online calculators for health improvement",
+    title: "Lose weight you can actually keep off",
+    description:
+      "Most GLP-1 users watch the scale. Calqulate watches what the scale cannot. Lose fat. Keep muscle. Stay healthy.",
     type: "website",
-    siteName: "Calqulate",
+    siteName: "Calqulate Vitals",
     url: SITE_URL,
     images: [
       {
         url: "/og-image.webp",
         width: 1200,
         height: 630,
-        alt: "Calqulate — professional health calculators",
+        alt: "Calqulate Vitals, the daily companion for people on GLP-1 medications",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Calqulate - Professional Calculators",
-    description: "Free online calculators for health improvement",
+    title: "Lose weight you can actually keep off",
+    description:
+      "Most GLP-1 users watch the scale. Calqulate watches what the scale cannot. Lose fat. Keep muscle. Stay healthy.",
     images: ["/og-image.webp"],
   },
   alternates: {
