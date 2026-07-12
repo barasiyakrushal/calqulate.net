@@ -238,7 +238,7 @@ export default async function Glp1TrackerPage() {
   if (!activeMed) {
     return (
       <div className="py-2">
-        <Onboarding />
+        <Onboarding paid={paid} />
       </div>
     );
   }

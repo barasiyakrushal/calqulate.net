@@ -37,6 +37,14 @@ export async function updateSession(request: NextRequest) {
   const { data: { session } } = await supabase.auth.getSession();
   const path = request.nextUrl.pathname;
 
+  // Auth pages — redirect already-logged-in users to the dashboard
+  const authPages = ["/login", "/signup", "/forgot-password", "/reset-password"];
+  if (user && authPages.some((p) => path === p)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard/glp1";
+    return applySecurityHeaders(NextResponse.redirect(url));
+  }
+
   // Require sign-in for gated areas.
   if (!user && (path.startsWith("/dashboard") || path.startsWith("/admin"))) {
     const url = request.nextUrl.clone();

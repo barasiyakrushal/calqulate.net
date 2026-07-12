@@ -32,7 +32,7 @@ const STEPS = ["Profile", "Medication", "Lifestyle", "Prediction", "Weekly plan"
  * stores the goal in localStorage. All numbers are ESTIMATES for guidance — the
  * disclaimer makes that explicit, and dose info always defers to the prescriber.
  */
-export function Onboarding() {
+export function Onboarding({ paid = false }: { paid?: boolean }) {
   const [skipped, setSkipped] = useState(false);
 
   // ── form state ──
@@ -230,9 +230,9 @@ export function Onboarding() {
           </Step>
         )}
 
-        {/* ── Step 6: Commit — soft paywall framed around their goal ── */}
+        {/* ── Step 6: Commit — soft paywall framed around their goal (free users) ── */}
         {step === 5 && (
-          <Step title="You're all set" sub="Your plan is ready. Start free, or unlock the features that protect your results.">
+          <Step title="You're all set" sub={paid ? "Your plan is ready. Head to your dashboard." : "Your plan is ready. Start free, or unlock the features that protect your results."}>
             <div className="rounded-2xl bg-emerald-50 p-5 text-center">
               <Trophy className="mx-auto h-8 w-8 text-emerald-600" />
               <p className="mt-2 text-sm text-gray-700">
@@ -241,25 +241,26 @@ export function Onboarding() {
               </p>
             </div>
 
-            {/* Premium pitch tied to the goal they just told us */}
-            <div className="mt-4 rounded-2xl border-2 border-gold/40 bg-gradient-to-br from-amber-50 to-white p-5">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-gold" />
-                <span className="text-sm font-bold uppercase tracking-wide text-gold-ink">Premium, to hit {targetLb} lb the right way</span>
+            {!paid && (
+              <div className="mt-4 rounded-2xl border-2 border-gold/40 bg-gradient-to-br from-amber-50 to-white p-5">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-gold" />
+                  <span className="text-sm font-bold uppercase tracking-wide text-gold-ink">Premium, to hit {targetLb} lb the right way</span>
+                </div>
+                <ul className="mt-3 space-y-2">
+                  {[
+                    `Fat vs. muscle tracking, so your ${round(lostLb, 0) || ""} lb comes off as fat`,
+                    "Adaptive titration that holds when side effects spike",
+                    "Find out why your progress slowed, and when to raise your dose",
+                    "Doctor-ready PDF report and rebound-risk view",
+                  ].map((b) => (
+                    <li key={b} className="flex items-start gap-2 text-sm text-gray-700">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /> {b}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="mt-3 space-y-2">
-                {[
-                  `Fat vs. muscle tracking, so your ${round(lostLb, 0) || ""} lb comes off as fat`,
-                  "Adaptive titration that holds when side effects spike",
-                  "Find out why your progress slowed, and when to raise your dose",
-                  "Doctor-ready PDF report and rebound-risk view",
-                ].map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-sm text-gray-700">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /> {b}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            )}
             {error && <p className="mt-3 text-center text-sm text-red-600">{error}</p>}
           </Step>
         )}
@@ -279,11 +280,13 @@ export function Onboarding() {
           ) : (
             <div className="flex items-center gap-2">
               <Button variant="ghost" onClick={() => finish("tracker")} disabled={saving} className="text-gray-600 hover:text-gray-900">
-                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Start free
+                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} {paid ? "Go to dashboard" : "Start free"}
               </Button>
-              <Button onClick={() => finish("premium")} disabled={saving} className="bg-gradient-to-r from-gold-light to-gold text-gold-ink hover:opacity-90">
-                <Sparkles className="mr-2 h-4 w-4" /> Go Premium
-              </Button>
+              {!paid && (
+                <Button onClick={() => finish("premium")} disabled={saving} className="bg-gradient-to-r from-gold-light to-gold text-gold-ink hover:opacity-90">
+                  <Sparkles className="mr-2 h-4 w-4" /> Go Premium
+                </Button>
+              )}
             </div>
           )}
         </div>
