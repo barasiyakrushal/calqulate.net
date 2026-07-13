@@ -132,6 +132,46 @@
   --color-curve: #0ea5e9;
   --color-heart: #fb7185;
   --color-metab: #8b5cf6;
+
+  /* ── Calqulate Vitals palette (Semaglutide treatment assistant) ─────────── */
+  --color-vital: #12b76a;
+  --color-vital-50: #e7f8f0;
+  --color-vital-100: #c8f0dd;
+  --color-vital-200: #9ee2c3;
+  --color-vital-500: #12b76a;
+  --color-vital-600: #0e9355;
+  --color-vital-700: #0b7a46;
+  --color-vital-800: #066e43;
+
+  --color-ink-0: #ffffff;
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #e2e8f0;
+  --color-ink-200: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1e293b;
+  --color-ink-900: #0f172a;
+
+  --color-gold-50: #fffbeb;
+  --color-gold-600: #d97706;
+  --color-gold-700: #b45309;
+  --color-gold-800: #92400e;
+
+  --radius-card: 1rem;
+  --blur-glass: 12px;
+  --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 12px rgb(15 23 42 / 0.06);
+  --shadow-lift: 0 4px 10px rgb(15 23 42 / 0.06), 0 16px 40px rgb(15 23 42 / 0.1);
+}
+
+/* Frosted card surface used by the Semaglutide treatment assistant */
+.glass-card {
+  border: 1px solid var(--color-ink-100);
+  border-radius: var(--radius-card);
+  background-color: rgb(255 255 255 / 0.75);
+  backdrop-filter: blur(var(--blur-glass));
+  box-shadow: var(--shadow-soft);
 }
 
 /* Gold spotlight sweep for highlighted premium features */
