@@ -17,6 +17,18 @@ const productLinks = [
   { name: "Pricing", href: "/pricing", desc: "One simple plan, everything included" },
 ]
 
+// ─── GLP-1 Companion (every tool, in the order the questions come up) ────────
+
+const glp1Links = [
+  { name: "Semaglutide Dose Calculator", href: "/health/semaglutide-dose-calculator", desc: "Am I on the right dose?" },
+  { name: "Tirzepatide Dose Calculator", href: "/health/tirzepatide-dose-calculator", desc: "Mounjaro & Zepbound schedules" },
+  { name: "GLP-1 Half-Life Calculator", href: "/health/glp-1-half-life-calculator", desc: "Is my medication still active?" },
+  { name: "GLP-1 Unit Converter", href: "/health/glp-1-unit-converter", desc: "Am I measuring it correctly?" },
+  { name: "GLP-1 Injection Day Calculator", href: "/health/glp-1-injection-day-calculator", desc: "When should I inject next?" },
+  { name: "GLP-1 Body Composition Tracker", href: "/health/glp-1-dose-calculator", desc: "Am I losing fat or muscle?" },
+  { name: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker", desc: "How is my treatment working over time?" },
+]
+
 // ─── Calculator categories (free snapshot tools that feed the service) ───────
 
 const categories = [
@@ -163,6 +175,29 @@ function ProductMenu({ onClose }: { onClose: () => void }) {
   )
 }
 
+// ─── GLP-1 dropdown ───────────────────────────────────────────────────────────
+
+function Glp1Menu({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="absolute left-0 top-full z-50 mt-2 w-[22rem] overflow-hidden rounded-xl border border-gray-100 bg-white py-2 shadow-2xl">
+      <div className="flex items-center gap-2 px-4 pb-1.5 pt-2">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600">GLP-1 Companion</span>
+      </div>
+      {glp1Links.map((l) => (
+        <Link
+          key={l.href}
+          href={l.href}
+          onClick={onClose}
+          className="group flex flex-col px-4 py-2 transition-colors hover:bg-emerald-50"
+        >
+          <span className="text-sm font-semibold text-gray-800 group-hover:text-emerald-700">{l.name}</span>
+          <span className="text-xs text-gray-400">{l.desc}</span>
+        </Link>
+      ))}
+    </div>
+  )
+}
+
 // ─── Calculators mega menu (all 8 categories) ────────────────────────────────
 
 function CalculatorsMenu({ onClose }: { onClose: () => void }) {
@@ -251,10 +286,11 @@ function MobileCategory({ category, onLinkClick }: { category: Category; onLinkC
 // ─── Header ──────────────────────────────────────────────────────────────────
 
 export function Header() {
-  const [activeMenu, setActiveMenu] = useState<"product" | "calculators" | null>(null)
+  const [activeMenu, setActiveMenu] = useState<"product" | "calculators" | "glp1" | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [mobileProductOpen, setMobileProductOpen] = useState(true)
+  const [mobileGlp1Open, setMobileGlp1Open] = useState(false)
   const [userEmail, setUserEmail] = useState<string | null>(null)
   const [authReady, setAuthReady] = useState(false)
   const [avatarOpen, setAvatarOpen] = useState(false)
@@ -363,6 +399,20 @@ export function Header() {
               <ChevronDown className={`h-3.5 w-3.5 transition-transform ${activeMenu === "calculators" ? "rotate-180 text-emerald-600" : "text-gray-400"}`} />
             </button>
 
+            {/* GLP-1 */}
+            <div className="relative">
+              <button
+                onMouseEnter={() => { cancelClose(); setActiveMenu("glp1") }}
+                onClick={() => setActiveMenu(activeMenu === "glp1" ? null : "glp1")}
+                className={`flex items-center gap-1 px-3.5 py-2 text-[13.5px] font-medium rounded-md whitespace-nowrap transition-colors
+                  ${activeMenu === "glp1" ? "text-emerald-700 bg-emerald-50" : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"}`}
+              >
+                GLP-1
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${activeMenu === "glp1" ? "rotate-180 text-emerald-600" : "text-gray-400"}`} />
+              </button>
+              {activeMenu === "glp1" && <Glp1Menu onClose={closeAll} />}
+            </div>
+
             <Link href="/how-it-works" onClick={closeAll} className="px-3.5 py-2 text-[13.5px] font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
               How it works
             </Link>
@@ -371,9 +421,6 @@ export function Header() {
             </Link>
             <Link href="/blog" onClick={closeAll} className="px-3.5 py-2 text-[13.5px] font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
               Blog
-            </Link>
-            <Link href="/gallery" onClick={closeAll} className="px-3.5 py-2 text-[13.5px] font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
-              Gallery
             </Link>
             <Link href="/about-us" onClick={closeAll} className="px-3.5 py-2 text-[13.5px] font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
               About
@@ -501,6 +548,32 @@ export function Header() {
               )}
             </div>
 
+            {/* GLP-1 Companion */}
+            <div className="border-b border-gray-100">
+              <button
+                onClick={() => setMobileGlp1Open((v) => !v)}
+                className="flex min-h-[44px] w-full items-center justify-between px-4 py-3.5 text-left sm:py-3"
+              >
+                <span className="text-sm font-semibold text-emerald-700">GLP-1</span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${mobileGlp1Open ? "rotate-180 text-emerald-600" : "text-gray-400"}`} />
+              </button>
+              {mobileGlp1Open && (
+                <div className="bg-emerald-50/40 pb-1">
+                  {glp1Links.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      onClick={closeAll}
+                      className="flex min-h-[44px] items-center gap-2.5 px-6 py-2.5 text-sm text-gray-700 hover:text-emerald-700 sm:py-2"
+                    >
+                      <span className="h-1 w-1 flex-shrink-0 rounded-full bg-emerald-500" />
+                      {l.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Calculator categories */}
             <div className="px-4 pt-3 pb-1">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Free snapshot tools</span>
@@ -513,7 +586,6 @@ export function Header() {
               <Link href="/how-it-works" onClick={closeAll} className="text-sm font-medium text-gray-600 hover:text-emerald-700 min-h-[44px] flex items-center">How it works</Link>
               <Link href="/pricing" onClick={closeAll} className="text-sm font-medium text-gray-600 hover:text-emerald-700 min-h-[44px] flex items-center">Pricing</Link>
               <Link href="/blog" onClick={closeAll} className="text-sm font-medium text-gray-600 hover:text-emerald-700 min-h-[44px] flex items-center">Blog</Link>
-              <Link href="/gallery" onClick={closeAll} className="text-sm font-medium text-gray-600 hover:text-emerald-700 min-h-[44px] flex items-center">Gallery</Link>
               <Link href="/about-us" onClick={closeAll} className="text-sm font-medium text-gray-600 hover:text-emerald-700 min-h-[44px] flex items-center">About</Link>
             </div>
           </div>

@@ -1,16 +1,25 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Mail, ShieldCheck, Lock } from "lucide-react"
-import { STANDALONE_QUESTIONS } from "@/app/answers/questions-data"
+import { Mail, ShieldCheck, Lock, ArrowRight } from "lucide-react"
 import { PaymentBadges } from "./payment-badges"
 
 const linkCls = "block text-white/55 hover:text-white transition-colors py-1.5 sm:py-1"
+
+/** The GLP-1 tools, in the order a user actually meets the questions they answer. */
+const GLP1_COMPANION = [
+  { href: "/health/semaglutide-dose-calculator", label: "Semaglutide Dose Calculator" },
+  { href: "/health/tirzepatide-dose-calculator", label: "Tirzepatide Dose Calculator" },
+  { href: "/health/glp-1-half-life-calculator", label: "GLP-1 Half-Life Calculator" },
+  { href: "/health/glp-1-unit-converter", label: "GLP-1 Unit Converter" },
+  { href: "/health/glp-1-injection-day-calculator", label: "GLP-1 Injection Day Calculator" },
+  { href: "/health/glp-1-dose-calculator", label: "GLP-1 Body Composition Tracker" },
+]
 
 export function Footer() {
   return (
     <footer className="border-t border-white/10 bg-ink text-white">
       <div className="container mx-auto px-3 sm:px-4 py-10 sm:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {/* Brand */}
           <div className="space-y-4 sm:col-span-2 lg:col-span-1">
             <Link href="/" aria-label="Calqulate.NET Home" className="inline-flex">
@@ -53,6 +62,18 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* GLP-1 Companion */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-white">GLP-1 Companion</h3>
+            <ul className="space-y-1 text-sm">
+              {GLP1_COMPANION.map((tool) => (
+                <li key={tool.href}>
+                  <Link href={tool.href} className={linkCls}>{tool.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Popular Calculators */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-white">Popular Calculators</h3>
@@ -70,6 +91,7 @@ export function Footer() {
             <ul className="space-y-1 text-sm">
               <li><Link href="/about-us" className={linkCls}>About Us</Link></li>
               <li><Link href="/how-it-works" className={linkCls}>How It Works</Link></li>
+              <li><Link href="/gallery" className={linkCls}>Gallery</Link></li>
               <li><Link href="/answers" className={linkCls}>Health Questions</Link></li>
               <li><Link href="/contact-us" className={linkCls}>Contact Us</Link></li>
               <li><Link href="/privacy-policy" className={linkCls}>Privacy Policy</Link></li>
@@ -91,19 +113,23 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Popular health questions (high-intent answer pages) */}
+        {/* One high-intent question, then straight through to every answer */}
         <div className="mt-8 border-t border-white/10 pt-8">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-white">Popular health questions</h3>
-            <Link href="/answers" className="text-xs font-medium text-gold-light hover:underline">View all answers →</Link>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Link
+              href="/answers/best-glp-1-for-weight-loss"
+              className="text-sm font-medium text-white/80 transition-colors hover:text-white hover:underline"
+            >
+              What is the best GLP-1 for weight loss?
+            </Link>
+            <Link
+              href="/answers"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-gold-light hover:underline"
+            >
+              View all answers
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
           </div>
-          <ul className="grid grid-cols-1 gap-x-6 gap-y-1 text-sm sm:grid-cols-2 lg:grid-cols-3">
-            {STANDALONE_QUESTIONS.map((q) => (
-              <li key={q.slug}>
-                <Link href={`/answers/${q.slug}`} className={linkCls}>{q.q}</Link>
-              </li>
-            ))}
-          </ul>
         </div>
 
         {/* Payment methods */}
