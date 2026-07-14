@@ -24,24 +24,38 @@ import {
   TrendingDown,
   ArrowRight,
   ArrowLeft,
+  ChevronRight,
   RotateCcw,
   Syringe,
   Salad,
   Stethoscope,
+  HelpCircle,
   Target,
   ShieldCheck,
   Sparkles,
   Lock,
   Gauge,
   Flag,
+  Zap,
   AlertTriangle,
   CheckCircle2,
   Trophy,
 } from "lucide-react"
 
 // --- Answer model -------------------------------------------------------------
-type Context = "glp1" | "diet" | "surgery"
+type Context = "glp1" | "diet" | "surgery" | "other"
 type Units = "lbs" | "kg"
+
+/** Roughly how long a question takes, used for the "about N sec left" promise. */
+const SECONDS_PER_STEP = 4
+
+/** What the user gets at the end. Shown up front so they know why they are answering. */
+const PROMISES = [
+  "Percent of body weight lost",
+  "Your average weekly pace",
+  "Healthy, or too fast",
+  "Muscle-loss risk",
+]
 
 interface Answers {
   context?: Context
@@ -58,7 +72,7 @@ type ChoiceStep = {
   key: keyof Answers
   title: string
   subtitle?: string
-  options: { value: string; label: string; hint?: string; icon?: React.ReactNode }[]
+  options: { value: string; label: string; hint?: string; icon?: React.ReactNode; badge?: string }[]
 }
 type NumberStep = {
   kind: "number"
@@ -78,12 +92,19 @@ const STEPS: Step[] = [
   {
     kind: "choice",
     key: "context",
-    title: "What is driving your weight loss?",
+    title: "What caused your weight loss?",
     subtitle: "This changes how we read your numbers.",
     options: [
-      { value: "glp1", label: "A GLP-1 medication", hint: "Ozempic, Wegovy, Mounjaro, Zepbound", icon: <Syringe className="h-5 w-5" /> },
+      {
+        value: "glp1",
+        label: "GLP-1 medication",
+        hint: "Ozempic · Wegovy · Mounjaro · Zepbound",
+        icon: <Syringe className="h-5 w-5" />,
+        badge: "Most popular",
+      },
       { value: "diet", label: "Diet and exercise", hint: "Food, training, lifestyle", icon: <Salad className="h-5 w-5" /> },
-      { value: "surgery", label: "Surgery or other", hint: "Post-op or a medical reason", icon: <Stethoscope className="h-5 w-5" /> },
+      { value: "surgery", label: "Surgery", hint: "Post-op weight loss", icon: <Stethoscope className="h-5 w-5" /> },
+      { value: "other", label: "Other", hint: "A medical reason, or not sure", icon: <HelpCircle className="h-5 w-5" /> },
     ],
   },
   {
@@ -296,66 +317,117 @@ export default function WeightLossPercentageWizard() {
     return <ResultView answers={answers} result={result} onRestart={restart} onBack={goBack} />
   }
 
-  const progress = Math.round(((step + (done ? 1 : 0)) / total) * 100)
   const suffix =
     current.kind === "number" ? ((current as NumberStep).suffixUnits ? units : (current as NumberStep).suffix) : undefined
+
+  const secondsLeft = Math.max(5, (total - step) * SECONDS_PER_STEP)
 
   return (
     <div className="mx-auto w-full max-w-xl">
       <div className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_10px_40px_-12px_rgba(6,110,67,0.18)]">
-        {/* Progress */}
-        <div className="flex items-center gap-3 border-b border-line px-5 py-4 sm:px-7">
-          <span className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-800">
-            <TrendingDown className="h-4 w-4" />
-          </span>
-          <div className="flex-1">
-            <div className="flex items-center justify-between text-xs font-semibold text-faint">
-              <span>Weight loss check</span>
-              <span>
-                {step + 1} of {total}
-              </span>
-            </div>
-            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-line">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-brand to-brand-600 transition-all duration-500 ease-out"
-                style={{ width: `${progress}%` }}
-              />
+        {/* Calculator bar: says what this is, on every step */}
+        <div className="border-b border-line bg-gradient-to-r from-brand-50 to-white px-5 py-4 sm:px-7">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-brand text-white">
+              <TrendingDown className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-extrabold text-ink sm:text-base">Weight Loss Percentage Calculator</p>
+              <p className="mt-0.5 flex items-center gap-1.5 text-[11px] font-semibold text-brand-800">
+                <Zap className="h-3 w-3" /> Instant result · Free · No sign-up
+              </p>
             </div>
           </div>
+
+          {/* Segmented progress: you can see how short this is */}
+          <div className="mt-3 flex items-center gap-2">
+            <div className="flex flex-1 gap-1">
+              {STEPS.map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
+                    i < step ? "bg-brand" : i === step ? "bg-brand/60" : "bg-line"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="flex-shrink-0 text-[11px] font-bold text-faint">
+              Step {step + 1} of {total}
+            </span>
+          </div>
+          <p className="mt-1.5 text-[11px] font-medium text-faint">About {secondsLeft} seconds left</p>
         </div>
 
         {/* Question */}
-        <div className="px-5 py-7 sm:px-7 sm:py-9">
+        <div className="px-5 py-6 sm:px-7 sm:py-8">
+          {/* Step 1 doubles as the launch screen: what you get, and a nudge to tap */}
+          {step === 0 && (
+            <div className="mb-6">
+              <p className="text-sm font-semibold text-copy">
+                Answer {total} quick questions and you will see:
+              </p>
+              <ul className="mt-3 grid grid-cols-1 gap-x-4 gap-y-1.5 sm:grid-cols-2">
+                {PROMISES.map((p) => (
+                  <li key={p} className="flex items-center gap-1.5 text-sm text-copy">
+                    <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-brand" />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <h2 className="text-xl font-bold leading-snug text-ink sm:text-2xl">{current.title}</h2>
           {current.subtitle && <p className="mt-2 text-sm text-copy sm:text-base">{current.subtitle}</p>}
 
           {current.kind === "choice" ? (
-            <div className="mt-6 space-y-3">
-              {current.options.map((opt) => {
-                const selected = answers[current.key] === opt.value
-                return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => pick(opt.value)}
-                    className={`group flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all active:scale-[0.99] ${
-                      selected ? "border-brand bg-brand-50" : "border-line bg-white hover:border-brand hover:bg-brand-50/50"
-                    }`}
-                  >
-                    {opt.icon && (
-                      <span className="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-800 group-hover:bg-white">
-                        {opt.icon}
+            <>
+              {step === 0 && (
+                <p className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-bold text-brand-800">
+                  <ArrowRight className="h-3.5 w-3.5" /> Tap one option to begin
+                </p>
+              )}
+              <div className="mt-5 space-y-3">
+                {current.options.map((opt) => {
+                  const selected = answers[current.key] === opt.value
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => pick(opt.value)}
+                      className={`group flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-[0.99] ${
+                        selected
+                          ? "border-brand bg-brand-50"
+                          : "border-line bg-white hover:border-brand hover:bg-brand-50/60"
+                      }`}
+                    >
+                      {opt.icon && (
+                        <span className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-800 transition-colors group-hover:bg-brand group-hover:text-white">
+                          {opt.icon}
+                        </span>
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="flex flex-wrap items-center gap-2">
+                          <span className="font-bold text-ink">{opt.label}</span>
+                          {opt.badge && (
+                            <span className="rounded-full bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                              {opt.badge}
+                            </span>
+                          )}
+                        </span>
+                        {opt.hint && <span className="mt-0.5 block text-sm text-faint">{opt.hint}</span>}
                       </span>
-                    )}
-                    <span className="min-w-0 flex-1">
-                      <span className="block font-bold text-ink">{opt.label}</span>
-                      {opt.hint && <span className="mt-0.5 block text-sm text-faint">{opt.hint}</span>}
-                    </span>
-                    <ArrowRight className="h-5 w-5 flex-shrink-0 text-faint transition-transform group-hover:translate-x-0.5 group-hover:text-brand" />
-                  </button>
-                )
-              })}
-            </div>
+                      <span className="flex flex-shrink-0 items-center gap-1 text-brand">
+                        <span className="hidden text-sm font-bold sm:inline">Select</span>
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 transition-colors group-hover:bg-brand group-hover:text-white">
+                          <ChevronRight className="h-5 w-5" />
+                        </span>
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </>
           ) : (
             <form
               className="mt-6"

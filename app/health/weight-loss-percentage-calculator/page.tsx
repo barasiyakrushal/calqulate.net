@@ -188,9 +188,9 @@ export default function WeightLossPercentageCalculatorPage() {
         <section id="calculator" className="scroll-mt-20 bg-slate-50/60">
           <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16">
             <div className="mx-auto mb-8 max-w-xl text-center">
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">How much have you really lost?</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Calculate your weight loss percentage</h2>
               <p className="mt-2 text-slate-600">
-                A few quick taps. No account, no email, your answers never leave your browser.
+                6 quick questions, about 20 seconds. No account, no email, your answers never leave your browser.
               </p>
             </div>
             <WeightLossPercentageWizard />
