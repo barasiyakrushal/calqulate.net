@@ -188,7 +188,16 @@ export const hero = {
   eyebrow: "Free GLP-1 Safety Tool",
   headline: "GLP-1 Unit Converter",
   subheadline:
-    "Convert milligrams, millilitres and syringe units accurately using your medication concentration, while understanding what those numbers actually mean.",
+    "Convert mg ↔ units ↔ mL for compounded semaglutide and tirzepatide using your vial's concentration.",
+  /** Capability chips shown directly under the headline. These capture the primary search demand. */
+  capabilities: [
+    "mg → Units",
+    "Units → mg",
+    "Semaglutide",
+    "Tirzepatide",
+    "U-100 Syringe",
+    "Instant",
+  ],
   trustBadges: [
     { icon: "check", text: "Free forever" },
     { icon: "shield", text: "Educational only" },
@@ -966,3 +975,320 @@ export const references = [
 
 export const medicalDisclaimer =
   "Calqulate Vitals provides educational information only. This converter performs arithmetic on numbers you enter and cannot see your vial, your syringe or your prescription. It is not medical advice, is not a dosing instruction, and does not replace your prescriber or pharmacist. Always confirm your concentration and your dose against the label and with the person who dispensed it. Never change your prescribed dose. If you believe you have injected the wrong amount, contact your prescriber or a poison information service immediately.";
+
+/* ================================================================== */
+/* NEW MOBILE-FIRST PAGE ARCHITECTURE                                  */
+/* Purpose-built, scannable blocks that map to the highest-intent      */
+/* searches. Each block opens with a direct answer for AI Overviews.   */
+/* ================================================================== */
+
+/* ------------------------------------------------------------------ */
+/* CHART IMAGES                                                         */
+/* Placeholders. Drop the matching files into /public/charts/ and the  */
+/* images render automatically. Alt text is written for accessibility  */
+/* and image SEO.                                                       */
+/* ------------------------------------------------------------------ */
+
+export interface ChartImage {
+  src: string;
+  alt: string;
+  caption: string;
+  /** Intended aspect ratio, used to reserve space and avoid layout shift. */
+  width: number;
+  height: number;
+}
+
+export const charts: Record<
+  "mgToUnits" | "concentration" | "syringe",
+  ChartImage
+> = {
+  mgToUnits: {
+    src: "/charts/glp1-mg-to-units-conversion-chart.webp",
+    alt: "Bar chart converting common semaglutide doses from 0.25 mg to 2.4 mg into insulin syringe units at 1 mg/mL, 2.5 mg/mL and 5 mg/mL concentrations",
+    caption:
+      "Every common semaglutide dose in syringe units, shown at the three concentrations pharmacies dispense most often (U-100 syringe).",
+    width: 1600,
+    height: 900,
+  },
+  concentration: {
+    src: "/charts/glp1-concentration-comparison-chart.webp",
+    alt: "Chart showing the same 1 mg semaglutide dose requiring 100 units at 1 mg/mL, 40 units at 2.5 mg/mL and 20 units at 5 mg/mL",
+    caption:
+      "The identical 1 mg dose draws a different number of units at every concentration. The concentration on your label is what decides.",
+    width: 1600,
+    height: 900,
+  },
+  syringe: {
+    src: "/charts/glp1-insulin-syringe-sizes-chart.webp",
+    alt: "Diagram comparing 30-unit, 50-unit and 100-unit U-100 insulin syringes, their barrel volumes and unit markings",
+    caption:
+      "30-unit, 50-unit and 100-unit insulin syringes side by side. The smallest barrel your dose fits is the easiest to read accurately.",
+    width: 1600,
+    height: 900,
+  },
+};
+
+/* ------------------------------------------------------------------ */
+/* UNDERSTANDING YOUR CONVERSION (worked example, sits above the fold  */
+/* of the content)                                                     */
+/* ------------------------------------------------------------------ */
+
+export const understandingConversion = {
+  heading: "Understanding your conversion",
+  intro:
+    "Every conversion on this page is one worked example: a prescribed dose in milligrams, your vial's concentration, and the number of units that lands on the syringe. Here is what a typical result looks like.",
+  example: {
+    caption: "Worked example: a 0.5 mg dose from a 2.5 mg/mL vial",
+    rows: [
+      { label: "Your prescribed dose", value: "0.5 mg" },
+      { label: "Your concentration", value: "2.5 mg/mL" },
+      { label: "Volume to draw", value: "0.20 mL" },
+      { label: "Draw", value: "20 units", highlight: true },
+      { label: "Recommended syringe", value: "30-unit syringe" },
+    ],
+  },
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* BEFORE YOU INJECT (3-step trust check, moved high on the page)      */
+/* ------------------------------------------------------------------ */
+
+export const beforeYouInject = {
+  heading: "Before you inject, check three things",
+  intro:
+    "Almost every conversion error comes down to one of these three numbers being wrong. Confirm all three against the label in your hand before you draw.",
+  checks: [
+    {
+      title: "Check your concentration",
+      body: "Read the mg/mL printed on your vial and make sure it matches what you entered. This one number decides every unit you draw.",
+    },
+    {
+      title: "Check your medication",
+      body: "Confirm the drug and that it is a compounded vial, not a pre-filled pen. Pens measure the dose for you and are never drawn into a syringe.",
+    },
+    {
+      title: "Check your syringe",
+      body: "Use a U-100 insulin syringe, where 100 units equals 1 mL, and pick the smallest barrel your dose fits so the markings are easy to read.",
+    },
+  ],
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* HOW MANY UNITS IS MY DOSE (scannable dose cards for AI Overviews)   */
+/* ------------------------------------------------------------------ */
+
+export interface DoseCard {
+  dose: string;
+  drug: "Semaglutide" | "Tirzepatide";
+  /** Units at each concentration, ordered low to high strength. */
+  values: { concentration: string; units: string }[];
+}
+
+export const doseConversions = {
+  heading: "How many units is my GLP-1 dose?",
+  answer:
+    "A GLP-1 dose has no single unit value. It depends entirely on your vial's concentration. For example, 0.5 mg equals 20 units at 2.5 mg/mL but only 10 units at 5 mg/mL. Find your dose below, then read the column that matches the concentration on your label.",
+  cards: [
+    {
+      dose: "0.25 mg",
+      drug: "Semaglutide",
+      values: [
+        { concentration: "1 mg/mL", units: "25 units" },
+        { concentration: "2.5 mg/mL", units: "10 units" },
+        { concentration: "5 mg/mL", units: "5 units" },
+      ],
+    },
+    {
+      dose: "0.5 mg",
+      drug: "Semaglutide",
+      values: [
+        { concentration: "1 mg/mL", units: "50 units" },
+        { concentration: "2.5 mg/mL", units: "20 units" },
+        { concentration: "5 mg/mL", units: "10 units" },
+      ],
+    },
+    {
+      dose: "1 mg",
+      drug: "Semaglutide",
+      values: [
+        { concentration: "1 mg/mL", units: "100 units" },
+        { concentration: "2.5 mg/mL", units: "40 units" },
+        { concentration: "5 mg/mL", units: "20 units" },
+      ],
+    },
+    {
+      dose: "1.7 mg",
+      drug: "Semaglutide",
+      values: [
+        { concentration: "2.5 mg/mL", units: "68 units" },
+        { concentration: "5 mg/mL", units: "34 units" },
+      ],
+    },
+    {
+      dose: "2.4 mg",
+      drug: "Semaglutide",
+      values: [
+        { concentration: "2.5 mg/mL", units: "96 units" },
+        { concentration: "5 mg/mL", units: "48 units" },
+      ],
+    },
+    {
+      dose: "5 mg",
+      drug: "Tirzepatide",
+      values: [
+        { concentration: "5 mg/mL", units: "100 units" },
+        { concentration: "10 mg/mL", units: "50 units" },
+        { concentration: "20 mg/mL", units: "25 units" },
+      ],
+    },
+  ] as DoseCard[],
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* WHY CONCENTRATION MATTERS (one sentence + a two-row example)        */
+/* ------------------------------------------------------------------ */
+
+export const whyConcentration = {
+  heading: "Why concentration matters",
+  answer:
+    "The same dose can equal completely different syringe units because pharmacies prepare compounded GLP-1 vials at different strengths.",
+  example: {
+    caption: "The same 1 mg dose at two different concentrations",
+    rows: [
+      { dose: "1 mg", concentration: "1 mg/mL", units: "100 units" },
+      { dose: "1 mg", concentration: "5 mg/mL", units: "20 units" },
+    ],
+  },
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* BRAND PENS VS COMPOUNDED VIALS (do you convert? yes/no table)       */
+/* ------------------------------------------------------------------ */
+
+export const brandVsCompounded = {
+  heading: "Brand pens vs compounded vials",
+  answer:
+    "Only compounded multi-dose vials need converting. Brand pens such as Ozempic, Wegovy, Mounjaro and Zepbound measure the dose for you in milligrams, so you never count units.",
+  rows: [
+    { medication: "Ozempic", convert: false },
+    { medication: "Wegovy", convert: false },
+    { medication: "Mounjaro", convert: false },
+    { medication: "Zepbound", convert: false },
+    { medication: "Compounded semaglutide", convert: true },
+    { medication: "Compounded tirzepatide", convert: true },
+  ],
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* CHOOSING THE RIGHT SYRINGE (comparison cards)                       */
+/* ------------------------------------------------------------------ */
+
+export const syringeChoice = {
+  heading: "Choosing the right syringe",
+  answer:
+    "Use the smallest U-100 insulin syringe your dose fits inside. Fewer units spread across the barrel are far easier to read without a mistake.",
+  cards: [
+    {
+      size: "30-unit",
+      volume: "0.3 mL",
+      markings: "1-unit steps",
+      bestFor: "Best for small starter doses",
+    },
+    {
+      size: "50-unit",
+      volume: "0.5 mL",
+      markings: "1-unit steps",
+      bestFor: "Best for most people, up to 50 units",
+    },
+    {
+      size: "100-unit",
+      volume: "1 mL",
+      markings: "2-unit steps",
+      bestFor: "Best for high-volume doses",
+    },
+  ],
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* COMMON CONVERSION MISTAKES                                          */
+/* ------------------------------------------------------------------ */
+
+export const commonMistakes = {
+  heading: "Common conversion mistakes",
+  answer:
+    "Most GLP-1 dosing errors are not maths errors. They are the wrong concentration, a reused units figure, or the wrong syringe. Here are the mistakes worth catching before you draw.",
+  items: [
+    {
+      title: "Reusing a units number from an old vial",
+      body: "A new vial can be a different strength. Always read the concentration on the new label and redo the conversion.",
+    },
+    {
+      title: "Copying a units figure from a forum or a friend",
+      body: "A units number is meaningless without the concentration it came from. Their vial is almost certainly not yours.",
+    },
+    {
+      title: "Assuming the wrong concentration",
+      body: "Believing your vial is 2.5 mg/mL when it is really 5 mg/mL doubles every dose you draw. Confirm mg/mL first, every time.",
+    },
+    {
+      title: "Rounding a dose that lands between two markings",
+      body: "If your dose does not sit on a whole line, do not estimate. It usually means the concentration and the syringe are mismatched.",
+    },
+    {
+      title: "Drawing a pen into an insulin syringe",
+      body: "Ozempic, Wegovy, Mounjaro and Zepbound are measured in milligrams by the device. They are never counted in units.",
+    },
+  ],
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* WHAT TO DO IF YOUR NUMBERS DON'T MATCH                              */
+/* ------------------------------------------------------------------ */
+
+export const numbersDontMatch = {
+  heading: "What to do if your numbers don't match",
+  answer:
+    "If the units here disagree with what your prescriber or pharmacist told you to draw, do not inject. The label always wins. Work through these steps before you go any further.",
+  steps: [
+    "Re-read the concentration on your vial and confirm it matches the mg/mL you entered here.",
+    "Convert in the other direction: take the units you plan to draw, convert them back to milligrams, and check it equals your prescribed dose.",
+    "Confirm the medication is a compounded vial, not a pre-filled pen that measures the dose for you.",
+    "If the two answers still disagree, call the pharmacy that dispensed it before you inject. They will resolve it in a minute.",
+  ],
+  footer:
+    "If you believe you have already injected the wrong amount, contact your prescriber or a poison information service straight away.",
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* WHY YOU CAN TRUST THIS CALCULATOR (EEAT signals)                    */
+/* ------------------------------------------------------------------ */
+
+export const trustSignals = {
+  heading: "Why you can trust this calculator",
+  answer:
+    "This converter uses the same arithmetic your pharmacist uses, with your own vial concentration and the U-100 insulin syringe standard, and it checks the answer in both directions.",
+  items: [
+    {
+      title: "Uses your vial concentration",
+      body: "Nothing is assumed. Every result is built from the mg/mL you read off your own label.",
+    },
+    {
+      title: "U-100 insulin syringe standard",
+      body: "All units assume 100 units per 1 mL, the standard for insulin syringes worldwide.",
+    },
+    {
+      title: "Double-direction verification",
+      body: "You can convert mg to units and units back to mg to confirm both answers agree before you draw.",
+    },
+    {
+      title: "Browser-only calculations",
+      body: "Every number is worked out on your device. Nothing you type is stored or sent anywhere.",
+    },
+    {
+      title: "Educational safety checks",
+      body: "The tool flags doses that don't fit, land between markings, or exceed approved maximums so you can stop and confirm.",
+    },
+  ],
+  referencesNote:
+    "Dose ranges and product information are drawn from FDA prescribing information and manufacturer labels for semaglutide (Novo Nordisk) and tirzepatide (Eli Lilly). See the sources below.",
+} as const;

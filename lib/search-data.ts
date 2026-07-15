@@ -555,6 +555,15 @@ export const calculators: Calculator[] = [
     category: "Health",
     tags: ["draw length", "archery", "arm span", "sports"],
     keywords: ["draw length calculator", "archery draw length", "bow sizing", "arm span measurement"],
+  },
+  {
+    id: "age-calculator",
+    title: "Age Calculator",
+    description: "Calculate your age based on your date of birth",
+    href: "/health/age-calculator",
+    category: "Health",
+    tags: ["age", "date of birth", "birthday", "years"],
+    keywords: ["age calculator", "calculate age from date of birth", "birthday age calculation", "years old calculator"],
   }
 ]
 

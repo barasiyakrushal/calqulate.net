@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Activity, Heart, Flame, Zap, Timer, Info, Dumbbell, Target } from "lucide-react"
+import { Activity, Heart, Flame, Zap, Timer, Info } from "lucide-react"
 
 // Define validation schema
 const formSchema = z.object({
@@ -256,140 +256,82 @@ export default function HeartRateCalculator() {
           <div className="lg:col-span-7">
             {results ? (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                
-                {/* Header Stats */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-slate-900 text-white rounded-xl text-center shadow-md">
-                    <p className="text-xs uppercase tracking-wider opacity-70">Max Heart Rate</p>
-                    <p className="text-3xl font-bold">{results.maxHeartRate} <span className="text-sm font-normal">bpm</span></p>
+
+                {/* ── UNDERSTAND YOUR RESULTS ─────────────────────────────────── */}
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900">Understand your results</h3>
+                  <div className="mt-3 grid grid-cols-2 gap-3">
+                    <div className="rounded-xl bg-slate-900 p-4 text-center text-white">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-white/60">Max heart rate</p>
+                      <p className="mt-1 text-3xl font-bold tabular-nums">
+                        {results.maxHeartRate}
+                        <span className="ml-1 text-sm font-normal text-white/60">bpm</span>
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-center">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Recommended Zone 2</p>
+                      <p className="mt-1 text-lg font-bold text-red-700">{results.zones[1].range}</p>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Best for</p>
+                      <p className="mt-1 text-sm font-semibold text-slate-800">Fat burning &amp; endurance</p>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Heart rate reserve</p>
+                      <p className="mt-1 text-lg font-bold text-slate-900">
+                        {results.heartRateReserve !== null ? `${results.heartRateReserve} bpm` : "Add resting HR"}
+                      </p>
+                    </div>
+                    <div className="col-span-2 rounded-xl border border-slate-200 bg-white p-4 text-center">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Training method</p>
+                      <p className="mt-1 text-sm font-semibold text-slate-800">{results.methodUsed}</p>
+                    </div>
                   </div>
-                  <div className="p-4 bg-white border border-slate-200 text-slate-800 rounded-xl text-center shadow-sm">
-                    <p className="text-xs uppercase tracking-wider opacity-70">Calculation Method</p>
-                    <p className="text-lg font-semibold mt-1">{results.methodUsed}</p>
-                  </div>
+                  <p className="mt-3 text-xs leading-relaxed text-slate-500">
+                    {results.methodUsed === "Karvonen (HRR)"
+                      ? "Your zones use the Karvonen method, blending your max and resting heart rate for a personalised range."
+                      : "Your zones use % of max heart rate. Add your resting heart rate above to unlock the more personalised Karvonen method."}
+                  </p>
                 </div>
 
-                {/* Zones Visualization */}
+                {/* ── YOUR TRAINING ZONES (single consolidated list) ──────────── */}
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-lg text-slate-800">Your Training Zones</h3>
+                  <h3 className="text-lg font-bold text-slate-900">Your training zones</h3>
                   {results.zones.map((zone) => (
-                    <div 
-                      key={zone.zone} 
-                      className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg border-l-4 shadow-sm transition-all hover:shadow-md ${zone.color}`}
+                    <div
+                      key={zone.zone}
+                      className={`rounded-lg border-l-4 p-4 shadow-sm ${zone.color} ${
+                        zone.fatBurn ? "ring-1 ring-emerald-300" : ""
+                      }`}
                     >
-                      <div className="flex items-center gap-4 mb-2 sm:mb-0">
-                        <div className="p-2 bg-white bg-opacity-60 rounded-full">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <p className="flex items-center gap-2 text-base font-bold">
                           <zone.icon className="h-5 w-5 opacity-80" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-base flex items-center gap-2">
-                            Zone {zone.zone}: {zone.name}
-                          </p>
-                          <p className="text-xs opacity-90">{zone.description}</p>
-                        </div>
-                      </div>
-                      <div className="text-right w-full sm:w-auto mt-2 sm:mt-0">
-                        <span className="inline-block px-3 py-1 bg-white bg-opacity-80 rounded-full font-bold text-lg shadow-sm">
+                          Zone {zone.zone}: {zone.name}
+                          <span className="text-xs font-normal opacity-80">· {zone.intensity}</span>
+                          {zone.fatBurn && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                              <Flame className="h-3 w-3" /> Fat burn
+                            </span>
+                          )}
+                        </p>
+                        <span className="rounded-full bg-white/80 px-3 py-1 text-sm font-bold shadow-sm">
                           {zone.range}
                         </span>
                       </div>
+                      <p className="mt-2 text-xs opacity-90">
+                        <strong>Try:</strong> {zone.workouts}
+                      </p>
                     </div>
                   ))}
+                  <p className="text-xs leading-relaxed text-slate-500">
+                    Spend most easy training in Zone 2, the aerobic base range where your body uses fat most efficiently.
+                  </p>
                 </div>
-
-                {/* ── FEATURE 1: Personalised Karvonen Training Zones ────────────── */}
-                <Card className="border-emerald-100 bg-emerald-50/40 rounded-xl shadow-sm">
-                  <CardContent className="p-5 md:p-6 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Target className="h-5 w-5 text-emerald-700" />
-                      <h3 className="text-base font-bold text-slate-800">Your Personalised Training Zones</h3>
-                    </div>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      {results.methodUsed === "Karvonen (HRR)" ? (
-                        <>
-                          These brackets use the <strong className="text-emerald-700">Karvonen method</strong>, blending your
-                          maximum heart rate with your resting rate (Heart Rate Reserve ={" "}
-                          <strong>{results.heartRateReserve} bpm</strong>) for zones tailored to your fitness level.
-                        </>
-                      ) : (
-                        <>
-                          These brackets use standard <strong className="text-emerald-700">% of max heart rate</strong>. Add
-                          your <strong>resting heart rate</strong> above to unlock the more precise Karvonen method.
-                        </>
-                      )}
-                    </p>
-
-                    <div className="space-y-2">
-                      {results.zones.map((zone) => (
-                        <div
-                          key={zone.zone}
-                          className={`flex items-center justify-between gap-3 rounded-lg border px-3 py-2 ${
-                            zone.fatBurn
-                              ? "border-emerald-300 bg-emerald-100/70 ring-1 ring-emerald-200"
-                              : "border-slate-200 bg-white"
-                          }`}
-                        >
-                          <div className="min-w-0">
-                            <p className="text-sm font-semibold text-slate-800 flex items-center gap-1.5 flex-wrap">
-                              Zone {zone.zone}
-                              <span className="text-xs font-normal text-slate-500">· {zone.intensity} intensity</span>
-                              {zone.fatBurn && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-                                  <Flame className="h-3 w-3" /> Fat-Burning Zone
-                                </span>
-                              )}
-                            </p>
-                          </div>
-                          <span className="shrink-0 rounded-md bg-slate-900 px-2.5 py-1 text-xs font-bold text-white">
-                            {zone.range}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-xs text-slate-500 leading-relaxed">
-                      Spend most of your easy training in <strong className="text-emerald-700">Zone 2 (~60-70% HRR)</strong> —
-                      this is the fat-burning, aerobic-base range where your body uses fat most efficiently as fuel.
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* ── FEATURE 2: Example Workouts For Each Zone ──────────────────── */}
-                <Card className="border-slate-200 rounded-xl shadow-sm">
-                  <CardContent className="p-5 md:p-6 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Dumbbell className="h-5 w-5 text-emerald-700" />
-                      <h3 className="text-base font-bold text-slate-800">How To Train In Each Zone</h3>
-                    </div>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Concrete workout ideas so you know exactly how to hit each heart-rate bracket.
-                    </p>
-                    <div className="space-y-2">
-                      {results.zones.map((zone) => (
-                        <div
-                          key={zone.zone}
-                          className={`flex items-start gap-3 rounded-lg border p-3 ${zone.color}`}
-                        >
-                          <div className="p-1.5 bg-white bg-opacity-60 rounded-full shrink-0">
-                            <zone.icon className="h-4 w-4 opacity-80" />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-sm font-bold">
-                              Zone {zone.zone}: {zone.name}{" "}
-                              <span className="text-xs font-normal opacity-80">({zone.range})</span>
-                            </p>
-                            <p className="text-xs opacity-90 mt-0.5">
-                              <strong>Try:</strong> {zone.workouts}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-slate-400 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl">
-                <Activity className="h-16 w-16 mb-4 opacity-20" />
+              <div className="flex h-full min-h-[300px] flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 text-slate-400">
+                <Activity className="mb-4 h-16 w-16 opacity-20" />
                 <p>Enter your details to see your zones</p>
               </div>
             )}

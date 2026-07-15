@@ -1,89 +1,153 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import AdjustedBodyWeightCalculator from "@/components/calculators/adjusted-body-weight-calculator"
 import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Calculator, Scale, HeartPulse, ShieldCheck, Clock, Users, FlaskConical, AlertTriangle, CheckCircle , Stethoscope, Sparkles } from "lucide-react"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
+import { CheckCircle2, ArrowRight, Check, X } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Adjusted Body Weight (AjBW) Calculator: Accurate Dosing for Obese Patients",
-  description: "Calculate your Adjusted Body Weight (AjBW) for accurate medicine dosing, nutritional planning, and metabolic health monitoring. An essential tool for healthcare professionals, dietitians, and individuals managing their health.",
-  keywords: "adjusted body weight calculator, AjBW calculator, how to calculate adjusted body weight, adjusted body weight calculator globalrph, ideal body weight calculator, medical dosing calculator, nutrition planning tool, metabolic health, Robinson equation, body weight adjustment",
+  title: "Adjusted Body Weight (AjBW) Calculator: Dosing Weight, IBW & Formula",
+  description:
+    "Free Adjusted Body Weight (AjBW) calculator. Get your adjusted body weight, ideal body weight (IBW), and dosing weight instantly using the standard clinical formula, plus the AjBW formula and when to use it.",
+  keywords:
+    "adjusted body weight calculator, AjBW calculator, adjusted body weight formula, dosing weight calculator, ideal body weight calculator, IBW calculation, adjusted body weight vs ideal body weight, adjusted body weight obesity",
   alternates: {
     canonical: "https://calqulate.net/health/adjusted-body-weight-calculator",
   },
   openGraph: {
-    title: "Adjusted Body Weight (AjBW) Calculator: Accurate Dosing for Obese Patients",
-    description: "Calculate your Adjusted Body Weight (AjBW) for accurate medicine dosing, nutritional planning, and metabolic health monitoring. An essential tool for healthcare professionals, dietitians, and individuals managing their health.",
+    title: "Adjusted Body Weight (AjBW) Calculator: Dosing Weight, IBW & Formula",
+    description:
+      "Get your adjusted body weight, ideal body weight, and dosing weight instantly using the standard clinical formula, plus the AjBW formula and when to use it.",
     url: "https://calqulate.net/health/adjusted-body-weight-calculator",
     siteName: "Calqulate",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adjusted Body Weight (AjBW) Calculator: Accurate Dosing for Obese Patients",
-    description: "Calculate your Adjusted Body Weight (AjBW) for accurate medicine dosing, nutritional planning, and metabolic health monitoring. An essential tool for healthcare professionals, dietitians, and individuals managing their health.",
+    title: "Adjusted Body Weight (AjBW) Calculator: Dosing Weight, IBW & Formula",
+    description:
+      "Get your adjusted body weight, ideal body weight, and dosing weight instantly using the standard clinical formula.",
   },
 }
 
 const faqs = [
-  { question: "How does one calculate the adjusted body weight manually?", answer: "Use the equation below: AjBW = IBW + 0.4 × (ABW − IBW). First, calculate your IBW based on your height and gender and then input your actual body weight." },
-  { question: "In what way does AjBW deviate from IBW?", answer: "IBW estimates your “healthy” weight, while AjBW adjusts for excess fat to better reflect metabolic activity." },
-  { question: "What are the hospitals using AjBW for?", answer: "It gives more precise dosing for medicine and nutrients in obese or overweight patients." },
-  { question: "Can AjBW be used for the underweight?", answer: "Not usually — AjBW is meant for situations where excess fat affects nominal body weight." },
-  { question: "How does AjBW differ from BMI?", answer: "BMI only considers the weight and height. AjBW also considers the fat mass and lean mass and therefore is superior for medical applications." }
+  {
+    question: "What is Adjusted Body Weight?",
+    answer:
+      "Adjusted Body Weight (AjBW) is a calculated weight used mainly for medication dosing and nutrition planning in adults with obesity. It combines ideal body weight with 40% of excess body weight so that dosing is not overestimated by fat mass.",
+  },
+  {
+    question: "How do you calculate Adjusted Body Weight?",
+    answer:
+      "First calculate ideal body weight (IBW) from height and sex, then apply AjBW = IBW + 0.4 x (actual weight - IBW). For example, a 95 kg adult with an IBW of 73 kg has an AjBW of 73 + 0.4 x 22, which is 81.8 kg.",
+  },
+  {
+    question: "What is the Adjusted Body Weight formula?",
+    answer:
+      "The formula is AjBW = IBW + 0.4 x (ABW - IBW), where ABW is actual body weight and IBW is ideal body weight. The 0.4 factor reflects the roughly 40% of excess tissue that is metabolically active.",
+  },
+  {
+    question: "When should Adjusted Body Weight be used?",
+    answer:
+      "Use AjBW when actual weight would overestimate dose or nutritional needs, typically in adults who are overweight or obese, for many medication doses, and for clinical nutrition. It is not used for normal-weight adults, pregnancy, or children.",
+  },
+  {
+    question: "What is the difference between IBW and AjBW?",
+    answer:
+      "IBW is a healthy reference weight based only on height and sex. AjBW starts from IBW but adds part of the excess weight back, so it better reflects the metabolically active mass of a heavier person for dosing.",
+  },
+  {
+    question: "Should I use Actual Body Weight or Adjusted Body Weight?",
+    answer:
+      "For a normal-weight adult, actual body weight is correct. For an overweight or obese adult, adjusted body weight is usually the safer figure for medication dosing and nutrition. A pharmacist or physician confirms the right choice for a given drug.",
+  },
+  {
+    question: "Why do hospitals use Adjusted Body Weight?",
+    answer:
+      "Hospitals use AjBW because dosing many drugs on actual weight can cause toxicity in heavier patients, while dosing on ideal weight can underdose them. AjBW gives a middle value that keeps drug levels and nutrition in a safer range.",
+  },
+  {
+    question: "Is Adjusted Body Weight only for obesity?",
+    answer:
+      "It is used mainly when a person is above their ideal body weight, so it is most relevant in overweight and obesity. For people at or below ideal weight, actual or ideal body weight is used instead.",
+  },
+  {
+    question: "How is Adjusted Body Weight used for medication dosing?",
+    answer:
+      "For weight-based drugs such as some antibiotics and chemotherapy agents, clinicians multiply the dose per kilogram by the adjusted body weight instead of actual weight, so heavier patients are not overdosed by inactive fat mass.",
+  },
+  {
+    question: "Can dietitians use Adjusted Body Weight?",
+    answer:
+      "Yes. Dietitians often use AjBW to estimate energy and protein needs in adults with obesity, so that calorie targets are not overestimated by using actual weight.",
+  },
 ]
 
-// --- Custom Vertical Stepper Component ---
-const VerticalStepper = ({ steps }: { steps: { title: string; description: string }[] }) => {
-  return (
-    <div className="relative pl-8 pb-4 md:pb-0">
-      {steps.map((step, index) => (
-        <div key={index} className={`relative ${index < steps.length - 1 ? 'pb-10' : 'pb-0'}`}>
-          {/* Vertical line (not on the last item) */}
-          {index < steps.length - 1 && (
-            <div className="absolute top-2 left-[1px] w-0.5 h-full bg-gray-300 dark:bg-gray-700"></div>
-          )}
-          
-          {/* Circle indicator */}
-          <div className="absolute top-2 left-0 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-background"></div>
-          
-          {/* Step content */}
-          <div className="pl-6">
-            <h3 className="text-lg font-semibold text-primary">Step {String(index + 1).padStart(2, '0')}</h3>
-            <p className="font-bold mt-1">{step.title}</p>
-            <p className="text-muted-foreground mt-1">{step.description}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
+/** Actual vs IBW vs AjBW, what each is used for. */
+const weightTypes = [
+  { type: "Actual Body Weight (ABW)", used: "Your measured scale weight. Used for BMI and general health." },
+  { type: "Ideal Body Weight (IBW)", used: "A healthy reference weight from height and sex." },
+  { type: "Adjusted Body Weight (AjBW)", used: "Drug dosing and nutrition in overweight and obesity." },
+]
 
+/** When to use AjBW, decision table. */
+const whenToUse = [
+  { situation: "Medication dosing in obesity", use: true },
+  { situation: "Clinical nutrition assessment", use: true },
+  { situation: "ICU nutrition and TPN", use: true },
+  { situation: "Normal-weight adults", use: false },
+  { situation: "Bodybuilders and elite athletes", use: false },
+  { situation: "Pregnancy", use: false },
+]
+
+const clinicalUses = [
+  "Medication dosing",
+  "Clinical nutrition",
+  "Calorie estimation",
+  "Hospital calculations",
+  "Renal dosing",
+  "Chemotherapy",
+  "Critical care",
+]
+
+const whoShouldUse = [
+  "Healthcare professionals",
+  "Dietitians",
+  "Pharmacists",
+  "Medical students",
+  "Nurses",
+  "Patients with obesity",
+  "Clinical researchers",
+]
+
+const whenNotToUse = ["Elite athletes with high muscle mass", "Pregnancy", "Fluid retention or edema", "Children"]
+
+const references = [
+  "Devine BJ. Gentamicin therapy. Drug Intelligence and Clinical Pharmacy. 1974 (origin of the ideal body weight formula).",
+  "Pai MP. Drug dosing based on weight and body surface area. Pharmacotherapy. 2012 (review of adjusted body weight in dosing).",
+  "Bauer LA. Applied Clinical Pharmacokinetics (adjusted body weight in aminoglycoside and vancomycin dosing).",
+  "ASPEN clinical guidelines on nutrition support, which use adjusted body weight for energy needs in obesity.",
+]
+
+/** One-sentence lead answer for AI Overviews and quick scanning. */
+function Answer({ children }: { children: React.ReactNode }) {
+  return <p className="mt-3 text-base font-medium leading-relaxed text-slate-800 sm:text-lg">{children}</p>
+}
 
 export default function AdjustedBodyWeightCalculatorPage() {
-  const howToUseSteps = [
-    { title: "Select your gender", description: "Choose between female or male to apply the correct formula." },
-    { title: "Enter the height", description: "Input your height in either inches or centimeters." },
-    { title: "Add actual body weight (ABW)", description: "Provide your current, measured body weight." },
-    { title: "Click the 'Calculate' button", description: "Get your Adjusted Body Weight (AjBW), Ideal Body Weight (IBW), and the difference in a matter of seconds." },
-  ];
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <CalculatorSchema 
-        name="Adjusted Body Weight (AjBW) Calculator" 
-        description="A medical method to estimate the optimal weight for accurate medicine dosing, food planning, and monitoring metabolic health." 
-        url="https://calqulate.net/health/adjusted-body-weight-calculator" 
+    <div className="min-h-screen flex flex-col bg-white">
+      <CalculatorSchema
+        name="Adjusted Body Weight (AjBW) Calculator"
+        description="Calculate adjusted body weight (AjBW), ideal body weight (IBW), and dosing weight using the standard clinical formula."
+        url="https://calqulate.net/health/adjusted-body-weight-calculator"
       />
       <FAQSchema faqs={faqs} />
       <MedicalReviewerSchema />
@@ -91,245 +155,268 @@ export default function AdjustedBodyWeightCalculatorPage() {
 
       <main id="main" className="flex-1">
         {/* HERO */}
-        <section className="bg-gradient-to-br from-emerald-50 via-white to-lime-50 border-b border-slate-200">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-5">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
-              Free · Instant · No sign-up required
-            </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
+        <section className="border-b border-slate-200 bg-slate-50">
+          <div className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 md:py-16">
+            <h1 className="text-3xl font-bold leading-tight text-slate-900 sm:text-4xl md:text-5xl">
               Adjusted Body Weight (AjBW) Calculator
             </h1>
-            <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              You can also easily determine your Adjusted Body Weight (AjBW). It's the medical method used to estimate the optimal weight for accurate medicine dosing, food planning, and monitoring your metabolic health. This is a very handy calculator for health professionals, dietitians, and others concerned with obesity or muscular-weight differences.
+            <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 sm:text-lg">
+              Calculate your Adjusted Body Weight (AjBW), Ideal Body Weight (IBW), and dosing weight instantly using the
+              standard clinical formula used by hospitals, pharmacists, dietitians, and healthcare professionals.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <ul className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2">
+              {["Adjusted Body Weight", "Ideal Body Weight", "Devine Formula", "Medication Dosing Weight", "Nutrition Planning"].map(
+                (chip) => (
+                  <li
+                    key={chip}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700"
+                  >
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    {chip}
+                  </li>
+                ),
+              )}
+            </ul>
+
+            <div className="mt-8">
               <a
                 href="#calculator"
-                className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800"
               >
-                Try the Calculator ↓
+                Calculate AjBW
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
           </div>
         </section>
 
-        {/* USP SUMMARY (TOFU) */}
-        <section className="border-b border-emerald-100 bg-white">
-          <div className="mx-auto max-w-5xl px-6 py-6">
-            <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 md:p-6">
-              <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
-              <p className="text-sm md:text-base leading-relaxed text-slate-700">
-                Calqulate.net computes adjusted body weight from your actual and ideal weight using the standard clinical formula. You get all three weights side by side for the precise figure dosing and nutrition rely on.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* STATS DASHBOARD */}
-        <section className="border-b border-slate-200 bg-slate-50">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
-            {[
-              { value: "kg / lb", label: "Units" },
-              { value: "2", label: "Formulas" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
-              { value: "Instant", label: "Results" },
-            ].map((s) => (
-              <div key={s.label} className="bg-white p-5 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CALCULATOR */}
+        {/* CALCULATOR (and dynamic "Understand your result") */}
         <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+          <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 md:py-14">
             <AdjustedBodyWeightCalculator />
           </div>
         </section>
 
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
+        <div className="container mx-auto px-4 pb-8">
+          <div className="mx-auto max-w-3xl space-y-14">
+            {/* WHAT IS AjBW */}
+            <section id="what-is-ajbw" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">What is Adjusted Body Weight?</h2>
+              <Answer>
+                Adjusted Body Weight (AjBW) is a calculated weight used mainly for medication dosing and nutrition
+                planning in adults with obesity, combining ideal body weight with 40% of excess body weight.
+              </Answer>
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
+                It is not a weight goal. Think of it as a dosing weight: a more accurate number for clinical
+                calculations than either actual or ideal weight, because fat tissue is less metabolically active than
+                lean tissue.
+              </p>
+            </section>
 
-            <div className="prose prose-gray dark:prose-invert max-w-none mt-12 space-y-16">
-              <section>
-                <h2 className="mb-2"><b>What is Adjusted Body Weight (AjBW)?</b></h2>
-                <p>Adjusted Body Weight (AjBW) is a measure used to estimate a person's lean body mass, particularly for individuals who are overweight or obese. It "adjusts" their actual weight to account for the fact that fat tissue is less metabolically active than muscle tissue. This prevents overestimation when calculating calorie needs or medication dosages.</p>
-                <blockquote>AjBW is not a weight loss goal. Instead, think of it as a "dosing weight"—a more accurate number for clinical calculations than either your actual or ideal weight.</blockquote>
-              </section>
+            {/* ABW vs IBW vs AjBW */}
+            <section id="comparison" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Actual vs Ideal vs Adjusted body weight</h2>
+              <Answer>
+                Actual body weight is your scale weight, ideal body weight is a healthy reference, and adjusted body
+                weight is the figure used for drug dosing and nutrition.
+              </Answer>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Weight</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Used for</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {weightTypes.map((row) => (
+                      <tr key={row.type} className="odd:bg-white even:bg-slate-50/60">
+                        <td className="border-b border-slate-100 px-4 py-3 font-semibold text-slate-900">{row.type}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-slate-700">{row.used}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-              {/* --- Formulas & Example Calculation --- */}
-              <section>
-                  <h2 className="mb-2"><b>The Formulas for Ideal and Adjusted Body Weight</b></h2>
-                  <p>To accurately compute Adjusted Body Weight (AjBW), we must first calculate the Ideal Body Weight (IBW). Clinical environments typically rely on the Robinson formula for IBW, followed by the standard body weight adjustment equation.</p>
-                  
-                  <div className="grid md:grid-cols-2 gap-8 items-start not-prose mt-6">
-                      <Card>
-                          <CardHeader>
-                              <CardTitle className="flex items-center gap-2"><Scale className="w-5 h-5" /> Ideal Body Weight (Robinson Formula)</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                              <div className="p-4 bg-muted rounded-lg font-mono text-xs md:text-sm space-y-2">
-                                  <p className="font-bold">For Men:</p>
-                                  <p>IBW = 52 kg + 1.9 kg per inch over 5 feet</p>
-                                  <p className="font-bold mt-2">For Women:</p>
-                                  <p>IBW = 49 kg + 1.7 kg per inch over 5 feet</p>
-                              </div>
-                              <p className="text-xs text-muted-foreground mt-4">Note: 5 feet is equivalent to 60 inches (approx. 152.4 cm). This serves as the baseline stature for the calculation.</p>
-                          </CardContent>
-                      </Card>
+            {/* WHEN TO USE */}
+            <section id="when-to-use" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">When should you use Adjusted Body Weight?</h2>
+              <Answer>
+                Use Adjusted Body Weight when actual weight would overestimate dosing or nutrition, mainly in overweight
+                and obese adults, and not for normal-weight adults, athletes, pregnancy, or children.
+              </Answer>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Situation</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 text-center font-bold text-slate-900">Use AjBW?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {whenToUse.map((row) => (
+                      <tr key={row.situation} className="odd:bg-white even:bg-slate-50/60">
+                        <td className="border-b border-slate-100 px-4 py-3 font-medium text-slate-800">{row.situation}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-center">
+                          {row.use ? (
+                            <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
+                              <Check className="h-4 w-4" aria-hidden="true" /> Yes
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 font-medium text-slate-400">
+                              <X className="h-4 w-4" aria-hidden="true" /> No
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-                      <Card>
-                          <CardHeader>
-                              <CardTitle className="flex items-center gap-2"><FlaskConical className="w-5 h-5" /> Adjusted Body Weight Formula</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                              <div className="p-4 bg-muted rounded-lg font-mono text-sm md:text-base space-y-2">
-                                  <p>AjBW = IBW + 0.4 * (ABW - IBW)</p>
-                              </div>
-                              <p className="text-xs text-muted-foreground mt-4">Where: <strong>AjBW</strong> is Adjusted Body Weight, <strong>IBW</strong> is Ideal Body Weight, and <strong>ABW</strong> is Actual Body Weight. The correction factor (0.4) represents the metabolically active component of excess body fat.</p>
-                          </CardContent>
-                      </Card>
+            {/* FORMULA */}
+            <section id="formula" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Adjusted Body Weight formula</h2>
+              <Answer>
+                The Adjusted Body Weight formula is AjBW = IBW + 0.4 x (actual weight - IBW), where IBW is ideal body
+                weight from the Devine formula.
+              </Answer>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                  <p className="text-sm font-semibold text-slate-500">Ideal Body Weight (Devine)</p>
+                  <div className="mt-3 space-y-1 font-mono text-sm text-slate-800">
+                    <p>Men: 50 kg + 2.3 kg per inch over 5 ft</p>
+                    <p>Women: 45.5 kg + 2.3 kg per inch over 5 ft</p>
                   </div>
-
-                  <h3 className="font-bold text-lg mt-8 mb-4">Step-by-Step Calculation: IBW vs. AjBW</h3>
-                  <p>Let&apos;s trace both calculations for a male individual who stands at a height of 5&apos;11&apos;&apos; (71 inches total / 180 cm) and has an actual weight (ABW) of 90 kg.</p>
-                  
-                  <div className="not-prose my-6">
-                    <div className="bg-muted/50 border border-border rounded-lg p-5 font-mono text-sm space-y-4">
-                        <div>
-                          <p className="font-bold text-primary">1. Ideal Body Weight (IBW) Calculation:</p>
-                          <p>• Height: 5 feet 11 inches = 71 inches total</p>
-                          <p>• Inches over 5 feet: 71 - 60 = 11 inches</p>
-                          <p>• Formula: 52 kg + (1.9 kg × 11)</p>
-                          <p>• Calculation: 52 + 20.9 = 72.9 kg</p>
-                          <p className="mt-1 font-sans"><strong>Ideal Body Weight (IBW) = 72.9 kg</strong></p>
-                        </div>
-                        
-                        <div className="border-t border-border pt-4">
-                          <p className="font-bold text-primary">2. Adjusted Body Weight (AjBW) Calculation:</p>
-                          <p>• Actual Weight (ABW) = 90 kg</p>
-                          <p>• Excess Weight: ABW - IBW = 90 - 72.9 = 17.1 kg</p>
-                          <p>• Formula: IBW + 0.4 × (ABW - IBW)</p>
-                          <p>• Calculation: 72.9 + 0.4 × 17.1 = 72.9 + 6.84</p>
-                          <p className="mt-1 font-sans"><strong>Adjusted Body Weight (AjBW) = 79.74 kg (rounded to 79.7 kg)</strong></p>
-                        </div>
-                    </div>
-                  </div>
-
-                  <h3 className="font-bold text-lg mt-8 mb-4">Comparing the Results: Why the Difference Matters</h3>
-                  <p>Analyzing these outcomes reveals how each weight metric serves a unique physiological purpose, especially when compared side by side:</p>
-                  
-                  <div className="grid sm:grid-cols-3 gap-4 not-prose my-6">
-                    <div className="p-4 rounded-lg border border-border bg-card">
-                      <p className="text-sm font-semibold text-muted-foreground">Actual Weight (ABW)</p>
-                      <p className="text-2xl font-bold text-destructive">90.0 kg</p>
-                      <p className="text-xs text-muted-foreground mt-2">Dosing based on this weight assumes fat tissue consumes drugs and nutrients at the same rate as muscle, which can lead to hazardous medication overdoses.</p>
-                    </div>
-                    <div className="p-4 rounded-lg border border-border bg-card">
-                      <p className="text-sm font-semibold text-muted-foreground">Ideal Weight (IBW)</p>
-                      <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">72.9 kg</p>
-                      <p className="text-xs text-muted-foreground mt-2">Dosing based on this weight completely ignores the extra physiological strain of excess tissue, potentially causing therapeutic underdosing.</p>
-                    </div>
-                    <div className="p-4 rounded-lg border border-primary/30 bg-primary/5">
-                      <p className="text-sm font-semibold text-primary">Adjusted Weight (AjBW)</p>
-                      <p className="text-2xl font-bold text-primary">79.7 kg</p>
-                      <p className="text-xs text-muted-foreground mt-2">The optimal middle ground. It adds exactly 40% of the excess weight (6.8 kg) back to the ideal baseline, accounting for the supportive fluid and vascularity in adipose tissue.</p>
-                    </div>
-                  </div>
-
-                  <h3 className="font-bold text-lg mt-8 mb-4">The Science of Dosing Weight: A Clinical Safety Mechanism</h3>
-                  <p>In pharmacology, this tool is often referred to as a &quot;dosing weight&quot; calculator rather than a standard fitness planner. Here is why this distinction is so vital:</p>
-                  <ul className="list-disc pl-5 space-y-3 mt-4">
-                    <li><strong>The Hydrophilic Drug Challenge:</strong> Many critical medications, such as aminoglycoside antibiotics (e.g., Gentamicin) and certain chemotherapy drugs, are hydrophilic (water-soluble). Since excess fat tissue contains very little water, these drugs do not distribute well into fat. If you dose based on Actual Weight, you risk serious toxicity (such as kidney damage). If you dose based on Ideal Weight, the concentration might be too low to fight infection. AjBW serves as the &quot;Goldilocks&quot; value.</li>
-                    <li><strong>The 40% Adipose Factor:</strong> Why 0.4? Clinical research demonstrates that roughly 40% of excess adipose tissue consists of blood vessels, extracellular fluid, and metabolic support structures. The 0.4 multiplier adjusts the volume of distribution accordingly to maintain safe drug concentrations.</li>
-                    <li><strong>Avoiding Overfeeding in TPN:</strong> For patients receiving Total Parenteral Nutrition (TPN) in intensive care units, calculating nutritional needs on actual weight can result in severe metabolic stress or hyperglycemia. AjBW helps design feeding regimens that supply sufficient energy without overtaxing the patient&apos;s system.</li>
-                  </ul>
-              </section>
-
-              {/* --- How to Use the Calculator --- */}
-              <section>
-                <h2 className="mb-2"><b>How to use the Adjusted Body Weight Calculator</b></h2>
-                <div className="grid md:grid-cols-2 gap-8 items-start not-prose">
-                  {/* Left side: Vertical Stepper */}
-                  <div className="mt-4">
-                    <p className="mb-6 text-muted-foreground">Our calculator usage is also swift and simple:</p>
-                    <VerticalStepper steps={howToUseSteps} />
-                  </div>
-
-                  {/* Right side: Why It's Handy */}
-                  <div className="space-y-4">
-                    <Card>
-                        <CardHeader><CardTitle>Why Our Body Weight Adjustment Calculator Is Handy</CardTitle></CardHeader>
-                        <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                            Our calculator stands out because it's meant for professionals and lay citizens.
-                        </p>
-                        <ul className="list-disc pl-5 mt-4 space-y-2 text-sm">
-                            <li><strong>Accurate clinical formulas</strong> in compliance with Robinson and Bauer standards.</li>
-                            <li><strong>Direct calculation</strong> — no arithmetic required.</li>
-                            <li><strong>Dual results</strong> — shows both IBW and AjBW to make it clear.</li>
-                            <li><strong>Simple to use</strong> from any device — PC, tablete, nebo mobilní telefon.</li>
-                            <li><strong>Recommended healthcare</strong> — approved by health and nutrition specialists.</li>
-                        </ul>
-                        </CardContent>
-                    </Card>
-                  </div>
+                  <p className="mt-3 text-xs text-slate-500">5 feet equals 60 inches (about 152.4 cm).</p>
                 </div>
-              </section>
-
-              {/* --- Benefits of Using Adjusted Body Weight --- */}
-              <section>
-                <h2 className="mb-2"><b>Benefits of Using Adjusted Body Weight</b></h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 not-prose mt-4">
-                  <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-lg font-bold">Promotes drug safety</CardTitle><ShieldCheck className="h-6 w-6 text-primary" /></CardHeader><CardContent className="text-sm text-muted-foreground">Avoids overdosing and underdosing in the case of obese patients.</CardContent></Card>
-                  <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-lg font-bold">Personalized nutrition</CardTitle><HeartPulse className="h-6 w-6 text-primary" /></CardHeader><CardContent className="text-sm text-muted-foreground">Accommodates personalized nutrition: Calculates your true energy requirement.</CardContent></Card>
-                  <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-lg font-bold">Improves clinical accuracy</CardTitle><CheckCircle className="h-6 w-6 text-primary" /></CardHeader><CardContent className="text-sm text-muted-foreground">Visualises real metabolic mass instead of ABW.</CardContent></Card>
-                  <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-lg font-bold">Saves Time</CardTitle><Clock className="h-6 w-6 text-primary" /></CardHeader><CardContent className="text-sm text-muted-foreground">Get immediate answers with no tedious calculations.</CardContent></Card>
-                  <Card className="sm:col-span-2 lg:col-span-1"><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-lg font-bold">People-first method</CardTitle><Users className="h-6 w-6 text-primary" /></CardHeader><CardContent className="text-sm text-muted-foreground">Designed to inform, and not simply tally.</CardContent></Card>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                  <p className="text-sm font-semibold text-slate-500">Adjusted Body Weight</p>
+                  <p className="mt-3 font-mono text-base text-slate-800">AjBW = IBW + 0.4 x (ABW - IBW)</p>
+                  <p className="mt-3 text-xs text-slate-500">
+                    ABW is actual body weight. The 0.4 factor reflects the roughly 40% of excess tissue that is
+                    metabolically active.
+                  </p>
                 </div>
-              </section>
+              </div>
+            </section>
 
-              {/* --- When to Use & Limitations --- */}
-              <section>
-                  <h2 className="mb-2"><b>When You Need Body Weight in Adjustment</b></h2>
-                  <p>Use AjBW when:</p>
-                  <ul className="list-disc pl-5 space-y-3 mt-4">
-                    <li>The patient carries more than 20% over the ideal body weight.</li>
-                    <li>You are conducting drug dosing (e.g., renal dosing, antibiotics, or chemotherapy).</li>
-                    <li>You require the correct nutritional or calorie requirement for your weight management.</li>
-                  </ul>
-                   <h3 className="font-bold text-lg mt-8 mb-4 flex items-center gap-2"><AlertTriangle className="w-5 h-5 text-destructive" /> Limitations and Considerations</h3>
-                   <p>Avoid AjBW if:</p>
-                   <ul className="list-disc pl-5 space-y-3 mt-4">
-                    <li>The individual is an elite athlete with considerable muscle mass.</li>
-                    <li>The person is pregnant or has swelling from fluid buildup.</li>
-                  </ul>
-                  <p className="mt-4">AjBW presumes that 40% of the excess body weight at hand exists metabolically — this may not be the case for all. For people who are thin or athletes, use Lean Body Mass (LBM) or Fat-Free Mass Index (FFMI) instead. Always consult with a healthcare practitioner before using AjBW for medicine or health.</p>
-              </section>
-            </div>
-            
-            <RelatedCalculators slug="adjusted-body-weight-calculator" />
+            {/* WORKED EXAMPLE */}
+            <section id="example" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Worked example</h2>
+              <Answer>
+                For a 5 ft 10 in man weighing 95 kg, ideal body weight is 73 kg and adjusted body weight is 81.8 kg.
+              </Answer>
+              <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                <div className="space-y-1 p-5 font-mono text-sm text-slate-800">
+                  <p>Height: 5 ft 10 in = 70 inches, so 10 inches over 5 feet.</p>
+                  <p>IBW = 50 + 2.3 x 10 = 73 kg</p>
+                  <p>Excess weight = 95 - 73 = 22 kg</p>
+                  <p>AjBW = 73 + 0.4 x 22 = 73 + 8.8 = 81.8 kg</p>
+                </div>
+                <div className="border-t border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900">
+                  Adjusted Body Weight = 81.8 kg
+                </div>
+              </div>
+            </section>
 
-            {/* Structured FAQ UI */}
-            <div className="mt-12">
+            {/* COMMON CLINICAL USES */}
+            <section id="clinical-uses" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Common clinical uses</h2>
+              <Answer>
+                Adjusted Body Weight is used for medication dosing, clinical nutrition, and calorie estimation,
+                especially in hospital and critical care settings.
+              </Answer>
+              <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+                {clinicalUses.map((use) => (
+                  <li key={use} className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-800">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    {use}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* WHO SHOULD USE */}
+            <section id="who-should-use" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Who should use this calculator?</h2>
+              <Answer>
+                This calculator is built for healthcare professionals, dietitians, pharmacists, students, and patients
+                who need an adjusted body weight for dosing or nutrition.
+              </Answer>
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {whoShouldUse.map((who) => (
+                  <li key={who} className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700">
+                    {who}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* WHEN NOT TO USE */}
+            <section id="when-not" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">When not to use AjBW</h2>
+              <Answer>
+                Do not use Adjusted Body Weight for elite athletes, pregnancy, fluid retention, or children, where the
+                40% assumption does not hold.
+              </Answer>
+              <ul className="mt-6 space-y-2">
+                {whenNotToUse.map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-slate-700">
+                    <X className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 text-sm leading-relaxed text-slate-500">
+                For lean or very muscular people, lean body mass or fat-free mass is a better basis. Always confirm
+                clinical dosing with a qualified professional.
+              </p>
+            </section>
+
+            {/* FAQ */}
+            <section id="faqs" className="scroll-mt-20">
+              <h2 className="mb-6 text-2xl font-bold text-slate-900 sm:text-3xl">Frequently asked questions</h2>
               <FAQSection faqs={faqs} />
-            </div>
+            </section>
 
-            {/* Author Badge Section */}
+            {/* REFERENCES */}
+            <section id="references" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Clinical references and evidence</h2>
+              <ul className="mt-4 space-y-3">
+                {references.map((ref) => (
+                  <li key={ref} className="text-sm leading-relaxed text-slate-600">
+                    {ref}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 text-sm text-slate-500">
+                See also our{" "}
+                <Link href="/health/ideal-body-weight-calculator" className="font-semibold text-emerald-700 hover:underline">
+                  Ideal Body Weight calculator
+                </Link>{" "}
+                and{" "}
+                <Link href="/health/bmi-calculator" className="font-semibold text-emerald-700 hover:underline">
+                  BMI calculator
+                </Link>
+                .
+              </p>
+            </section>
+          </div>
+
+          <div className="mx-auto max-w-3xl">
+            <RelatedCalculators slug="adjusted-body-weight-calculator" />
             <MedicalReviewerSection />
             <AuthorSection />
           </div>
         </div>
       </main>
-      <AuthorSchema />
 
+      <AuthorSchema />
       <Footer />
     </div>
   )

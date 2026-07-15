@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { ClickableImage } from "@/components/ui/image-lightbox"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import WHtRCalculator from "@/components/calculators/whtr-calculator"
@@ -9,87 +10,175 @@ import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
-import { 
-  Ruler, 
-  Activity, 
-  HeartPulse, 
-  Calculator as CalculatorIcon, 
-  CheckCircle2, 
-  AlertCircle, 
-  ArrowRight, 
-  Utensils, 
-  Zap,
-  Info,
-  Users,
-  Baby,
-  Stethoscope,
-  Sparkles,
+import {
+  CheckCircle2,
+  ArrowRight,
+  Check,
+  X,
+  Ruler,
+  Dumbbell,
+  Footprints,
+  Drumstick,
+  Moon,
+  Flame,
+  ShieldCheck,
 } from "lucide-react"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
 
 export const metadata: Metadata = {
-  title: "Waist to Height Ratio Calculator: Simple & Accurate Health Risk Check",
+  title: "Waist to Height Ratio Calculator: Your WHtR Score & Healthy Range",
   description:
-    "Measure your waist to height ratio (WHtR) to assess abdominal fat and metabolic health. Learn why keeping your waist less than half your height is vital.",
+    "Free Waist-to-Height Ratio calculator. Get your WHtR score in seconds, see if your waist is in the healthy below 0.50 range, find your target waist for your height, and compare WHtR with BMI.",
   keywords:
-    "waist to height ratio calculator, WHtR calculator, height to waist ratio, calculate waist to height ratio, abdominal fat calculator, WHtR NHS, metabolic health risk",
+    "waist to height ratio calculator, WHtR calculator, healthy waist to height ratio, waist to height ratio chart, waist size for height, BMI vs waist to height ratio, waist to height ratio NHS",
   alternates: {
     canonical: "https://calqulate.net/health/waist-to-height-ratio-calculator",
   },
   openGraph: {
-    title: "Waist to Height Ratio Calculator: Simple & Accurate Health Risk Check",
-    description: "Measure your waist to height ratio (WHtR) to assess abdominal fat and metabolic health. Learn why keeping your waist less than half your height is vital.",
+    title: "Waist to Height Ratio Calculator: Your WHtR Score & Healthy Range",
+    description:
+      "Get your WHtR score in seconds, see if your waist is in the healthy below 0.50 range, and find your target waist for your height.",
     url: "https://calqulate.net/health/waist-to-height-ratio-calculator",
     siteName: "Calqulate",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Waist to Height Ratio Calculator: Simple & Accurate Health Risk Check",
-    description: "Measure your waist to height ratio (WHtR) to assess abdominal fat and metabolic health. Learn why keeping your waist less than half your height is vital.",
+    title: "Waist to Height Ratio Calculator: Your WHtR Score & Healthy Range",
+    description:
+      "Get your WHtR score in seconds, see if your waist is in the healthy below 0.50 range, and find your target waist for your height.",
   },
 }
 
 const faqs = [
   {
-    question: "What is a good waist to height ratio?",
+    question: "What is a healthy waist to height ratio?",
     answer:
-      "A ratio below 0.50 is considered healthy for most adults. This means your waist circumference should be less than half of your total height.",
+      "A healthy Waist-to-Height Ratio is below 0.50, which means your waist circumference should be less than half of your height. Ratios of 0.50 and above signal increasing health risk.",
   },
   {
     question: "Is waist to height ratio better than BMI?",
     answer:
-      "Yes, especially for detecting abdominal fat and metabolic risk. While BMI looks at total weight, WHtR looks at where fat is stored, which is a better predictor of heart disease.",
+      "For many people, yes. Waist-to-Height Ratio accounts for where fat is stored and detects abdominal fat, while BMI only uses total weight and height and can misclassify athletes and people with a normal weight but high visceral fat.",
   },
   {
-    question: "Can I use this calculator in cm or inches?",
+    question: "What should my waist measurement be for my height?",
     answer:
-      "Yes. The waist to height ratio calculator cm and inches give identical results as long as you use the same unit for both measurements.",
+      "Your waist should be less than half your height. For example, a healthy waist is under 80 cm at 160 cm tall, under 85 cm at 170 cm, under 90 cm at 180 cm, and under 95 cm at 190 cm.",
   },
   {
-    question: "Is this the same as NHS waist to height ratio?",
+    question: "How do I calculate waist to height ratio?",
     answer:
-      "Yes. The calculation is identical to the waist to height ratio calculator NHS method, which emphasizes keeping your waist less than half your height.",
+      "Divide your waist circumference by your height using the same unit for both. For example, a 80 cm waist divided by 170 cm height gives a ratio of 0.47.",
   },
   {
-    question: "How often should I check my waist to height ratio?",
+    question: "Where should I measure my waist?",
     answer:
-      "Every 4–8 weeks if you are actively improving your health through diet and exercise.",
+      "Measure at the midpoint between the bottom of your ribs and the top of your hip bones, roughly level with your belly button. Stand relaxed, breathe out, and keep the tape snug but not tight.",
   },
   {
-    question: "Can skinny people have a bad ratio?",
+    question: "Does waist to height ratio work for women?",
     answer:
-      "Yes. 'Skinny-fat' individuals can have high visceral (internal) fat despite having a normal weight or BMI, leading to a higher-than-ideal ratio.",
+      "Yes. The same target applies to women: keep your Waist-to-Height Ratio below 0.50. The measurement is taken the same way regardless of gender.",
+  },
+  {
+    question: "Does waist to height ratio work for men?",
+    answer:
+      "Yes. Men use the same below 0.50 target as women. Keeping your waist under half your height is a simple, reliable marker of lower abdominal fat.",
+  },
+  {
+    question: "Is the NHS waist to height ratio the same?",
+    answer:
+      "Yes. The NHS uses the same principle: keep your waist to less than half your height, which is a Waist-to-Height Ratio below 0.50.",
+  },
+  {
+    question: "Can skinny people have unhealthy visceral fat?",
+    answer:
+      "Yes. Someone with a normal weight or BMI can still store fat around their organs, sometimes called skinny-fat. A Waist-to-Height Ratio of 0.50 or higher can flag this even when the scale looks fine.",
+  },
+  {
+    question: "How often should I measure my waist?",
+    answer:
+      "Every 4 to 8 weeks is enough to track progress if you are actively changing your diet or activity. Measure at the same time of day, ideally in the morning before eating.",
   },
 ]
+
+const healthyRanges = [
+  { range: "Below 0.40", label: "Possibly underweight", tone: "blue" },
+  { range: "0.40 to 0.49", label: "Healthy", tone: "green" },
+  { range: "0.50 to 0.59", label: "Increased health risk", tone: "orange" },
+  { range: "0.60 and above", label: "High risk", tone: "red" },
+]
+
+const toneStyles: Record<string, string> = {
+  blue: "border-blue-200 bg-blue-50 text-blue-700",
+  green: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  orange: "border-orange-200 bg-orange-50 text-orange-700",
+  red: "border-red-200 bg-red-50 text-red-700",
+}
+
+const chartRows = [
+  { ratio: "Below 0.40", category: "Possibly underweight", meaning: "Waist is much less than half your height." },
+  { ratio: "0.40 to 0.49", category: "Healthy", meaning: "Waist is under half your height. Lowest risk." },
+  { ratio: "0.50 to 0.59", category: "Increased risk", meaning: "Waist is over half your height. More visceral fat." },
+  { ratio: "0.60 and above", category: "High risk", meaning: "Strongly linked to metabolic disease." },
+]
+
+const waistForHeight = [
+  { height: "150 cm (4 ft 11 in)", waist: "Under 75 cm (29.5 in)" },
+  { height: "160 cm (5 ft 3 in)", waist: "Under 80 cm (31.5 in)" },
+  { height: "170 cm (5 ft 7 in)", waist: "Under 85 cm (33.5 in)" },
+  { height: "180 cm (5 ft 11 in)", waist: "Under 90 cm (35.5 in)" },
+  { height: "190 cm (6 ft 3 in)", waist: "Under 95 cm (37.5 in)" },
+]
+
+const bmiVsWhtr = [
+  { factor: "Shows where fat is stored", bmi: false, whtr: true },
+  { factor: "Uses your waist measurement", bmi: false, whtr: true },
+  { factor: "Detects abdominal (visceral) fat", bmi: false, whtr: true },
+  { factor: "Works well for athletes", bmi: "Often wrong", whtr: "Better" },
+  { factor: "Predicts metabolic disease", bmi: "Limited", whtr: "Better" },
+]
+
+const improveSteps = [
+  {
+    icon: Flame,
+    title: "Lose abdominal fat",
+    body: "Even a small drop in waist size lowers your ratio. A modest calorie deficit is the most direct way to shrink the fat stored around your middle.",
+  },
+  {
+    icon: Dumbbell,
+    title: "Strength training",
+    body: "Lifting two to three times a week builds muscle and helps burn visceral fat, which improves your ratio even if the scale barely moves.",
+  },
+  {
+    icon: Footprints,
+    title: "Daily walking",
+    body: "Aiming for 7,000 to 10,000 steps a day burns extra calories and is one of the easiest habits to keep long term.",
+  },
+  {
+    icon: Drumstick,
+    title: "Higher protein",
+    body: "More protein keeps you full, protects muscle in a calorie deficit, and makes fat loss around the waist easier to sustain.",
+  },
+  {
+    icon: Moon,
+    title: "Better sleep",
+    body: "Poor sleep raises cortisol and appetite, which encourages fat storage around the middle. Aim for seven to nine hours.",
+  },
+]
+
+/** One-sentence lead answer, styled for AI Overviews and quick scanning. */
+function Answer({ children }: { children: React.ReactNode }) {
+  return <p className="mt-3 text-base font-medium leading-relaxed text-slate-800 sm:text-lg">{children}</p>
+}
 
 export default function WHtRCalculatorPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <CalculatorSchema
         name="Waist to Height Ratio Calculator"
-        description="Calculate your waist-to-height ratio (WHtR) to assess abdominal fat and metabolic health risks instantly."
+        description="Calculate your Waist-to-Height Ratio (WHtR) to check abdominal fat and metabolic health, see your healthy range, and find your target waist for your height."
         url="https://calqulate.net/health/waist-to-height-ratio-calculator"
       />
       <FAQSchema faqs={faqs} />
@@ -99,351 +188,323 @@ export default function WHtRCalculatorPage() {
 
       <main id="main" className="flex-1">
         {/* HERO */}
-        <section className="bg-gradient-to-br from-emerald-50 via-white to-lime-50 border-b border-slate-200">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-5">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
-              Free · Instant · No sign-up required
-            </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              Waist to Height Ratio Calculator
+        <section className="border-b border-slate-200 bg-gradient-to-br from-emerald-50 via-white to-lime-50">
+          <div className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 md:py-16">
+            <h1 className="text-3xl font-bold leading-tight text-slate-900 sm:text-4xl md:text-5xl">
+              Waist-to-Height Ratio Calculator
             </h1>
-            <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              A waist to height ratio calculator measures how your waist circumference compares to your height. It helps assess abdominal fat, which is strongly linked to{" "} <Link href="/health/heart-age-calculator" className="text-red-600 hover:underline hover:text-red-800 transition-colors font-medium" > heart disease </Link>{" "} and metabolic health.
+            <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 sm:text-lg">
+              Calculate your Waist-to-Height Ratio (WHtR) in seconds and see whether your waist is within the healthy
+              &quot;less than half your height&quot; range used by health professionals worldwide.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <ul className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2">
+              {["Health Risk Score", "Waist Target", "NHS <0.5 Rule", "Heart Disease Risk", "Free Calculator"].map(
+                (chip) => (
+                  <li
+                    key={chip}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-semibold text-emerald-800"
+                  >
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    {chip}
+                  </li>
+                ),
+              )}
+            </ul>
+
+            <div className="mt-8">
               <a
                 href="#calculator"
-                className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
               >
-                Try the Calculator ↓
+                Calculate my ratio
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
           </div>
         </section>
 
-        {/* USP SUMMARY (TOFU) */}
-        <section className="border-b border-emerald-100 bg-white">
-          <div className="mx-auto max-w-5xl px-6 py-6">
-            <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 md:p-6">
-              <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
-              <p className="text-sm md:text-base leading-relaxed text-slate-700">
-                Calqulate.net checks your waist-to-height ratio from two measurements using the evidence-backed &apos;&lt;0.5&apos; rule. You get a clear risk tier and the exact inches to lose.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* STATS DASHBOARD */}
-        <section className="border-b border-slate-200 bg-slate-50">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
-            {[
-              { value: "0.5", label: "Threshold" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
-              { value: "Instant", label: "Results" },
-              { value: "Private", label: "In-browser" },
-            ].map((s) => (
-              <div key={s.label} className="bg-white p-5 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CALCULATOR */}
+        {/* CALCULATOR (and dynamic "Understand Your Result" output) */}
         <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+          <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 md:py-14">
             <WHtRCalculator />
           </div>
         </section>
 
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
+        <div className="container mx-auto px-4 pb-8">
+          <div className="mx-auto max-w-3xl space-y-14">
+            {/* WHAT IS A HEALTHY WHtR */}
+            <section id="healthy-ratio" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+                What is a healthy Waist-to-Height Ratio?
+              </h2>
+              <Answer>
+                A healthy Waist-to-Height Ratio is below 0.50, meaning your waist circumference should be less than half
+                of your height.
+              </Answer>
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
+                The same 0.50 target applies to men and women of most ages. As your ratio rises above 0.50, the amount
+                of fat stored around your organs tends to rise with it, and so does your risk of heart disease and type
+                2 diabetes.
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {healthyRanges.map((r) => (
+                  <div key={r.range} className={`rounded-2xl border p-4 ${toneStyles[r.tone]}`}>
+                    <p className="text-lg font-bold">{r.range}</p>
+                    <p className="text-sm font-semibold">{r.label}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
 
-            <div className="prose prose-gray dark:prose-invert max-w-none mt-12 space-y-12">
-              
-              {/* What is WHtR? */}
-              <section className="py-8 border-b border-gray-100">
-                <h2 className="mb-4 text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Info className="w-6 h-6 text-green-600" />
-                  What is a Waist to Height Ratio Calculator?
-                </h2>
-                <p className="mb-3 text-gray-700 leading-relaxed">
-                  Unlike BMI, this method focuses on where fat is stored, not just body weight. It helps assess abdominal fat, which is strongly linked to:
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                  {['Heart disease', 'Type 2 diabetes', 'High blood pressure', 'Metabolic syndrome'].map((item) => (
-                    <div key={item} className="flex flex-col items-center p-3 bg-white border border-green-100 rounded-xl shadow-sm text-center">
-                      <HeartPulse className="w-5 h-5 text-green-600 mb-2" />
-                      <span className="text-xs font-bold text-gray-700">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </section>
+            {/* WHtR CHART */}
+            <section id="chart" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Waist-to-Height Ratio chart</h2>
+              <Answer>
+                Use this Waist-to-Height Ratio chart to see which category your score falls into, from healthy below
+                0.50 to high risk at 0.60 and above.
+              </Answer>
 
-              {/* Formula Card */}
-              <section>
-                <Card className="border-green-100 shadow-sm rounded-2xl overflow-hidden">
-                  <CardHeader className="bg-green-600 text-white">
-                    <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                      <CalculatorIcon className="w-5 h-5" />
-                      Waist to Height Ratio Formula
-                    </CardTitle>
-                    <CardDescription className="text-green-50">Simple & Accurate Calculation</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-8">
-                    <div className="text-center mb-8">
-                      <p className="text-sm text-gray-500 uppercase tracking-widest mb-2 font-bold">The Math:</p>
-                      <p className="text-2xl md:text-3xl font-mono text-green-700 font-bold">
-                        Waist to Height Ratio = Waist ÷ Height
-                      </p>
-                      <p className="text-xs text-gray-400 mt-2 italic">Both measurements must be in the same unit (cm/cm or inches/inches).</p>
-                    </div>
+              {/* Chart image placeholder: upload the file to /public/charts/ and it renders here. */}
+              <figure className="mt-6">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/charts/waist-to-height-ratio-chart.webp"
+                  alt="Waist-to-Height Ratio chart showing healthy below 0.50, increased risk from 0.50 to 0.59, and high risk at 0.60 and above"
+                  width={1200}
+                  height={800}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-auto w-full rounded-2xl border border-slate-200 bg-slate-50"
+                />
+                <figcaption className="mt-3 text-sm leading-relaxed text-slate-500">
+                  Waist-to-Height Ratio categories for adults. A ratio below 0.50 is the healthy target.
+                </figcaption>
+              </figure>
 
-                    <div className="grid md:grid-cols-2 gap-8 border-t pt-8">
-                      <div>
-                        <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-green-600" /> Manual Steps
-                        </h4>
-                        <ol className="text-sm space-y-3 text-gray-600">
-                          <li><b>1.</b> Measure your waist at the midpoint between ribs and hips.</li>
-                          <li><b>2.</b> Measure your height without shoes.</li>
-                          <li><b>3.</b> Divide waist by height.</li>
-                        </ol>
-                      </div>
-                      <div className="bg-green-50 p-4 rounded-xl border border-green-100">
-                        <h4 className="font-bold text-green-800 mb-2">Example (Metric):</h4>
-                        <div className="text-sm text-green-900 space-y-1">
-                          <p>Waist: 80 cm</p>
-                          <p>Height: 170 cm</p>
-                          <p className="font-bold pt-2">80 ÷ 170 = 0.47</p>
-                          <p className="text-xs font-bold text-green-600">✅ Healthy range</p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* Chart Section */}
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Waist to Height Ratio Chart (Adults)</h2>
-                <Card className="not-prose border-green-200 overflow-hidden">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-green-600 text-white">
-                        <th className="px-6 py-4 text-left font-bold">Ratio</th>
-                        <th className="px-6 py-4 text-left font-bold">Health Risk</th>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Ratio</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Category</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">What it means</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {chartRows.map((row) => (
+                      <tr key={row.ratio} className="odd:bg-white even:bg-slate-50/60">
+                        <td className="border-b border-slate-100 px-4 py-3 font-semibold text-slate-900">{row.ratio}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-slate-700">{row.category}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-slate-700">{row.meaning}</td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      <tr><td className="px-6 py-4 font-medium">Below 0.40</td><td className="px-6 py-4 text-blue-600 font-bold">Underweight</td></tr>
-                      <tr className="bg-green-50/50"><td className="px-6 py-4 font-medium">0.40 – 0.49</td><td className="px-6 py-4 text-green-600 font-bold">Healthy</td></tr>
-                      <tr><td className="px-6 py-4 font-medium">0.50 – 0.59</td><td className="px-6 py-4 text-orange-600 font-bold">Increased risk</td></tr>
-                      <tr className="bg-red-50/30"><td className="px-6 py-4 font-medium">0.60+</td><td className="px-6 py-4 text-red-600 font-bold">High health risk</td></tr>
-                    </tbody>
-                  </table>
-                </Card>
-                <p className="mt-4 text-sm text-gray-500 italic">This threshold is supported by large-scale population studies and aligns closely with waist to height ratio calculator NHS guidance.</p>
-              </section>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-              {/* NHS & BMI Comparison */}
-              <section className="space-y-8">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Waist to Height Ratio Calculator NHS – What’s the Difference?</h2>
-                  <p className="text-gray-700 leading-relaxed">
-                    The waist to height ratio calculator NHS follows the same principle: <b>Waist should be less than half your height</b>. This guide fills the gaps that most calculators miss, such as how athletes and &quot;skinny-fat&quot; people are misclassified by BMI.
-                  </p>
+            {/* WAIST FOR HEIGHT */}
+            <section id="waist-for-height" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+                What should my waist be for my height?
+              </h2>
+              <Answer>
+                Your waist should be less than half your height, so a healthy waist is roughly under 80 cm at 160 cm
+                tall, under 85 cm at 170 cm, under 90 cm at 180 cm, and under 95 cm at 190 cm.
+              </Answer>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Height</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Healthy waist (WHtR below 0.50)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {waistForHeight.map((row) => (
+                      <tr key={row.height} className="odd:bg-white even:bg-slate-50/60">
+                        <td className="border-b border-slate-100 px-4 py-3 font-semibold text-slate-900">{row.height}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-emerald-700 font-semibold">{row.waist}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                In inches the rule is identical: keep your waist under half your height in the same unit.
+              </p>
+            </section>
+
+            {/* BMI vs WHtR */}
+            <section id="bmi-vs-whtr" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">BMI vs Waist-to-Height Ratio</h2>
+              <Answer>
+                Waist-to-Height Ratio is often better than BMI because it accounts for where fat is stored, while BMI
+                only uses total weight and height.
+              </Answer>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Feature</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 text-center font-bold text-slate-900">
+                        <Link href="/health/bmi-calculator" className="hover:underline">BMI</Link>
+                      </th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 text-center font-bold text-emerald-700">WHtR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bmiVsWhtr.map((row) => (
+                      <tr key={row.factor} className="odd:bg-white even:bg-slate-50/60">
+                        <td className="border-b border-slate-100 px-4 py-3 font-medium text-slate-800">{row.factor}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-center">
+                          {typeof row.bmi === "boolean" ? (
+                            row.bmi ? (
+                              <Check className="mx-auto h-5 w-5 text-emerald-600" aria-label="Yes" />
+                            ) : (
+                              <X className="mx-auto h-5 w-5 text-red-500" aria-label="No" />
+                            )
+                          ) : (
+                            <span className="text-slate-500">{row.bmi}</span>
+                          )}
+                        </td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-center">
+                          {typeof row.whtr === "boolean" ? (
+                            row.whtr ? (
+                              <Check className="mx-auto h-5 w-5 text-emerald-600" aria-label="Yes" />
+                            ) : (
+                              <X className="mx-auto h-5 w-5 text-red-500" aria-label="No" />
+                            )
+                          ) : (
+                            <span className="font-semibold text-emerald-700">{row.whtr}</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                Using a{" "}
+                <Link href="/health/bmi-calculator" className="font-semibold text-emerald-700 hover:underline">
+                  BMI calculator
+                </Link>{" "}
+                and your Waist-to-Height Ratio together gives a fuller picture than either number alone.
+              </p>
+            </section>
+
+            {/* HOW TO MEASURE WAIST */}
+            <section id="measure-waist" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">How to measure your waist</h2>
+              <Answer>
+                Measure your waist at the midpoint between the bottom of your ribs and the top of your hip bones,
+                standing relaxed just after breathing out.
+              </Answer>
+              <div className="mt-6 grid items-center gap-6 sm:grid-cols-2">
+                <div className="flex justify-center">
+                  <ClickableImage
+                    src="/images/dress-size/measure-waist.webp"
+                    alt="Illustration showing where to place the tape measure to measure waist circumference, midway between the ribs and hips"
+                    width={480}
+                    height={480}
+                    className="rounded-2xl border border-slate-200 shadow-sm"
+                  />
                 </div>
+                <ul className="space-y-3 text-sm text-slate-700">
+                  <li className="flex gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    Wrap the tape around your bare waist, level and parallel to the floor.
+                  </li>
+                  <li className="flex gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    Stand up straight, relax, and breathe out before you read the number.
+                  </li>
+                  <li className="flex gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    Keep the tape snug but not digging into the skin.
+                  </li>
+                  <li className="flex gap-2">
+                    <X className="mt-0.5 h-4 w-4 shrink-0 text-red-500" aria-hidden="true" />
+                    Do not hold your breath, pull the tape tight, or measure straight after a meal.
+                  </li>
+                </ul>
+              </div>
+            </section>
 
-                <div className="not-prose">
-                  <h3 className="text-xl font-bold text-gray-800 mb-4">BMI vs Waist to Height Ratio</h3>
-                  <div className="overflow-x-auto border border-green-100 rounded-xl">
-                    <table className="w-full text-sm">
-                      <thead className="bg-green-50 text-green-900">
-                        <tr>
-                          <th className="px-4 py-3 text-left">Factor</th>
-                          <th className="px-4 py-3 text-left">
-                            <Link
-                              href="/health/bmi-calculator"
-                              className="hover:underline hover:text-green-800 transition-colors"
-                            >
-                              BMI Calculator
-                            </Link>
-                          </th>
-                          <th className="px-4 py-3 text-left">Waist to Height Ratio</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-100">
-                        <tr><td className="px-4 py-3 font-medium">Considers fat location</td><td className="px-4 py-3 text-red-500">❌ No</td><td className="px-4 py-3 text-green-600 font-bold">✅ Yes</td></tr>
-                        <tr><td className="px-4 py-3 font-medium">Works for athletes</td><td className="px-4 py-3 text-red-500">❌ Often wrong</td><td className="px-4 py-3 text-green-600 font-bold">✅ Better</td></tr>
-                        <tr><td className="px-4 py-3 font-medium">Ethnicity-neutral</td><td className="px-4 py-3 text-red-500">❌ No</td><td className="px-4 py-3 text-green-600 font-bold">✅ Mostly</td></tr>
-                        <tr><td className="px-4 py-3 font-medium">Detects visceral fat</td><td className="px-4 py-3 text-red-500">❌ No</td><td className="px-4 py-3 text-green-600 font-bold">✅ Yes</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <p className="mt-3 text-sm font-bold text-green-700">
-                    👉 Using a{" "}
-                    <Link
-                      href="/health/bmi-calculator"
-                      className="underline hover:text-green-900 transition-colors"
-                    >
-                      BMI calculator
-                    </Link>{" "}
-                    and waist to height ratio together gives a far better health picture than either alone.
-                  </p>
-                </div>
-              </section>
-
-              {/* Gender & Children */}
-              <section className="grid md:grid-cols-2 gap-8">
-                <Card className="border-green-100">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
-                      <Users className="w-5 h-5 text-green-600" />
-                      WHtR Men vs Women
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <span className="font-medium">Men Target</span>
-                        <span className="font-bold text-green-700">≤ 0.50</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <span className="font-medium">Women Target</span>
-                        <span className="font-bold text-green-700">≤ 0.50</span>
-                      </div>
-                      <p className="text-xs text-gray-500">✔️ Same cutoff across genders for health risk assessment.</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-orange-100 bg-orange-50/30">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-lg font-bold text-orange-800">
-                      <Baby className="w-5 h-5 text-orange-600" />
-                      WHtR for Children & Teens
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-700 mb-3">Ratio below <b>0.50</b> is still recommended for children. It often predicts future health risks better than BMI percentiles.</p>
-                    <p className="text-xs font-bold text-orange-700 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> Always interpret with pediatric guidance.
-                    </p>
-                  </CardContent>
-                </Card>
-              </section>
-
-              {/* Practical Tips */}
-              <section className="bg-green-50 p-8 rounded-3xl border border-green-100">
-                <h2 className="text-2xl font-bold mb-6 text-green-900">Practical Tips to Improve Waist to Height Ratio</h2>
-                <div className="grid md:grid-cols-3 gap-6 not-prose">
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-green-800 flex items-center gap-2">
-                      <Utensils className="w-4 h-4" /> Nutrition
-                    </h4>
-                    <ul className="text-sm space-y-2 text-green-700">
-                      <li>• Reduce ultra-processed carbs</li>
-                      <li>• Increase protein & fiber</li>
-                      <li>• Control liquid calories</li>
-                    </ul>
-                  </div>
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-green-800 flex items-center gap-2">
-                      <Ruler className="w-4 h-4" /> Activity
-                    </h4>
-                    <ul className="text-sm space-y-2 text-green-700">
-                      <li>• Strength training (2–3x/week)</li>
-                      <li>• Daily walking (7k–10k steps)</li>
-                      <li>• Reduce prolonged sitting</li>
-                    </ul>
-                  </div>
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-green-800 flex items-center gap-2">
-                      <Zap className="w-4 h-4" /> Lifestyle
-                    </h4>
-                    <ul className="text-sm space-y-2 text-green-700">
-                      <li>
-                        • Improve{" "}
-                        <Link
-                          href="/health/sleep-cycle-calculator"
-                          className="hover:underline hover:text-green-900 transition-colors font-medium"
-                        >
-                          sleep quality
-                        </Link>
-                      </li>
-
-                      <li>
-                        •{" "}
-                        <Link
-                          href="/health/stress-level-calculator"
-                          className="hover:underline hover:text-green-900 transition-colors font-medium"
-                        >
-                          Manage stress
-                        </Link>{" "}
-                        (cortisol)
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </section>
-
-              {/* Mistakes Section */}
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Common Measurement Mistakes (Avoid These)</h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="p-4 border border-red-100 rounded-xl bg-red-50/30">
-                    <h4 className="text-red-700 font-bold mb-2">Don&apos;t:</h4>
-                    <ul className="text-sm space-y-2 text-gray-600">
-                      <li>❌ Measuring waist at belly button</li>
-                      <li>❌ Holding breath</li>
-                      <li>❌ Tight tape measure</li>
-                      <li>❌ Measuring after meals</li>
-                    </ul>
-                  </div>
-                  <div className="p-4 border border-green-100 rounded-xl bg-green-50/30">
-                    <h4 className="text-green-700 font-bold mb-2">Do:</h4>
-                    <ul className="text-sm space-y-2 text-gray-600">
-                      <li>✔️ Measure relaxed, standing</li>
-                      <li>✔️ Measure before food (morning)</li>
-                      <li>✔️ Use consistent units (cm or inches)</li>
-                    </ul>
-                  </div>
-                </div>
-              </section>
-
-              {/* Final Note */}
-              <section className="text-center pt-12 border-t border-gray-100">
-                <h2 className="text-3xl font-bold mb-4 text-gray-900">Final Takeaway</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                  If you remember one thing: <b>Keep your waist less than half your height.</b> 
-                  This single ratio may reveal health risks years before symptoms appear.
+            {/* FORMULA (short) */}
+            <section id="formula" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Waist-to-Height Ratio formula</h2>
+              <Answer>
+                To calculate your Waist-to-Height Ratio, divide your waist circumference by your height using the same
+                unit for both.
+              </Answer>
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center">
+                <p className="font-mono text-xl font-bold text-emerald-700 sm:text-2xl">
+                  WHtR = waist &divide; height
                 </p>
-              </section>
+                <p className="mt-3 text-sm text-slate-600">
+                  Example: 80 cm waist &divide; 170 cm height = <span className="font-bold text-slate-900">0.47</span>, a
+                  healthy result.
+                </p>
+              </div>
+            </section>
 
-            </div>
+            {/* NHS */}
+            <section id="nhs" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Waist-to-Height Ratio and the NHS</h2>
+              <Answer>
+                The NHS uses the same rule as this calculator: keep your waist to less than half your height, which is a
+                Waist-to-Height Ratio below 0.50.
+              </Answer>
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
+                This calculator applies the same evidence-based 0.50 threshold, so your result lines up with NHS
+                guidance and with large population studies used by health services around the world.
+              </p>
+            </section>
 
-            <RelatedCalculators slug="waist-to-height-ratio-calculator" />
+            {/* HOW TO IMPROVE */}
+            <section id="improve" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+                How to improve your Waist-to-Height Ratio
+              </h2>
+              <Answer>
+                To improve your Waist-to-Height Ratio, reduce abdominal fat through strength training, regular walking,
+                higher protein intake, and better sleep.
+              </Answer>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {improveSteps.map((s) => (
+                  <div key={s.title} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-5">
+                    <s.icon className="mt-0.5 h-6 w-6 shrink-0 text-emerald-600" aria-hidden="true" />
+                    <div>
+                      <h3 className="font-bold text-slate-900">{s.title}</h3>
+                      <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 flex items-start gap-2 rounded-2xl bg-emerald-50 p-4 text-sm leading-relaxed text-emerald-900">
+                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" aria-hidden="true" />
+                Re-measure every 4 to 8 weeks. A falling ratio is one of the clearest early signs that your health is
+                moving in the right direction.
+              </p>
+            </section>
 
-            {/* Structured FAQ UI */}
-            <div className="mt-12">
+            {/* FAQ */}
+            <section id="faqs" className="scroll-mt-20">
+              <h2 className="mb-6 text-2xl font-bold text-slate-900 sm:text-3xl">Frequently asked questions</h2>
               <FAQSection faqs={faqs} />
-            </div>
+            </section>
+          </div>
 
-            {/* Author Badge Section */}
+          <div className="mx-auto max-w-3xl">
+            <RelatedCalculators slug="waist-to-height-ratio-calculator" />
             <MedicalReviewerSection />
             <AuthorSection />
           </div>
         </div>
       </main>
 
-      {/* Author Schema */}
       <AuthorSchema />
 
       <Footer />

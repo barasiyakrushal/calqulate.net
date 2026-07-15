@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import HeartRateCalculator from "@/components/calculators/heart-rate-calculator"
@@ -9,99 +8,166 @@ import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
 import {
-  Heart,
   Activity,
-  Zap,
-  Timer,
-  Target,
-  TrendingUp,
   Flame,
-  ShieldCheck,
-  Info,
-  AlertTriangle,
+  Heart,
+  Timer,
+  Zap,
   CheckCircle2,
-  Calculator,
   ArrowRight,
-  Gauge,
-  Clock,
-  User,
-  Users,
-  Dumbbell,
-  Stethoscope,
-  Sparkles,
+  ShieldCheck,
+  AlertTriangle,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
 
 export const metadata: Metadata = {
-  title: "Target & Max Heart Rate Calculator | Find Your Training Zones",
+  title: "Target & Max Heart Rate Calculator: Zones, Karvonen & MHR",
   description:
-    "Estimate maximum heart rate and find your target training zones. Use our calculator to determine optimal beats per minute for fat loss, endurance, and cardio.",
+    "Free target and max heart rate calculator. Get your maximum heart rate (MHR), target heart rate, heart rate reserve (HRR), and personalized training zones using the Karvonen, Tanaka, and standard formulas.",
   keywords:
-    "max heart rate calculator, target heart rate calculator, beats per minute, exercise intensity, resting heart rate rhr, target heart rates chart, maximum heart rate",
+    "target heart rate calculator, max heart rate calculator, heart rate zone calculator, karvonen calculator, heart rate reserve, zone 2 heart rate, tanaka formula, resting heart rate, heart rate chart by age",
   alternates: {
     canonical: "https://calqulate.net/health/heart-rate-calculator",
   },
   openGraph: {
-    title: "Target & Max Heart Rate Calculator | Find Your Training Zones",
-    description: "Estimate maximum heart rate and find your target training zones. Use our calculator to determine optimal beats per minute for fat loss, endurance, and cardio.",
+    title: "Target & Max Heart Rate Calculator: Zones, Karvonen & MHR",
+    description:
+      "Get your maximum heart rate, target heart rate, heart rate reserve, and personalized training zones using the Karvonen, Tanaka, and standard formulas.",
     url: "https://calqulate.net/health/heart-rate-calculator",
     siteName: "Calqulate",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Target & Max Heart Rate Calculator | Find Your Training Zones",
-    description: "Estimate maximum heart rate and find your target training zones. Use our calculator to determine optimal beats per minute for fat loss, endurance, and cardio.",
+    title: "Target & Max Heart Rate Calculator: Zones, Karvonen & MHR",
+    description:
+      "Get your maximum heart rate, target heart rate, heart rate reserve, and personalized training zones instantly.",
   },
 }
 
 const faqs = [
   {
-    question: "How do I estimate maximum heart rate accurately?",
+    question: "What is my maximum heart rate?",
     answer:
-      "The most common method is the standard formula of 220 minus your age. For a 40-year-old, this equals 180 beats per minute. The Tanaka formula (208 minus 0.7 times age) provides more accuracy for adults over 40. A 40-year-old using Tanaka would calculate 208 minus 28 to get 180 beats per minute.",
+      "Your maximum heart rate is the highest number of beats per minute your heart can reach during all-out effort. A quick estimate is 220 minus your age, so a 40-year-old has an estimated max of 180 bpm. The Tanaka formula (208 minus 0.7 times age) is often more accurate for adults over 40.",
   },
   {
-    question: "What is the Karvonen formula and how does it calculate heart rate reserve?",
+    question: "How do I calculate target heart rate?",
     answer:
-      "The Karvonen formula determines your target training zone using your Heart Rate Reserve (HRR). You find your HRR by subtracting your resting heart rate from your maximum heart rate. You then multiply the HRR by your desired intensity percentage and add the resting heart rate back in.",
+      "Multiply your maximum heart rate by the intensity you want, such as 60 to 70% for Zone 2. For a more personal result, the Karvonen method uses your heart rate reserve: target = (max HR minus resting HR) times intensity, plus resting HR.",
   },
   {
-    question: "What is a normal resting heart rate (RHR)?",
+    question: "What is Zone 2 heart rate?",
     answer:
-      "A normal resting heart rate for adults ranges from 60 to 100 beats per minute. People who are physically active often have resting rates between 40 and 60 beats per minute. Regular exercise conditions the heart to pump more blood with fewer beats.",
+      "Zone 2 is about 60 to 70% of your maximum heart rate. At this comfortable intensity your body burns fat efficiently and builds aerobic endurance, which is why endurance athletes spend most of their training here.",
   },
   {
-    question: "What is Zone 2 heart rate and why is it important?",
+    question: "What is the Karvonen formula?",
     answer:
-      "Zone 2 represents 60 to 70 percent of your maximum heart rate. Your body efficiently burns fat for fuel and clears lactate at this moderate intensity. Endurance athletes spend most of their training time in Zone 2 to build cardiovascular stamina without overtraining.",
+      "The Karvonen formula calculates personalized target zones by combining your maximum heart rate and resting heart rate (your heart rate reserve), which makes it more accurate than age-only formulas.",
   },
   {
-    question: "How accurate are mathematical formulas compared to a clinical stress test?",
+    question: "Which heart rate formula is most accurate?",
     answer:
-      "Age-based formulas have a standard deviation of about 10 to 12 beats per minute. Your true maximum could be slightly higher or lower than the calculated number. A clinical stress test on a treadmill supervised by a doctor provides the exact maximum limit of your cardiovascular system.",
+      "A supervised stress test is the most accurate. Among formulas, Karvonen is best for personalized training, Tanaka is best for adults over 40, and 220 minus age is a fast general estimate.",
   },
   {
-    question: "What is the difference between maximum heart rate and target heart rate?",
+    question: "Should I use 220 minus age or Tanaka?",
     answer:
-      "Maximum heart rate is the absolute highest number of heart beats your body can sustain during severe physical exertion. Target heart rate is a specific percentage of that maximum. Exercising within your target zone ensures you meet specific fitness goals safely.",
+      "Use 220 minus age for a quick estimate. Use Tanaka (208 minus 0.7 times age) if you are over 40, since 220 minus age tends to underestimate maximum heart rate in older adults.",
   },
   {
-    question: "How do I calculate my heart rate reserve (HRR)?",
+    question: "What is heart rate reserve (HRR)?",
     answer:
-      "You calculate Heart Rate Reserve by subtracting your resting heart rate from your maximum heart rate. If your maximum is 180 and your resting rate is 65, your HRR is 115. This number represents the functional range your heart operates within during exercise.",
+      "Heart rate reserve is your maximum heart rate minus your resting heart rate. It represents the working range of your heart and is the basis of the Karvonen method for setting training zones.",
+  },
+  {
+    question: "What is a normal resting heart rate?",
+    answer:
+      "A normal resting heart rate for adults is 60 to 100 bpm. Active and fit people often sit between 40 and 60 bpm, because a stronger heart pumps more blood per beat.",
+  },
+  {
+    question: "Can medications affect target heart rate?",
+    answer:
+      "Yes. Beta blockers and some other heart medications lower your heart rate, so formula-based zones may be too high. If you take these medications, ask your doctor for zones based on your actual response to exercise.",
+  },
+  {
+    question: "How often should I recalculate my heart rate zones?",
+    answer:
+      "Recalculate every few months, or whenever your resting heart rate changes noticeably with fitness, or after a birthday changes your age-based maximum.",
   },
 ]
 
+/** Heart rate training zones, shown as cards. */
+const zones = [
+  { zone: 1, name: "Recovery", intensity: "50-60%", best: "Warm-ups, cool-downs, walking", icon: Activity, accent: "text-slate-600" },
+  { zone: 2, name: "Fat loss & endurance", intensity: "60-70%", best: "Easy jog, brisk walk, steady cycling", icon: Flame, accent: "text-emerald-700", highlight: true },
+  { zone: 3, name: "Cardio fitness", intensity: "70-80%", best: "Steady runs, cardio classes, swimming", icon: Heart, accent: "text-blue-700" },
+  { zone: 4, name: "Threshold", intensity: "80-90%", best: "Tempo intervals, hill repeats", icon: Timer, accent: "text-orange-700" },
+  { zone: 5, name: "Maximum effort", intensity: "90-100%", best: "Sprints, short HIIT bursts", icon: Zap, accent: "text-red-700" },
+]
+
+/** Goal to best zone, decision table. */
+const goalToZone = [
+  { goal: "Weight loss", zone: "Zone 2" },
+  { goal: "Marathon and long distance", zone: "Zone 2 to 3" },
+  { goal: "General fitness", zone: "Zone 2 to 3" },
+  { goal: "HIIT and speed", zone: "Zone 4 to 5" },
+  { goal: "Recovery days", zone: "Zone 1" },
+]
+
+/** Which formula is most accurate. */
+const formulaAccuracy = [
+  { formula: "220 minus Age", best: "Quick estimate" },
+  { formula: "Tanaka (208 - 0.7 x Age)", best: "Adults 40+" },
+  { formula: "Karvonen (HRR)", best: "Personalized training" },
+  { formula: "Clinical stress test", best: "Clinical accuracy" },
+]
+
+/** Heart rate chart by age (standard formula). */
+const ageChart = [
+  { age: "20", zone2: "120-140", zone3: "140-160", zone4: "160-180", max: "200" },
+  { age: "30", zone2: "114-133", zone3: "133-152", zone4: "152-171", max: "190" },
+  { age: "40", zone2: "108-126", zone3: "126-144", zone4: "144-162", max: "180" },
+  { age: "50", zone2: "102-119", zone3: "119-136", zone4: "136-153", max: "170" },
+  { age: "60", zone2: "96-112", zone3: "112-128", zone4: "128-144", max: "160" },
+  { age: "70", zone2: "90-105", zone3: "105-120", zone4: "120-135", max: "150" },
+]
+
+const rhrRanges = [
+  { range: "40-60 bpm", label: "Athlete or very fit" },
+  { range: "60-100 bpm", label: "Normal adult range" },
+  { range: "Over 100 bpm", label: "Elevated, worth checking" },
+]
+
+const trustPoints = [
+  "Aligned with American Heart Association (AHA) exercise guidance.",
+  "Uses the Karvonen heart rate reserve method for personalized zones.",
+  "Includes the Tanaka equation, supported by peer-reviewed exercise physiology research.",
+  "Educational only, not a replacement for a stress test or medical evaluation.",
+]
+
+const notAccurateFor = [
+  "Beta blockers and rate-limiting heart medication",
+  "Known heart disease",
+  "Arrhythmias such as atrial fibrillation",
+  "Elite athletes with unusually high or low max rates",
+  "Pregnancy",
+  "Cardiac rehabilitation",
+]
+
+/** One-sentence lead answer for AI Overviews and quick scanning. */
+function Answer({ children }: { children: React.ReactNode }) {
+  return <p className="mt-3 text-base font-medium leading-relaxed text-slate-800 sm:text-lg">{children}</p>
+}
+
 export default function HeartRateCalculatorPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-green-50">
+    <div className="min-h-screen flex flex-col bg-white">
       <CalculatorSchema
-        name="Target Heart Rate Calculator"
-        description="Estimate maximum heart rate and calculate specific target zones for cardiovascular training. Measure your optimal beats per minute for moderate intensity and high intensity workouts."
+        name="Target & Max Heart Rate Calculator"
+        description="Calculate maximum heart rate, target heart rate, heart rate reserve, and personalized training zones using the Karvonen, Tanaka, and standard formulas."
         url="https://calqulate.net/health/heart-rate-calculator"
       />
       <FAQSchema faqs={faqs} />
@@ -111,499 +177,319 @@ export default function HeartRateCalculatorPage() {
 
       <main id="main" className="flex-1">
         {/* HERO */}
-        <section className="bg-gradient-to-br from-emerald-50 via-white to-lime-50 border-b border-slate-200">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-5">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
-              Free · Instant · No sign-up required
-            </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              Target & Max Heart Rate Calculator
+        <section className="border-b border-slate-200 bg-slate-50">
+          <div className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 md:py-16">
+            <h1 className="text-3xl font-bold leading-tight text-slate-900 sm:text-4xl md:text-5xl">
+              Target &amp; Max Heart Rate Calculator
             </h1>
-            <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              Use our max heart rate calculator to estimate your cardiovascular ceiling. Find your exact training zones to optimize fat burning and endurance.
+            <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 sm:text-lg">
+              Calculate your Maximum Heart Rate (MHR), Target Heart Rate, Heart Rate Reserve (HRR), and personalized
+              training zones using the Karvonen, Tanaka, and standard formulas.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <ul className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2">
+              {["Max Heart Rate", "Target Heart Rate", "Zone 2 Calculator", "Karvonen Method", "Free & Instant"].map(
+                (chip) => (
+                  <li
+                    key={chip}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700"
+                  >
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    {chip}
+                  </li>
+                ),
+              )}
+            </ul>
+
+            <div className="mt-8">
               <a
                 href="#calculator"
-                className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700"
               >
-                Try the Calculator ↓
+                Calculate my zones
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
           </div>
         </section>
 
-        {/* USP SUMMARY (TOFU) */}
-        <section className="border-b border-emerald-100 bg-white">
-          <div className="mx-auto max-w-5xl px-6 py-6">
-            <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 md:p-6">
-              <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
-              <p className="text-sm md:text-base leading-relaxed text-slate-700">
-                Calqulate.net maps your training heart-rate zones from your age and resting rate using the precise Karvonen method. You get exact BPM brackets including your fat-burning Zone 2.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* STATS DASHBOARD */}
-        <section className="border-b border-slate-200 bg-slate-50">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
-            {[
-              { value: "5", label: "Training zones" },
-              { value: "Karvonen", label: "Method" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
-              { value: "Instant", label: "Results" },
-            ].map((s) => (
-              <div key={s.label} className="bg-white p-5 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CALCULATOR */}
+        {/* CALCULATOR (and dynamic 'Understand your results') */}
         <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+          <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 md:py-14">
             <HeartRateCalculator />
           </div>
         </section>
 
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
+        <div className="container mx-auto px-4 pb-8">
+          <div className="mx-auto max-w-3xl space-y-14">
+            {/* WHAT IS TARGET HEART RATE */}
+            <section id="what-is-target-hr" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">What is target heart rate?</h2>
+              <Answer>
+                Target heart rate is the heart rate range where exercise gives the greatest benefit for your fitness
+                goal, usually set as a percentage of your maximum heart rate.
+              </Answer>
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
+                Training below your target range does too little to improve fitness, while staying above it for too long
+                leads to fatigue. Most goals are met by training in a target zone between 60 and 85% of your maximum
+                heart rate.
+              </p>
+            </section>
 
-            <div className="prose prose-gray dark:prose-invert max-w-none mt-12 space-y-12">
-              
-              <section className="py-8 border-b border-gray-100">
-                <h2 className="mb-4 text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Gauge className="w-6 h-6 text-green-600" />
-                  How to Estimate Maximum Heart Rate
-                </h2>
-                <p className="mb-6 text-gray-700 leading-relaxed">
-                  Your maximum heart rate acts as the foundation for all training zone calculations. It represents the highest number of heart beats you can sustain during maximum physical effort. We use two widely studied formulas to estimate maximum heart rate.
-                </p>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <Card className="border-blue-200 overflow-hidden">
-                    <CardHeader className="bg-blue-50 pb-3">
-                      <CardTitle className="text-lg text-blue-800">Standard Formula</CardTitle>
-                      <CardDescription className="text-blue-600">Best for quick baseline estimates</CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <div className="text-2xl font-mono font-bold text-blue-700 text-center py-4 bg-white rounded-lg border-2 border-blue-200 mb-4">
-                        Max HR = 220 - Age
-                      </div>
-                      <div className="p-3 bg-blue-50 rounded-lg">
-                        <p className="text-sm text-blue-800"><strong>Example:</strong> Age 40</p>
-                        <p className="text-sm text-blue-700">220 - 40 = <strong>180 beats per minute</strong></p>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-green-200 overflow-hidden">
-                    <CardHeader className="bg-green-50 pb-3">
-                      <CardTitle className="text-lg text-green-800">Tanaka Formula</CardTitle>
-                      <CardDescription className="text-green-600">More precise for adults over 40</CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <div className="text-2xl font-mono font-bold text-green-700 text-center py-4 bg-white rounded-lg border-2 border-green-200 mb-4">
-                        Max HR = 208 - (0.7 × Age)
-                      </div>
-                      <div className="p-3 bg-green-50 rounded-lg">
-                        <p className="text-sm text-green-800"><strong>Example:</strong> Age 40</p>
-                        <p className="text-sm text-green-700">208 - 28 = <strong>180 beats per minute</strong></p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div className="mt-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg">
-                  <p className="text-amber-800 text-sm">
-                    <strong>💡 Why use the Tanaka method?</strong> Clinical research indicates that the standard 220-age formula frequently underestimates maximum heart capacity in healthy adults over 40. Exercise physiologists now prefer the Tanaka equation for older demographics.
-                  </p>
-                </div>
-              </section>
-
-              <section>
-                <Card className="border-green-100 shadow-sm rounded-2xl overflow-hidden">
-                  <CardHeader className="bg-green-50 pb-4">
-                    <CardTitle className="flex items-center gap-2 text-xl font-bold text-green-800">
-                      <Calculator className="w-5 h-5" />
-                      The Karvonen Formula and Heart Rate Reserve
-                    </CardTitle>
-                    <CardDescription className="text-green-700/80">
-                      Accounting for your current fitness level
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-6">
-                    <p className="text-gray-700 mb-6">
-                      Generic calculators ignore your current cardiovascular condition. A trained athlete and a sedentary office worker of the same age have distinct metabolic profiles. The Karvonen Method factors in your Resting Heart Rate (RHR) to provide a personalized exercise target.
-                    </p>
-                    
-                    <div className="space-y-4">
-                      <div className="flex gap-4">
-                        <div className="h-10 w-10 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0 font-bold">1</div>
-                        <div className="flex-1">
-                          <p className="font-bold text-gray-800">Measure Your Resting Pulse</p>
-                          <p className="text-sm text-gray-600">Count your beats per minute for 60 seconds immediately upon waking. Normal averages fall between 60 and 100.</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex gap-4">
-                        <div className="h-10 w-10 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0 font-bold">2</div>
-                        <div className="flex-1">
-                          <p className="font-bold text-gray-800">Find Heart Rate Reserve</p>
-                          <div className="mt-2 p-3 bg-gray-50 rounded-lg font-mono text-rose-700">
-                            HRR = Max HR - Resting HR
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex gap-4">
-                        <div className="h-10 w-10 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0 font-bold">3</div>
-                        <div className="flex-1">
-                          <p className="font-bold text-gray-800">Calculate Target Heart Rate</p>
-                          <div className="mt-2 p-3 bg-gray-50 rounded-lg font-mono text-rose-700">
-                            Target HR = (HRR × Intensity %) + Resting HR
-                          </div>
-                        </div>
-                      </div>
+            {/* TRAINING ZONES */}
+            <section id="training-zones" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Heart rate training zones</h2>
+              <Answer>
+                There are five heart rate zones, from Zone 1 for recovery to Zone 5 for maximum effort, each set as a
+                percentage of your maximum heart rate.
+              </Answer>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {zones.map((z) => (
+                  <div
+                    key={z.zone}
+                    className={`rounded-2xl border bg-white p-5 ${z.highlight ? "border-emerald-300 ring-1 ring-emerald-200" : "border-slate-200"}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2 font-bold text-slate-900">
+                        <z.icon className={`h-5 w-5 ${z.accent}`} aria-hidden="true" />
+                        Zone {z.zone}: {z.name}
+                      </span>
+                      <span className="text-sm font-semibold text-slate-500">{z.intensity}</span>
                     </div>
-
-                    <div className="mt-6 p-4 bg-green-50 rounded-xl border border-green-200">
-                      <p className="font-bold text-green-800 mb-2">📊 Practical Example:</p>
-                      <div className="text-sm text-green-700 space-y-1">
-                        <p>Age: 40 years. Resting HR: 60 bpm.</p>
-                        <p>Max HR: 180 bpm.</p>
-                        <p>Heart Rate Reserve: 180 - 60 = <strong>120 bpm</strong>.</p>
-                        <p>Zone 2 Target (60% intensity): (120 × 0.60) + 60 = <strong>132 bpm</strong>.</p>
-                      </div>
-                      <p className="text-xs text-green-600 mt-3 italic">
-                        Note: Without factoring in resting rate, basic 60% intensity equals 108 bpm. That pace is too slow to trigger cardiovascular adaptation.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Target className="w-6 h-6 text-green-600" />
-                  Exercising Within Your Target Zones
-                </h2>
-                <p className="mb-6 text-gray-700">
-                  Exercising within your target zone produces distinct physical changes. Tracking your exercise intensity ensures you build stamina, lose fat, and improve your overall fitness level systematically.
-                </p>
-
-                <div className="space-y-4 not-prose">
-                  <div className="p-5 bg-gray-50 rounded-2xl border-l-4 border-gray-400">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                        <Clock className="w-5 h-5 text-gray-500" />
-                        Zone 1: Active Recovery
-                      </h3>
-                      <span className="px-3 py-1 bg-gray-200 rounded-full text-sm font-semibold text-gray-700">50-60% Max HR</span>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-2"><strong>Feeling:</strong> Very light effort. You can maintain a full conversation.</p>
-                    <p className="text-sm text-gray-600"><strong>Purpose:</strong> Warm-ups, cool-downs, and promoting blood flow to muscles.</p>
+                    <p className="mt-2 text-sm text-slate-600">{z.best}</p>
+                    {z.highlight && (
+                      <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                        <Flame className="h-3 w-3" /> Fat-burning zone
+                      </span>
+                    )}
                   </div>
+                ))}
+              </div>
+            </section>
 
-                  <div className="p-5 bg-green-50 rounded-2xl border-l-4 border-green-500 ring-2 ring-green-200">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-bold text-green-800 flex items-center gap-2">
-                        <Flame className="w-5 h-5 text-green-600" />
-                        Zone 2: Aerobic Base & Fat Burning
-                      </h3>
-                      <span className="px-3 py-1 bg-green-200 rounded-full text-sm font-semibold text-green-700">60-70% Max HR</span>
-                    </div>
-                    <p className="text-sm text-green-700 mb-2"><strong>Feeling:</strong> Comfortable effort. You can speak in complete sentences.</p>
-                    <p className="text-sm text-green-700 mb-3"><strong>Purpose:</strong> Building endurance and prioritizing fat metabolism.</p>
-                    <div className="p-3 bg-white rounded-lg border border-green-200">
-                      <p className="text-sm text-green-800">
-                        <strong>⭐ The Endurance Sweet Spot:</strong> Long-distance runners spend 80 percent of their training in Zone 2. This moderate intensity conditions the body to use fat as a primary fuel source while clearing lactate efficiently.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-5 bg-blue-50 rounded-2xl border-l-4 border-blue-500">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-bold text-blue-800 flex items-center gap-2">
-                        <Heart className="w-5 h-5 text-blue-600" />
-                        Zone 3: Moderate to Hard Cardio
-                      </h3>
-                      <span className="px-3 py-1 bg-blue-200 rounded-full text-sm font-semibold text-blue-700">70-80% Max HR</span>
-                    </div>
-                    <p className="text-sm text-blue-700 mb-2"><strong>Feeling:</strong> Breathing becomes noticeably heavier. Speaking requires effort.</p>
-                    <p className="text-sm text-blue-700"><strong>Purpose:</strong> Enhancing overall cardiovascular capacity and total calorie burn.</p>
-                  </div>
-
-                  <div className="p-5 bg-orange-50 rounded-2xl border-l-4 border-orange-500">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-bold text-orange-800 flex items-center gap-2">
-                        <Zap className="w-5 h-5 text-orange-600" />
-                        Zone 4: High Intensity Threshold
-                      </h3>
-                      <span className="px-3 py-1 bg-orange-200 rounded-full text-sm font-semibold text-orange-700">80-90% Max HR</span>
-                    </div>
-                    <p className="text-sm text-orange-700 mb-2"><strong>Feeling:</strong> Difficult. Muscles start burning. Conversation is limited to single words.</p>
-                    <p className="text-sm text-orange-700"><strong>Purpose:</strong> Elevating the lactate threshold and performing interval training.</p>
-                  </div>
-
-                  <div className="p-5 bg-red-50 rounded-2xl border-l-4 border-red-500">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-bold text-red-800 flex items-center gap-2">
-                        <TrendingUp className="w-5 h-5 text-red-600" />
-                        Zone 5: Maximum Effort
-                      </h3>
-                      <span className="px-3 py-1 bg-red-200 rounded-full text-sm font-semibold text-red-700">90-100% Max HR</span>
-                    </div>
-                    <p className="text-sm text-red-700 mb-2"><strong>Feeling:</strong> Exhausting. You can only sustain this pace for short bursts.</p>
-                    <p className="text-sm text-red-700"><strong>Purpose:</strong> Improving peak sprint performance and absolute athletic power.</p>
-                  </div>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Activity className="w-6 h-6 text-green-600" />
-                  Target Heart Rates Chart by Age
-                </h2>
-                <p className="mb-4 text-gray-700">Use this target heart rates chart as a quick reference guide. These numbers derive from the standard calculation method.</p>
-                
-                <Card className="not-prose overflow-hidden border-green-200">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="bg-green-600 text-white">
-                          <th className="px-4 py-3 text-left font-bold">Age</th>
-                          <th className="px-4 py-3 text-left font-bold">Zone 2 (Fat Burn)</th>
-                          <th className="px-4 py-3 text-left font-bold">Zone 3 (Cardio)</th>
-                          <th className="px-4 py-3 text-left font-bold">Zone 4 (HIIT)</th>
-                          <th className="px-4 py-3 text-left font-bold">Max HR</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-100">
-                        <tr>
-                          <td className="px-4 py-3 font-semibold">20</td>
-                          <td className="px-4 py-3 text-green-700">120-140 bpm</td>
-                          <td className="px-4 py-3 text-blue-700">140-160 bpm</td>
-                          <td className="px-4 py-3 text-orange-700">160-180 bpm</td>
-                          <td className="px-4 py-3 font-bold text-green-700">200 bpm</td>
-                        </tr>
-                        <tr className="bg-gray-50">
-                          <td className="px-4 py-3 font-semibold">30</td>
-                          <td className="px-4 py-3 text-green-700">114-133 bpm</td>
-                          <td className="px-4 py-3 text-blue-700">133-152 bpm</td>
-                          <td className="px-4 py-3 text-orange-700">152-171 bpm</td>
-                          <td className="px-4 py-3 font-bold text-green-700">190 bpm</td>
-                        </tr>
-                        <tr>
-                          <td className="px-4 py-3 font-semibold">40</td>
-                          <td className="px-4 py-3 text-green-700">108-126 bpm</td>
-                          <td className="px-4 py-3 text-blue-700">126-144 bpm</td>
-                          <td className="px-4 py-3 text-orange-700">144-162 bpm</td>
-                          <td className="px-4 py-3 font-bold text-green-700">180 bpm</td>
-                        </tr>
-                        <tr className="bg-gray-50">
-                          <td className="px-4 py-3 font-semibold">50</td>
-                          <td className="px-4 py-3 text-green-700">102-119 bpm</td>
-                          <td className="px-4 py-3 text-blue-700">119-136 bpm</td>
-                          <td className="px-4 py-3 text-orange-700">136-153 bpm</td>
-                          <td className="px-4 py-3 font-bold text-green-700">170 bpm</td>
-                        </tr>
-                        <tr>
-                          <td className="px-4 py-3 font-semibold">60</td>
-                          <td className="px-4 py-3 text-green-700">96-112 bpm</td>
-                          <td className="px-4 py-3 text-blue-700">112-128 bpm</td>
-                          <td className="px-4 py-3 text-orange-700">128-144 bpm</td>
-                          <td className="px-4 py-3 font-bold text-green-700">160 bpm</td>
-                        </tr>
-                        <tr className="bg-gray-50">
-                          <td className="px-4 py-3 font-semibold">70</td>
-                          <td className="px-4 py-3 text-green-700">90-105 bpm</td>
-                          <td className="px-4 py-3 text-blue-700">105-120 bpm</td>
-                          <td className="px-4 py-3 text-orange-700">120-135 bpm</td>
-                          <td className="px-4 py-3 font-bold text-green-700">150 bpm</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </Card>
-
-                <p className="mt-4 text-sm text-gray-600 italic">
-                  Note: If you want personalized training brackets based on your fitness level, use the interactive calculator tool above.
-                </p>
-              </section>
-
-              <section className="py-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <Timer className="w-6 h-6 text-green-600" />
-                  Understanding Your Resting Heart Rate
-                </h2>
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  Individuals who are physically active generally maintain a lower resting heart rate. Engaging in regular exercise strengthens the heart muscle. This conditioning allows the heart to pump more blood per contraction, reducing the total number of beats per minute required while resting.
-                </p>
-                
-                <div className="grid md:grid-cols-3 gap-4 not-prose">
-                  <div className="p-5 bg-green-50 border border-green-200 rounded-2xl text-center">
-                    <p className="text-3xl font-bold text-green-700 mb-1">40-60</p>
-                    <p className="font-semibold text-green-800">bpm</p>
-                    <p className="text-sm text-green-600 mt-2">Highly Active</p>
-                  </div>
-                  <div className="p-5 bg-blue-50 border border-blue-200 rounded-2xl text-center">
-                    <p className="text-3xl font-bold text-blue-700 mb-1">60-80</p>
-                    <p className="font-semibold text-blue-800">bpm</p>
-                    <p className="text-sm text-blue-600 mt-2">Normal Range</p>
-                  </div>
-                  <div className="p-5 bg-amber-50 border border-amber-200 rounded-2xl text-center">
-                    <p className="text-3xl font-bold text-amber-700 mb-1">80-100</p>
-                    <p className="font-semibold text-amber-800">bpm</p>
-                    <p className="text-sm text-amber-600 mt-2">Elevated Resting</p>
-                  </div>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <ShieldCheck className="w-6 h-6 text-green-600" />
-                  Comparing Formulas vs. Clinical Tests
-                </h2>
-                
-                <Card className="not-prose overflow-hidden border-gray-200">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="px-6 py-4 text-left font-bold text-gray-800">Method</th>
-                        <th className="px-6 py-4 text-left font-bold text-gray-800">Accuracy Profile</th>
-                        <th className="px-6 py-4 text-left font-bold text-gray-800">Application</th>
+            {/* WHICH ZONE */}
+            <section id="which-zone" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Which heart rate zone should you train in?</h2>
+              <Answer>
+                Train in Zone 2 for weight loss and endurance, Zone 2 to 3 for general fitness, Zone 4 to 5 for HIIT and
+                speed, and Zone 1 for recovery.
+              </Answer>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Goal</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Best zone</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {goalToZone.map((row) => (
+                      <tr key={row.goal} className="odd:bg-white even:bg-slate-50/60">
+                        <td className="border-b border-slate-100 px-4 py-3 font-medium text-slate-800">{row.goal}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 font-semibold text-emerald-700">{row.zone}</td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      <tr className="bg-green-50">
-                        <td className="px-6 py-4 font-bold text-green-700">Medical Stress Test</td>
-                        <td className="px-6 py-4">Exact Measurement</td>
-                        <td className="px-6 py-4">Clinical assessments, professional athletes</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-blue-700">Tanaka Equation</td>
-                        <td className="px-6 py-4">Reliable within 7 bpm</td>
-                        <td className="px-6 py-4">Individuals aged 40 and older</td>
-                      </tr>
-                      <tr className="bg-gray-50">
-                        <td className="px-6 py-4 font-bold text-gray-700">Standard Equation</td>
-                        <td className="px-6 py-4">Varies by 10-12 bpm</td>
-                        <td className="px-6 py-4">General population baseline</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-rose-700">Karvonen Method</td>
-                        <td className="px-6 py-4">Highly personalized</td>
-                        <td className="px-6 py-4">Establishing target training zones</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Card>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-                <p className="mt-4 text-gray-700">
-                  Mathematical models provide a convenient starting point. If you require absolute clinical precision, a physician can perform a graded stress test. During tests like the Bruce Protocol, medical staff monitor your blood pressure and heart function on a treadmill as the incline and speed increase. Since most people lack access to a laboratory stress test, our calculator offers the most practical alternative for guiding daily workouts.
-                </p>
-              </section>
-
-              <section className="bg-gradient-to-br from-green-50 to-white rounded-3xl p-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Dumbbell className="w-6 h-6 text-green-600" />
-                  Practical Training Guidelines
-                </h2>
-                
-                <div className="grid md:grid-cols-3 gap-6 not-prose">
-                  <div className="p-5 bg-white border border-green-200 rounded-2xl">
-                    <Flame className="w-8 h-8 text-green-600 mb-3" />
-                    <h4 className="font-bold text-green-800 mb-2">Fat Loss</h4>
-                    <p className="text-sm text-gray-600 mb-3">Keep most of your cardio in Zone 2. Integrate occasional high-intensity sessions to elevate your resting metabolism.</p>
-                    <p className="text-xs text-green-600 font-semibold">Primary Focus: Moderate Intensity</p>
-                  </div>
-                  <div className="p-5 bg-white border border-blue-200 rounded-2xl">
-                    <Heart className="w-8 h-8 text-blue-600 mb-3" />
-                    <h4 className="font-bold text-blue-800 mb-2">Endurance</h4>
-                    <p className="text-sm text-gray-600 mb-3">Establish an aerobic base with sustained Zone 2 workouts. Gradually increase your session duration to prevent injury.</p>
-                    <p className="text-xs text-blue-600 font-semibold">Primary Focus: Sustained Duration</p>
-                  </div>
-                  <div className="p-5 bg-white border border-orange-200 rounded-2xl">
-                    <Zap className="w-8 h-8 text-orange-600 mb-3" />
-                    <h4 className="font-bold text-orange-800 mb-2">Performance</h4>
-                    <p className="text-sm text-gray-600 mb-3">Alternate between your baseline aerobic work and brief, maximum effort sprints in Zone 5.</p>
-                    <p className="text-xs text-orange-600 font-semibold">Primary Focus: Variable Intervals</p>
-                  </div>
+            {/* MAX HEART RATE */}
+            <section id="max-heart-rate" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Maximum heart rate calculator</h2>
+              <Answer>
+                Your maximum heart rate is estimated as 220 minus your age, or more accurately for adults over 40 as
+                Tanaka: 208 minus 0.7 times your age.
+              </Answer>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                  <p className="text-sm font-semibold text-slate-500">Standard formula</p>
+                  <p className="mt-3 font-mono text-lg font-bold text-slate-900">Max HR = 220 - Age</p>
+                  <p className="mt-2 text-sm text-slate-600">Age 40: 220 - 40 = 180 bpm. Best for a quick estimate.</p>
                 </div>
-              </section>
-
-              <section className="bg-green-600 rounded-3xl p-8 text-white">
-                <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
-                  <ShieldCheck className="w-6 h-6" />
-                  Calculator Methodology
-                </h2>
-                <p className="mb-6 opacity-90">We programmed this specific tool following peer-reviewed mathematical guidelines.</p>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="flex items-center gap-3 bg-white/10 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-green-200" />
-                    <span>Calculates using standard and Tanaka models</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-white/10 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-green-200" />
-                    <span>Applies Karvonen logic for specific zones</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-white/10 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-green-200" />
-                    <span>Maintains complete user privacy</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-white/10 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-green-200" />
-                    <span>Requires zero mandatory logins</span>
-                  </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                  <p className="text-sm font-semibold text-slate-500">Tanaka formula</p>
+                  <p className="mt-3 font-mono text-lg font-bold text-slate-900">Max HR = 208 - (0.7 x Age)</p>
+                  <p className="mt-2 text-sm text-slate-600">Age 40: 208 - 28 = 180 bpm. More accurate for adults over 40.</p>
                 </div>
-              </section>
+              </div>
+            </section>
 
-              <section className="border-2 border-dashed border-green-200 p-6 rounded-2xl bg-green-50/30">
-                <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-green-800 uppercase tracking-tight">
-                  <AlertTriangle className="w-5 h-5" /> Medical Notice
-                </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  These metrics serve an educational purpose. Genetics, prescribed medications, and pre-existing health conditions influence cardiovascular behavior. Always consult a physician before initiating a rigorous fitness routine. People with a history of abnormal blood pressure or those taking beta blockers must receive direct medical clearance.
-                </p>
-              </section>
-
-              <section className="not-prose mt-12">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-gradient-to-r from-green-600 to-green-500 rounded-3xl text-white shadow-xl">
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-bold">Track Your Physical Progress</h3>
-                    <p className="text-green-100 max-w-md">
-                      Measure how your cardiovascular work affects your physical composition using our dedicated body fat assessment tool.
-                    </p>
-                  </div>
-                  <Button asChild size="lg" variant="secondary" className="whitespace-nowrap">
-                    <Link href="/health/body-fat-calculator">
-                      Calculate Body Fat <ArrowRight className="ml-2 w-4 h-4" />
-                    </Link>
-                  </Button>
+            {/* KARVONEN */}
+            <section id="karvonen" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Karvonen formula and heart rate reserve</h2>
+              <Answer>
+                The Karvonen formula calculates your target heart rate using both your maximum and resting heart rate,
+                making it more personalized than age-based formulas.
+              </Answer>
+              <div className="mt-6 space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <p className="font-mono text-sm text-slate-800">Heart rate reserve (HRR) = Max HR - Resting HR</p>
+                <p className="font-mono text-sm text-slate-800">Target HR = (HRR x intensity %) + Resting HR</p>
+                <div className="border-t border-slate-200 pt-3 text-sm text-slate-600">
+                  <p className="font-semibold text-slate-900">Example</p>
+                  <p>Age 40, resting HR 60. Max HR 180, so HRR = 120.</p>
+                  <p>Zone 2 at 60%: (120 x 0.60) + 60 = 132 bpm.</p>
                 </div>
-              </section>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                Use Karvonen when you know your resting heart rate and want zones matched to your fitness level. Enter
+                your resting heart rate in the calculator above to switch to this method automatically.
+              </p>
+            </section>
 
-            </div>
+            {/* FORMULA ACCURACY */}
+            <section id="formula-accuracy" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Which formula is most accurate?</h2>
+              <Answer>
+                A clinical stress test is the most accurate. Among formulas, Karvonen is best for personalized training,
+                Tanaka for adults over 40, and 220 minus age for a quick estimate.
+              </Answer>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Formula</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Best for</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {formulaAccuracy.map((row) => (
+                      <tr key={row.formula} className="odd:bg-white even:bg-slate-50/60">
+                        <td className="border-b border-slate-100 px-4 py-3 font-semibold text-slate-900">{row.formula}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-slate-700">{row.best}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-            <RelatedCalculators slug="heart-rate-calculator" />
+            {/* AGE CHART */}
+            <section id="age-chart" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Heart rate chart by age</h2>
+              <Answer>
+                This heart rate chart shows the target zones and maximum heart rate by age, using the standard 220 minus
+                age formula.
+              </Answer>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Age</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Zone 2</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Zone 3</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Zone 4</th>
+                      <th scope="col" className="border-b border-slate-200 px-4 py-3 font-bold text-slate-900">Max HR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ageChart.map((row) => (
+                      <tr key={row.age} className="odd:bg-white even:bg-slate-50/60">
+                        <td className="border-b border-slate-100 px-4 py-3 font-semibold text-slate-900">{row.age}</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-slate-700">{row.zone2} bpm</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-slate-700">{row.zone3} bpm</td>
+                        <td className="border-b border-slate-100 px-4 py-3 text-slate-700">{row.zone4} bpm</td>
+                        <td className="border-b border-slate-100 px-4 py-3 font-semibold text-slate-900">{row.max} bpm</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-            <div className="mt-12">
+            {/* RESTING HEART RATE GUIDE */}
+            <section id="resting-heart-rate" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Resting heart rate guide</h2>
+              <Answer>
+                A normal resting heart rate for adults is 60 to 100 bpm, and fit people are often between 40 and 60 bpm.
+              </Answer>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                {rhrRanges.map((r) => (
+                  <div key={r.range} className="rounded-2xl border border-slate-200 bg-white p-5 text-center">
+                    <p className="text-2xl font-bold text-slate-900">{r.range}</p>
+                    <p className="mt-1 text-sm text-slate-600">{r.label}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* HOW TO MEASURE RHR */}
+            <section id="measure-rhr" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">How to measure resting heart rate</h2>
+              <Answer>
+                Measure your resting heart rate first thing in the morning, before getting up, by counting your pulse for
+                60 seconds.
+              </Answer>
+              <ol className="mt-6 space-y-3">
+                {[
+                  "Measure in the morning, while still lying down and fully rested.",
+                  "Find your pulse on your wrist (thumb side) or the side of your neck.",
+                  "Count the beats for a full 60 seconds, or count 15 seconds and multiply by four.",
+                  "Repeat on a few mornings and take the average for a reliable number.",
+                ].map((step, i) => (
+                  <li key={i} className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-4">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-700">
+                      {i + 1}
+                    </span>
+                    <span className="text-slate-700">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            {/* WHY TRUST */}
+            <section id="why-trust" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Why trust these calculations?</h2>
+              <Answer>
+                These calculations use established, peer-reviewed formulas and align with American Heart Association
+                exercise guidance.
+              </Answer>
+              <ul className="mt-6 space-y-3">
+                {trustPoints.map((point) => (
+                  <li key={point} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+                    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" aria-hidden="true" />
+                    <span className="text-sm leading-relaxed text-slate-700">{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* WHEN NOT ACCURATE */}
+            <section id="when-not-accurate" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">When these calculations may not apply</h2>
+              <Answer>
+                Age-based heart rate formulas may not be accurate if you take heart medication or have a heart condition,
+                so get medical guidance in these cases.
+              </Answer>
+              <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+                {notAccurateFor.map((item) => (
+                  <li key={item} className="flex items-start gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 text-sm leading-relaxed text-slate-500">
+                This tool is educational and does not replace a stress test or medical evaluation. Talk to your doctor
+                before starting an intense program, especially if you take beta blockers.
+              </p>
+            </section>
+
+            {/* FAQ */}
+            <section id="faqs" className="scroll-mt-20">
+              <h2 className="mb-6 text-2xl font-bold text-slate-900 sm:text-3xl">Frequently asked questions</h2>
               <FAQSection faqs={faqs} />
-            </div>
+            </section>
+          </div>
+
+          <div className="mx-auto max-w-3xl">
+            <RelatedCalculators slug="heart-rate-calculator" />
             <MedicalReviewerSection />
             <AuthorSection />
           </div>
         </div>
       </main>
+
       <AuthorSchema />
       <Footer />
     </div>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import { ClickableImage } from "@/components/ui/image-lightbox"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
@@ -11,77 +10,148 @@ import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
-import { 
-  Calendar, 
-  Clock, 
-  ShieldCheck, 
-  UserCheck, 
-  Info, 
-  FileText, 
-  Scale, 
-  Activity,
-  CheckCircle2,
-  HelpCircle,
-  ArrowRight,
+import {
+  CalendarDays,
+  Clock,
+  Cake,
+  CalendarClock,
+  CalendarPlus,
+  Scale,
+  ShieldCheck,
+  FileText,
+  GraduationCap,
+  Briefcase,
   Stethoscope,
-  Sparkles,
+  ShieldPlus,
+  PartyPopper,
+  CheckCircle2,
+  ArrowRight,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
 
 export const metadata: Metadata = {
-  title: "Age Calculator & Online Age Converter: Exact Years, Months & Days",
+  title: "Age Calculator: Calculate Your Exact Age From Date of Birth",
   description:
-    "Calculate the exact age of a person from their date of birth. Find your age in years, months, and days using this free online age converter.",
+    "Free online age calculator. Calculate your exact age from your date of birth in years, months, weeks, days, and hours. Find your next birthday and total days lived instantly.",
   keywords:
-    "online age converter, age calculator, date of birth, date calculator, calculate my age, age in years months, years months and days",
+    "age calculator, calculate age, age calculator by date of birth, exact age calculator, age in years months days, date of birth calculator, online age calculator, how old am i",
   alternates: {
     canonical: "https://calqulate.net/health/age-calculator",
   },
   openGraph: {
-    title: "Age Calculator & Online Age Converter: Exact Years, Months & Days",
-    description: "Calculate the exact age of a person from their date of birth. Find your age in years, months, and days using this free online age converter.",
+    title: "Age Calculator: Calculate Your Exact Age From Date of Birth",
+    description:
+      "Calculate your exact age from your date of birth in years, months, weeks, days, and hours. Find your next birthday and total days lived instantly.",
     url: "https://calqulate.net/health/age-calculator",
     siteName: "Calqulate",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Age Calculator & Online Age Converter: Exact Years, Months & Days",
-    description: "Calculate the exact age of a person from their date of birth. Find your age in years, months, and days using this free online age converter.",
+    title: "Age Calculator: Calculate Your Exact Age From Date of Birth",
+    description:
+      "Calculate your exact age from your date of birth in years, months, weeks, days, and hours, plus your next birthday and total days lived.",
   },
 }
 
 const faqs = [
   {
-    question: "How accurate is an online age converter?",
+    question: "How do I calculate my age?",
     answer:
-      "A well-built date calculator provides exact results when you enter the correct date of birth. It adjusts for leap years and different month lengths automatically.",
+      "Enter your date of birth in the calculator above and it counts the full years, months, and days between that date and today to give your exact age.",
   },
   {
-    question: "Does this calculator include leap years?",
+    question: "How do you calculate age from date of birth?",
     answer:
-      "Yes. The system factors in leap years to ensure the total number of days remains precise.",
+      "Your age is found by subtracting your date of birth from the selected date, then adjusting for leap years and different month lengths so the result is exact.",
   },
   {
-    question: "Can I calculate age by year only?",
+    question: "How many days old am I?",
     answer:
-      "You can, but year-only estimates often cause mistakes on legal documents. We recommend entering the full date of birth for accurate verification.",
+      "Your total days lived is the number of days between your date of birth and today, including every leap day. Enter your birth date above to see the exact count.",
   },
   {
-    question: "Is my personal data saved?",
+    question: "How many hours have I lived?",
     answer:
-      "No. We do not store or share your information. All calculations happen directly on your device to protect your privacy.",
+      "Your total hours lived is your total days lived multiplied by 24. The calculator works this out automatically once you enter your date of birth.",
+  },
+  {
+    question: "How is age calculated during leap years?",
+    answer:
+      "Every leap year adds an extra day, February 29, to your day count. The calculator includes each leap day you have lived through so your total is accurate.",
+  },
+  {
+    question: "Can I calculate age for a future date?",
+    answer:
+      "Yes. Set the target date to any date in the future and the calculator shows how old you will be on that day.",
+  },
+  {
+    question: "Can I calculate age between two dates?",
+    answer:
+      "Yes. Change the target date from today to any other date and the calculator returns the exact time between the two dates.",
+  },
+  {
+    question: "Can I calculate someone else's age?",
+    answer:
+      "Yes. Enter their date of birth instead of yours to find their exact age in years, months, and days.",
+  },
+  {
+    question: "What is an exact age calculator?",
+    answer:
+      "An exact age calculator shows your age broken down into years, months, weeks, days, and hours, rather than only your age in whole years.",
+  },
+  {
+    question: "Why does my age change tomorrow instead of today?",
+    answer:
+      "Your age in days and hours increases every day at midnight, so those numbers update daily even though your age in years only changes on your birthday.",
   },
 ]
+
+/** What the calculator can work out, shown as scannable cards. */
+const capabilities = [
+  { icon: CalendarDays, title: "Exact age", body: "Your age in years, months, and days from your date of birth." },
+  { icon: Scale, title: "Age difference", body: "The exact gap in time between any two dates you enter." },
+  { icon: Clock, title: "Days lived", body: "The total number of days and hours you have been alive." },
+  { icon: PartyPopper, title: "Next birthday", body: "How many days until your next birthday and the weekday it lands on." },
+  { icon: CalendarClock, title: "Leap year adjustment", body: "Every leap day is counted, so your totals stay accurate." },
+  { icon: CalendarPlus, title: "Future age", body: "How old you will be on any date in the future." },
+]
+
+/** Everyday reasons people look up an exact age. */
+const commonUses = [
+  { icon: FileText, title: "Government documents", body: "Passports, licences, and official forms that require an exact date." },
+  { icon: GraduationCap, title: "School admissions", body: "Confirm age eligibility for school years and entrance cut-off dates." },
+  { icon: Briefcase, title: "Job applications", body: "Check minimum age requirements for roles and work permits." },
+  { icon: Stethoscope, title: "Medical records", body: "Record precise age for appointments, screening, and dosing." },
+  { icon: ShieldPlus, title: "Insurance", body: "Age to the day can affect quotes and policy eligibility." },
+  { icon: Cake, title: "Birthday milestones", body: "Count down to birthdays and celebrate days-lived milestones." },
+]
+
+/** Why the results can be trusted, one signal per card. */
+const accuracyPoints = [
+  { title: "Real Gregorian calendar", body: "Calculations follow the standard Gregorian calendar used worldwide." },
+  { title: "Every leap year included", body: "Each February 29 you have lived through is counted in your totals." },
+  { title: "True month lengths", body: "We use the real length of every month instead of a 30-day average." },
+  { title: "No approximations", body: "You get your exact age, not a rounded estimate." },
+]
+
+const trustSignals = [
+  "Leap year accurate",
+  "Runs locally in your browser",
+  "No data stored or shared",
+  "Uses real calendar math",
+]
+
+function Answer({ children }: { children: React.ReactNode }) {
+  return <p className="text-base leading-relaxed text-slate-700 sm:text-lg">{children}</p>
+}
 
 export default function AgeCalculatorPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <CalculatorSchema
-        name="Age Calculator and Online Age Converter"
-        description="Instantly calculate your exact age in years, months, and days. Find your total days lived and age difference between dates."
+        name="Age Calculator"
+        description="Calculate your exact age from your date of birth in years, months, weeks, days, and hours. Find your next birthday and total days lived instantly."
         url="https://calqulate.net/health/age-calculator"
       />
       <FAQSchema faqs={faqs} />
@@ -91,370 +161,190 @@ export default function AgeCalculatorPage() {
 
       <main id="main" className="flex-1">
         {/* HERO */}
-        <section className="bg-gradient-to-br from-emerald-50 via-white to-lime-50 border-b border-slate-200">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-20">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-5">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
-              Free · Instant · No sign-up required
-            </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-balance leading-tight text-slate-900">
-              Age Calculator and Online Age Converter
+        <section className="border-b border-slate-200 bg-gradient-to-br from-emerald-50 via-white to-lime-50">
+          <div className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 md:py-16">
+            <h1 className="text-3xl font-bold leading-tight text-slate-900 sm:text-4xl md:text-5xl">
+              Age Calculator
             </h1>
-            <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl text-pretty">
-              Find the exact age of a person using this simple date calculator. Enter the date of birth and the current date to see your age in years months and days.
+            <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 sm:text-lg">
+              Calculate your exact age from your date of birth in years, months, weeks, days, hours, and minutes.
+              Also find your next birthday, total days lived, and the age difference between any two dates, instantly.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <ul className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2">
+              {["Exact Age", "Date of Birth Calculator", "Years • Months • Days", "Free & Instant", "Private"].map(
+                (chip) => (
+                  <li
+                    key={chip}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-semibold text-emerald-800"
+                  >
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    {chip}
+                  </li>
+                ),
+              )}
+            </ul>
+
+            <div className="mt-8">
               <a
                 href="#calculator"
-                className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-emerald-700"
               >
-                Try the Calculator ↓
+                Calculate my age
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
           </div>
         </section>
 
-        {/* USP SUMMARY (TOFU) */}
-        <section className="border-b border-emerald-100 bg-white">
-          <div className="mx-auto max-w-5xl px-6 py-6">
-            <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 md:p-6">
-              <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
-              <p className="text-sm md:text-base leading-relaxed text-slate-700">
-                Calqulate.net finds your exact age in years, months, days and hours from your date of birth, accurate to the day. You get milestones and shareable extras that make it worth returning to.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* STATS DASHBOARD */}
-        <section className="border-b border-slate-200 bg-slate-50">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px bg-slate-200 md:grid-cols-5">
-            {[
-              { value: "Y / M / D", label: "Breakdown" },
-              { value: "Free", label: "Price" },
-              { value: "No", label: "Sign-up" },
-              { value: "Instant", label: "Results" },
-              { value: "Private", label: "In-browser" },
-            ].map((s) => (
-              <div key={s.label} className="bg-white p-5 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CALCULATOR */}
+        {/* CALCULATOR (and dynamic results) */}
         <section id="calculator" className="scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+          <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 md:py-14">
             <AgeCalculator />
           </div>
         </section>
 
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
-
-            <section className="bg-white rounded-3xl p-8 border border-green-200 shadow-sm mt-8">
-              <h2 className="text-2xl font-bold text-black mb-4 flex items-center gap-2">
-                <Activity className="w-6 h-6 text-green-600" />
-                Product Update: Personalized Tracking
+        <div className="container mx-auto px-4 pb-8">
+          <div className="mx-auto max-w-3xl space-y-14">
+            {/* WHAT CAN THIS CALCULATOR CALCULATE */}
+            <section id="what-it-calculates" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+                What can this age calculator calculate?
               </h2>
-              <p className="text-black mb-6">
-                We updated our systems to help you track your calculations over time. You can monitor your changing health and age metrics securely.
+              <Answer>
+                This age calculator works out your exact age, your total days and hours lived, your next birthday, and
+                the age difference between any two dates.
+              </Answer>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {capabilities.map((c) => (
+                  <div key={c.title} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <c.icon className="h-6 w-6 text-emerald-600" aria-hidden="true" />
+                    <h3 className="mt-3 font-bold text-slate-900">{c.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{c.body}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* HOW IS AGE CALCULATED */}
+            <section id="how-age-is-calculated" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">How is age calculated?</h2>
+              <Answer>
+                Age is calculated by comparing your date of birth with a selected date while accounting for leap years,
+                varying month lengths, and the Gregorian calendar.
+              </Answer>
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
+                The calculator counts the number of full years since your birth, then the extra whole months, then the
+                remaining days. Because it uses the true length of each month and every leap day, the result is your
+                exact age rather than a rounded estimate.
               </p>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                  <span className="text-black">
-                    <strong>No login required:</strong> You can start tracking your metrics immediately. You do not need to create an account or verify an email address.
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                  <span className="text-black">
-                    <strong>Complete privacy:</strong> Your data remains local to your device. We do not track, store, or sell your personal information.
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                  <span className="text-black">
-                    <strong>View history:</strong> Access previous dates you entered to review your past calculations and track milestones.
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                  <span className="text-black">
-                    <strong>Compare results:</strong> Monitor your data year over year or month on month to identify important changes.
-                  </span>
-                </li>
+            </section>
+
+            {/* HOW TO USE (moved below the result) */}
+            <section id="how-to-use" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">How to use the age calculator</h2>
+              <Answer>Enter two dates and read your result. It takes about ten seconds.</Answer>
+              <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200">
+                <div className="flex justify-center bg-slate-50 p-4">
+                  <ClickableImage
+                    src="/age-calculator.webp"
+                    alt="Age calculator showing a date of birth field, a target date field, and the calculate button"
+                    width={700}
+                    height={400}
+                    className="rounded-xl border border-slate-200 shadow-sm"
+                  />
+                </div>
+                <ol className="divide-y divide-slate-100">
+                  {[
+                    "Select your date of birth as the first date.",
+                    "Leave the second date on today, or pick any past or future date.",
+                    "Press calculate to see your exact age and full breakdown.",
+                  ].map((step, i) => (
+                    <li key={i} className="flex items-start gap-3 p-4">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white">
+                        {i + 1}
+                      </span>
+                      <span className="text-slate-700">{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </section>
+
+            {/* COMMON USES */}
+            <section id="common-uses" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Common uses for an age calculator</h2>
+              <Answer>
+                People use an age calculator to confirm an exact age for official documents, school and job
+                applications, medical records, insurance, and birthday milestones.
+              </Answer>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {commonUses.map((u) => (
+                  <div key={u.title} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <u.icon className="h-6 w-6 text-emerald-600" aria-hidden="true" />
+                    <h3 className="mt-3 font-bold text-slate-900">{u.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{u.body}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* AGE DIFFERENCE (internal link opportunity) */}
+            <section id="age-difference" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Calculate the age difference between two dates</h2>
+              <Answer>
+                To find the age difference between two people, change the second date from today to the other person's
+                date of birth, and the calculator returns the exact gap in years, months, and days.
+              </Answer>
+              <Link
+                href="#calculator"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-800"
+              >
+                Try it in the calculator above
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </section>
+
+            {/* WHY ACCURATE (EEAT) */}
+            <section id="why-accurate" className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Why this age calculator is accurate</h2>
+              <Answer>
+                This calculator uses the real Gregorian calendar with true month lengths and every leap year, so it
+                returns your exact age with no approximations.
+              </Answer>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {accuracyPoints.map((p) => (
+                  <div key={p.title} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-5">
+                    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" aria-hidden="true" />
+                    <div>
+                      <h3 className="font-bold text-slate-900">{p.title}</h3>
+                      <p className="mt-1 text-sm leading-relaxed text-slate-600">{p.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {trustSignals.map((t) => (
+                  <li
+                    key={t}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-800"
+                  >
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                    {t}
+                  </li>
+                ))}
               </ul>
             </section>
 
-            <div className="prose prose-gray dark:prose-invert max-w-none mt-12 space-y-12">
-              
-              <section className="py-8 border-b border-gray-100">
-                <h2 className="mb-4 text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Calendar className="w-6 h-6 text-green-600" />
-                  Calculate Age From Date of Birth
-                </h2>
-                <p className="mb-3 text-gray-700 leading-relaxed">
-                  Finding the exact age of a person requires more than basic subtraction. You must account for different calendar rules to get a precise answer. Just enter the date into the form above, and the calculator considers:
-                </p>
-                <div className="grid md:grid-cols-2 gap-4 mt-6">
-                  <ul className="space-y-2 text-gray-700 list-none pl-0">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-600" /> Your exact date of birth
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-600" /> The specific starting date or current date
-                    </li>
-                  </ul>
-                  <ul className="space-y-2 text-gray-700 list-none pl-0">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-600" /> Extra days from leap years
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-600" /> Uneven month lengths
-                    </li>
-                  </ul>
-                </div>
-                <p className="mt-4 text-gray-700 font-medium bg-green-50 p-3 rounded-lg border-l-4 border-green-600">
-                  When you click calculate, the script runs these variables immediately. You will not have to guess your exact age in years months and days again.
-                </p>
-              </section>
-              
-              <section>
-                <Card className="border-green-100 shadow-sm rounded-2xl overflow-hidden">
-                  <CardHeader className="bg-green-50 pb-4">
-                    <CardTitle className="flex items-center gap-2 text-xl font-bold text-green-800">
-                      <Info className="w-5 h-5" />
-                      How to Use This Date Calculator
-                    </CardTitle>
-                    <CardDescription className="text-green-700/80">
-                      Follow these steps to find the exact number of days.
-                    </CardDescription>
-                  </CardHeader>
-
-                  <CardContent className="pt-6">
-                    <div className="mb-8 flex justify-center">
-                      <ClickableImage
-                        src="/age-calculator.webp"
-                        alt="Age calculator process showing date selection and calculate button click"
-                        width={700}
-                        height={400}
-                        className="rounded-2xl shadow-lg border border-green-100"
-                        priority
-                      />
-                    </div>
-
-                    <div className="space-y-4">
-                      <div className="flex gap-4">
-                        <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-bold">
-                          1
-                        </div>
-                        <p className="text-gray-700">
-                          Select your exact date of birth as the starting date.
-                        </p>
-                      </div>
-
-                      <div className="flex gap-4">
-                        <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-bold">
-                          2
-                        </div>
-                        <p className="text-gray-700">
-                          Choose an end date. The tool defaults to today, but you can select a past or future date.
-                        </p>
-                      </div>
-
-                      <div className="flex gap-4">
-                        <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-bold">
-                          3
-                        </div>
-                        <p className="text-gray-700">
-                          Press the calculate button to process the calendar math.
-                        </p>
-                      </div>
-
-                      <div className="flex gap-4">
-                        <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-bold">
-                          4
-                        </div>
-                        <p className="text-gray-700">
-                          Review your total years, months and day breakdown below the form.
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Understanding Your Output Format</h2>
-                <p className="mb-4 text-gray-700">
-                  Knowing your age involves more than a single number. This online age converter presents your life data in four distinct ways.
-                </p>
-                
-                <Card className="not-prose overflow-hidden border-green-200">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-green-600 text-white">
-                        <th className="px-6 py-4 text-left font-bold">Output Metric</th>
-                        <th className="px-6 py-4 text-left font-bold">What it Represents</th>
-                        <th className="px-6 py-4 text-left font-bold">Primary Use Case</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-green-700">✅ Age in Years</td>
-                        <td className="px-6 py-4">Total completed solar cycles</td>
-                        <td className="px-6 py-4">Legal and official documents</td>
-                      </tr>
-                      <tr className="bg-green-50/30">
-                        <td className="px-6 py-4 font-bold text-green-700">✅ Age in Months</td>
-                        <td className="px-6 py-4">Months since your last birthday</td>
-                        <td className="px-6 py-4">Infant milestones and growth tracking</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 font-bold text-green-700">✅ Age in Days</td>
-                        <td className="px-6 py-4">Exact days in the current month</td>
-                        <td className="px-6 py-4">Precise record keeping</td>
-                      </tr>
-                      <tr className="bg-green-50/30">
-                        <td className="px-6 py-4 font-bold text-green-700">✅ Total Days Lived</td>
-                        <td className="px-6 py-4">Cumulative days including leap years</td>
-                        <td className="px-6 py-4">Personal milestones and statistics</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Card>
-                
-                <p className="mt-6 text-gray-700 font-semibold">This breakdown is particularly useful for:</p>
-                <ul className="grid grid-cols-2 md:grid-cols-4 gap-4 list-none pl-0 mt-4">
-                  <li className="bg-white border border-green-200 p-3 rounded-xl text-center text-sm font-medium text-gray-700">Legal verification</li>
-                  <li className="bg-white border border-green-200 p-3 rounded-xl text-center text-sm font-medium text-gray-700">Academic eligibility</li>
-                  <li className="bg-white border border-green-200 p-3 rounded-xl text-center text-sm font-medium">
-                    <Link
-                      href="/health/diabetes-risk-calculator"
-                      className="text-gray-700 hover:text-green-700 hover:underline transition-colors"
-                    > 
-                      Medical tracking
-                    </Link>
-                  </li>
-                  <li className="bg-white border border-green-200 p-3 rounded-xl text-center text-sm font-medium text-gray-700">HR records</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <FileText className="w-6 h-6 text-green-600" />
-                  Common Reasons to Calculate My Age
-                </h2>
-                <div className="grid md:grid-cols-3 gap-6 not-prose">
-                  <div className="p-5 border border-gray-100 rounded-2xl bg-white hover:border-green-300 transition-colors shadow-sm">
-                    <h4 className="font-bold text-green-800 mb-2">Documentation</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">Government agencies require exact dates for passport applications, licenses, and medical paperwork.</p>
-                  </div>
-                  <div className="p-5 border border-gray-100 rounded-2xl bg-white hover:border-green-300 transition-colors shadow-sm">
-                    <h4 className="font-bold text-green-800 mb-2">Eligibility</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">Verify your eligibility for standardized exams, competitive sports, and insurance policies.</p>
-                  </div>
-                  <div className="p-5 border border-gray-100 rounded-2xl bg-white hover:border-green-300 transition-colors shadow-sm">
-                    <h4 className="font-bold text-green-800 mb-2">Personal Tracking</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">Find out exactly how many days you have lived to celebrate unique life milestones.</p>
-                  </div>
-                </div>
-              </section>
-
-              <section className="bg-green-600 rounded-3xl p-8 text-white">
-                <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
-                  <ShieldCheck className="w-6 h-6" />
-                  Why This Converter is Reliable
-                </h2>
-                <p className="mb-6 opacity-90">We designed this calculator to deliver fast, correct answers without confusing interfaces.</p>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="flex items-center gap-3 bg-white/10 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-green-200" />
-                    <span>No misleading advertisements</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-white/10 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-green-200" />
-                    <span>All calculations run locally</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-white/10 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-green-200" />
-                    <span>Handles leap years automatically</span>
-                  </div>
-                  <div className="flex items-center gap-3 bg-white/10 p-4 rounded-xl">
-                    <CheckCircle2 className="w-5 h-5 text-green-200" />
-                    <span>Calculates future or past dates</span>
-                  </div>
-                </div>
-              </section>
-
-              <section className="grid md:grid-cols-2 gap-12">
-                <div>
-                  <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
-                    <Scale className="text-green-600 w-5 h-5" /> Compare Dates
-                  </h3>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    You can calculate the age difference between two people easily. Just enter the two birth dates separately to find the gap in years, months, and days. This function helps with academic placements and legal documentation.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
-                    <Clock className="text-green-600 w-5 h-5" /> Calendar Math Explained
-                  </h3>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    Many age tools fail to explain why ages change during leap years. We calculate every month length precisely. We do not use average month lengths, which guarantees your final day count is completely accurate.
-                  </p>
-                </div>
-              </section>
-
-              <section className="border-2 border-dashed border-green-200 p-6 rounded-2xl bg-green-50/30">
-                <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-green-800 uppercase tracking-tight">
-                  <Activity className="w-5 h-5" /> Gestational Age Note
-                </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Medical professionals calculate gestational age differently. They base pregnancy timelines on the last menstrual period, not the conception date. You should always consult a doctor for pregnancy timelines. This tool handles general calendar ages, not medical diagnoses.
-                </p>
-              </section>
-
-              <section className="text-center pt-8 border-t">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center justify-center gap-2">
-                  <UserCheck className="w-6 h-6 text-green-600" />
-                  Who Built This Tool?
-                </h3>
-                <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                  We built this tool after researching how often people receive incorrect information from basic calculators. Our team focuses on data accuracy and user privacy so you can get the answers you need without frustration.
-                </p>
-              </section>
-
-              <section className="not-prose mt-12">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-gradient-to-r from-green-600 to-green-700 rounded-3xl text-white shadow-xl">
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-bold">Checking your health metrics?</h3>
-                    <p className="text-gray-300 max-w-md">
-                      Now that you have your precise calendar age, check how your lifestyle impacts your physical health.
-                    </p>
-                  </div>
-                  <Button asChild size="lg" variant="secondary" className="whitespace-nowrap">
-                    <Link href="/health/heart-age-calculator">
-                      Check Heart Age <ArrowRight className="ml-2 w-4 h-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </section>
-
-            </div>
-
-            <RelatedCalculators slug="age-calculator" />
-
-            <div className="mt-12">
+            {/* FAQ */}
+            <section id="faqs" className="scroll-mt-20">
+              <h2 className="mb-6 text-2xl font-bold text-slate-900 sm:text-3xl">Frequently asked questions</h2>
               <FAQSection faqs={faqs} />
-            </div>
+            </section>
+          </div>
+
+          <div className="mx-auto max-w-3xl">
+            <RelatedCalculators slug="age-calculator" />
             <MedicalReviewerSection />
             <AuthorSection />
           </div>

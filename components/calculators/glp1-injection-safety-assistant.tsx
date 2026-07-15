@@ -448,6 +448,24 @@ export default function Glp1InjectionSafetyAssistant() {
           {hero.subheadline}
         </motion.p>
 
+        {/* Capability chips: the primary keywords, front and centre */}
+        <motion.ul
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.16 }}
+          className="mx-auto mt-5 flex max-w-2xl flex-wrap items-center justify-center gap-2"
+        >
+          {hero.capabilities.map((c) => (
+            <li
+              key={c}
+              className="inline-flex items-center gap-1.5 rounded-full border border-vital-100 bg-vital-50 px-3 py-1.5 text-sm font-semibold text-vital-800"
+            >
+              <Check className="h-4 w-4 shrink-0 text-vital-600" aria-hidden="true" />
+              {c}
+            </li>
+          ))}
+        </motion.ul>
+
         <motion.ul
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
