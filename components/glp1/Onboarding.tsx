@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import {
 import { createRecord, ApiError } from "@/lib/glp1/client";
 import { proteinTarget } from "@/lib/glp1";
 import { Glp1LoggingPanel } from "@/components/glp1/Glp1LoggingPanel";
+import { track } from "@/lib/analytics/track";
 
 const LB = 2.2046226218;
 const lb2kg = (lb: number) => lb / LB;
@@ -54,6 +55,16 @@ export function Onboarding({ paid = false }: { paid?: boolean }) {
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  // Records every step the user reaches, so the funnel shows exactly where the
+  // 6-step setup loses people. Must sit above the `skipped` early-return.
+  useEffect(() => {
+    track("onboarding_step", {
+      step_index: step + 1,
+      step_name: STEPS[step],
+      step_total: STEPS.length,
+    });
+  }, [step]);
 
   if (skipped) {
     // Manual path — the existing add-medication + logging panel.

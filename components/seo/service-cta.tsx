@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { ArrowRight, Check, Activity } from "lucide-react"
+import { TrackedLink } from "@/components/analytics/TrackedLink"
 
 /**
  * Green, conversion-focused CTA that sends a free-calculator visitor to the
@@ -39,13 +39,15 @@ export function ServiceCTA({
           </ul>
         </div>
         <div className="flex flex-col items-stretch gap-3 lg:items-end">
-          <Link
+          <TrackedLink
             href={href}
+            ctaId="service_cta"
+            label={cta}
             className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-center font-bold text-green-700 shadow-lg transition hover:bg-green-50"
           >
             {cta}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+          </TrackedLink>
           <p className="text-center text-xs text-green-100/80 lg:text-right">
             Free to start. No card needed. Cancel anytime.
           </p>

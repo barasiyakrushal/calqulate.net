@@ -3,9 +3,11 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { Menu, X, ChevronDown, Search, ArrowRight, Activity, LayoutDashboard, Settings, Download, LogOut, User } from "lucide-react"
 import { SearchBar } from "@/components/search/search-bar"
 import { createClient } from "@/lib/supabase/client"
+import { track } from "@/lib/analytics/track"
 
 // ─── Product links (listed first) ─────────────────────────────────────────────
 
@@ -286,6 +288,7 @@ function MobileCategory({ category, onLinkClick }: { category: Category; onLinkC
 // ─── Header ──────────────────────────────────────────────────────────────────
 
 export function Header() {
+  const pathname = usePathname()
   const [activeMenu, setActiveMenu] = useState<"product" | "calculators" | "glp1" | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -474,11 +477,11 @@ export function Header() {
                   Log in
                 </Link>
                 <Link
-                  href="/product/metabolic-health-tracker"
-                  onClick={closeAll}
+                  href="/signup?next=/dashboard/glp1"
+                  onClick={() => { track("cta_click", { cta_id: "header_start_free", cta_label: "Start free", source_page: pathname, destination: "/signup?next=/dashboard/glp1" }); closeAll() }}
                   className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-[13.5px] font-semibold text-white hover:bg-emerald-700 transition-colors shadow-sm"
                 >
-                  Get my score
+                  Start free
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </>
@@ -605,8 +608,12 @@ export function Header() {
               </div>
             ) : (
               <div className="flex flex-col gap-2">
-                <Link href="/product/metabolic-health-tracker" onClick={closeAll} className="flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-3 sm:py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 min-h-[44px]">
-                  Get my score <ArrowRight className="h-4 w-4" />
+                <Link
+                  href="/signup?next=/dashboard/glp1"
+                  onClick={() => { track("cta_click", { cta_id: "header_start_free_mobile", cta_label: "Start free", source_page: pathname, destination: "/signup?next=/dashboard/glp1" }); closeAll() }}
+                  className="flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-3 sm:py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 min-h-[44px]"
+                >
+                  Start free <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href="/login" onClick={closeAll} className="w-full rounded-lg border border-gray-300 px-4 py-3 sm:py-2.5 text-center text-sm font-medium text-gray-600 hover:bg-gray-50 min-h-[44px] flex items-center justify-center">
                   Log in

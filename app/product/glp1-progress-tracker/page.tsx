@@ -82,7 +82,9 @@ const COMPARE: { feature: string; us: "yes" | "free" | "best"; shotsy: "yes" | "
 ];
 
 // Real, permissioned reviews only (empty until collected) — see lib/reviews.ts.
-const TESTIMONIALS = getReviews("glp1").map((r) => ({ q: r.quote, n: r.name, m: r.context }));
+// `rating` is carried through so we render the stars the member actually gave,
+// never a hardcoded 5.
+const TESTIMONIALS = getReviews("glp1").map((r) => ({ q: r.quote, n: r.name, m: r.context, r: r.rating }));
 
 const FAQS = [
   { q: "What is a GLP-1 tracker app?", a: "A GLP-1 tracker helps you log your weekly medication, side effects, food and weight in one place. Calqulate Vitals also shows your medication levels, body composition, heart age and metabolism, so you understand how your treatment is working." },
@@ -176,11 +178,14 @@ export default async function Glp1TrackerLanding() {
               {paid ? goDashboard : startFreeLink}
               {!paid && <Link href="#pricing" className={btnGold}>See Premium</Link>}
             </div>
+            {/* Factual capability statement. No star rating here: real, permissioned
+                reviews are the only social proof we show, and none are collected yet
+                (see TESTIMONIALS / lib/reviews). */}
             <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-faint">
-              <span className="inline-flex items-center gap-1 text-gold">
-                {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
+              <span className="inline-flex items-center gap-1.5">
+                <BadgeCheck className="h-4 w-4 text-brand" />
+                Works with Ozempic, Wegovy, Mounjaro &amp; Zepbound
               </span>
-              <span>Trusted by GLP-1 users on Ozempic, Wegovy, Mounjaro &amp; Zepbound</span>
             </div>
           </Reveal>
 
@@ -503,7 +508,14 @@ export default async function Glp1TrackerLanding() {
               {TESTIMONIALS.map((t, i) => (
                 <Reveal key={t.n} delay={i * 60}>
                   <figure className="h-full rounded-2xl border border-line bg-white p-6">
-                    <div className="mb-3 flex gap-1 text-gold">{Array.from({ length: 5 }).map((_, k) => <Star key={k} className="h-4 w-4 fill-current" />)}</div>
+                    {/* Only render stars when the member actually gave a rating. */}
+                    {typeof t.r === "number" && (
+                      <div className="mb-3 flex gap-1 text-gold" aria-label={`${t.r} out of 5 stars`}>
+                        {Array.from({ length: Math.max(0, Math.min(5, Math.round(t.r))) }).map((_, k) => (
+                          <Star key={k} className="h-4 w-4 fill-current" />
+                        ))}
+                      </div>
+                    )}
                     <blockquote className="text-[15px] leading-relaxed text-ink">“{t.q}”</blockquote>
                     <figcaption className="mt-4 text-sm">
                       <span className="font-semibold text-ink">{t.n}</span>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Eye, EyeOff, Loader2, Mail, Lock, AlertCircle } from "lucide-react";
 import { TurnstileWidget } from "./TurnstileWidget";
 import { toast } from "sonner";
+import { track } from "@/lib/analytics/track";
 
 const inputBase =
   "w-full rounded-lg border bg-white pl-9 pr-3 py-2 text-sm outline-none transition-colors";
@@ -56,6 +57,8 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     setError(null);
     if (!validate()) return;
 
+    if (mode === "signup") track("signup_start", { method: "email", next });
+
     setBusy(true);
     try {
       const endpoint = mode === "signup" ? "/api/auth/signup" : "/api/auth/login";
@@ -71,13 +74,18 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       const data = await res.json();
       if (!res.ok) {
         setError(data.error ?? "Something went wrong.");
+        if (mode === "signup") track("signup_error", { method: "email", reason: data.error ?? "unknown" });
         return;
       }
       if (mode === "signup" && data.needsConfirmation) {
+        // Account exists but the user is stranded here until they confirm by email.
+        // Tracked separately so this dead-end is visible in the funnel.
+        track("signup_complete", { method: "email", needs_confirmation: true });
         toast.success("Account created! Check your email to confirm.");
         return;
       }
       await fetch("/api/auth/register-session", { method: "POST" });
+      if (mode === "signup") track("signup_complete", { method: "email", needs_confirmation: false, next });
       toast.success(mode === "login" ? "Welcome back!" : "Account created!");
       router.push(next);
       router.refresh();
@@ -88,6 +96,9 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
 
   async function oauth(provider: "google" | "azure") {
     setError(null);
+    // OAuth leaves the site, so this is the last event we can fire here.
+    // signup_complete for OAuth users is recorded on the callback landing.
+    if (mode === "signup") track("signup_start", { method: provider, next });
     try {
       const res = await fetch("/api/auth/oauth", {
         method: "POST",

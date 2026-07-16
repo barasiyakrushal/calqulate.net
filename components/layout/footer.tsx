@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Mail, ShieldCheck, Lock, ArrowRight } from "lucide-react"
 import { PaymentBadges } from "./payment-badges"
+import { TrackedLink } from "@/components/analytics/TrackedLink"
 
 const linkCls = "block text-white/55 hover:text-white transition-colors py-1.5 sm:py-1"
 
@@ -52,6 +53,16 @@ export function Footer() {
           {/* Vitals (service) */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-white">Calqulate Vitals</h3>
+            {/* Primary signup path. Every page in the site has a footer, so this is
+                the site-wide fallback door into the GLP-1 tracker. */}
+            <TrackedLink
+              href="/signup?next=/dashboard/glp1"
+              ctaId="footer_start_free"
+              label="Start free"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              Start free <ArrowRight className="h-3.5 w-3.5" />
+            </TrackedLink>
             <ul className="space-y-1 text-sm">
               <li><Link href="/product/metabolic-health-tracker" className={linkCls}>Metabolic Health Tracker</Link></li>
               <li><Link href="/product/heart-age-tracker" className={linkCls}>Heart Age Tracker</Link></li>

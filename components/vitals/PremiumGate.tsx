@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { Lock, Sparkles, ArrowRight } from "lucide-react";
+import { TrackEvent } from "@/components/analytics/TrackEvent";
+import { TrackedLink } from "@/components/analytics/TrackedLink";
 
 const upgradeHref = (feature: string) => `/pricing?feature=${encodeURIComponent(feature)}`;
 
@@ -29,6 +30,8 @@ export function PremiumGate({
 
   const card = (
     <div className="flex flex-col items-center gap-3 rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 text-center sm:p-8">
+      {/* Records which locked feature actually drove the upgrade prompt. */}
+      <TrackEvent event="paywall_view" params={{ feature, blurred: blur }} />
       <span className="grid h-11 w-11 place-items-center rounded-xl bg-amber-100 text-amber-700">
         <Lock className="h-5 w-5" />
       </span>
@@ -41,12 +44,14 @@ export function PremiumGate({
           {description ?? "This is a Calqulate Vitals member feature."} You’ll need an active subscription to access it.
         </p>
       </div>
-      <Link
+      <TrackedLink
         href={upgradeHref(feature)}
+        ctaId="premium_gate_unlock"
+        label={`Unlock: ${feature}`}
         className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700"
       >
         Unlock with Premium <ArrowRight className="h-4 w-4" />
-      </Link>
+      </TrackedLink>
     </div>
   );
 
@@ -69,12 +74,14 @@ export function PremiumGate({
 /** Small inline lock pill for card headers / list rows. Links to pricing. */
 export function LockBadge({ feature, className = "" }: { feature: string; className?: string }) {
   return (
-    <Link
+    <TrackedLink
       href={upgradeHref(feature)}
+      ctaId="lock_badge"
+      label={feature}
       title={`${feature} — unlock with Premium`}
       className={`inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-700 hover:bg-amber-200 ${className}`}
     >
       <Lock className="h-3 w-3" /> Premium
-    </Link>
+    </TrackedLink>
   );
 }
