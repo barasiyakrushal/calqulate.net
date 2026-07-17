@@ -9,6 +9,7 @@ import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
@@ -425,6 +426,22 @@ export default function MacroCalculatorPage() {
               </section>
 
             </div>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="Protein is the macro that protects you"
+              title="Hitting your protein is what saves your muscle"
+              body="A macro split matters most when you are eating less than you burn, because that is exactly when muscle is at risk. Calqulate Vitals checks the protein in a real meal and keeps every day you log on one timeline, so you can see whether you are actually hitting the target above."
+              bullets={[
+                "Find out how much protein is really in your meal",
+                "Log a meal or weight in seconds",
+                "Everything you log on one timeline",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
 
             <RelatedCalculators slug="macro-calculator" />
 

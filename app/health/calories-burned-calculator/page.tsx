@@ -7,6 +7,7 @@ import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
@@ -333,6 +334,22 @@ export default function CaloriesBurnedCalculatorPage() {
               </section>
 
             </div>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="Burning calories is half the story"
+              title="What you burn only matters next to what you eat"
+              body="A session burns what it burns. Whether that turns into fat loss depends on the rest of your week, and whether the weight you lose is fat or muscle depends on protein and training. Calqulate Vitals keeps your workouts, meals and weight on one timeline."
+              bullets={[
+                "Track workouts, meals and weight together",
+                "Find out how much protein is really in your meal",
+                "Everything you log on one timeline",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
 
             <RelatedCalculators slug="calories-burned-calculator" />
 

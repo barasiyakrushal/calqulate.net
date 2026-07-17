@@ -425,10 +425,11 @@ export default function Glp1UnitConverterPage() {
                 bullets={[
                   "Your concentration and syringe, saved",
                   "Every injection on one timeline",
-                  "Drug-level curves between weekly shots",
-                  "Fat vs. muscle trend and plateau risk",
+                  "See how much medication is still working today",
+                  "Fat vs muscle trend and plateau risk (Premium)",
                 ]}
-                href="/product/glp1-progress-tracker"
+                href="/signup?next=/dashboard/glp1"
+                learnMoreHref="/product/glp1-progress-tracker"
                 cta="Start the GLP-1 Progress Tracker"
               />
 

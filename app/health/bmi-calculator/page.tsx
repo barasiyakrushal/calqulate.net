@@ -17,6 +17,7 @@ import { RelatedCalculators } from "@/components/calculators/related-calculators
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema, MedicalWebPageSchema } from "@/components/seo/medical-reviewer-schema"
 
@@ -879,6 +880,22 @@ export default function BMICalculatorPage() {
               </section>
 
             </div>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="BMI is a starting point, not an answer"
+              title="BMI cannot tell fat from muscle"
+              body="Your BMI comes from two numbers, height and weight, so it cannot see what the weight is made of. Two people at the same BMI can be in completely different shape. Calqulate Vitals logs your weight, waist and body composition on one timeline so you can watch what is actually changing."
+              bullets={[
+                "Log a weight or measurement in seconds",
+                "Everything you log on one timeline",
+                "Track body composition, labs and workouts",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
 
             <RelatedCalculators slug="bmi-calculator" />
 

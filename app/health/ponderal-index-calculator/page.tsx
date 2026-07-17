@@ -7,6 +7,7 @@ import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
@@ -690,6 +691,22 @@ export default function PonderalIndexCalculatorPage() {
               </section>
 
             </div>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="One index today, or the direction over months"
+              title="An index is a snapshot. Your body is a trend."
+              body="The Ponderal Index, like BMI, is built from height and weight alone, so it cannot see what your weight is made of. Calqulate Vitals keeps your weight, waist and body composition on one timeline so you can watch what is really changing."
+              bullets={[
+                "Log a weight or measurement in seconds",
+                "Everything you log on one timeline",
+                "Track body composition, labs and workouts",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
 
             <RelatedCalculators slug="ponderal-index-calculator" />
 

@@ -139,11 +139,12 @@ export default function TirzepatideDoseCalculatorPage() {
                 body="This snapshot is one moment in your treatment. Calqulate Vitals logs every injection, charts your drug levels between doses, splits your weight loss into fat and muscle, and predicts the week your progress is likely to plateau, before it happens."
                 bullets={[
                   "Every injection and dose change, on one timeline",
-                  "Drug-level curves between weekly shots",
-                  "Fat vs. muscle trend, not just the scale",
-                  "Doctor-ready PDF reports for your appointments",
+                  "See how much medication is still working today",
+                  "Know if you are on track against the clinical trials",
+                  "Fat vs muscle and doctor-ready reports (Premium)",
                 ]}
-                href="/product/glp1-progress-tracker"
+                href="/signup?next=/dashboard/glp1"
+                learnMoreHref="/product/glp1-progress-tracker"
                 cta="Start the GLP-1 Progress Tracker"
               />
 

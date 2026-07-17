@@ -461,12 +461,13 @@ export default async function GLP1BodyCompositionPage() {
                 title="On a GLP-1? Prove it's working at the level that matters"
                 body="This snapshot is one moment in time. What protects your results is watching lean mass over time, keeping protein and training on track, and catching the weeks you drop weight too fast. Calqulate Vitals tracks fat vs. muscle, builds an adaptive titration and protein plan, and flags rebound risk before you taper off."
                 bullets={[
-                  "Lean-mass trend over time, not just weight",
-                  "Adaptive titration that holds when side-effects spike",
-                  "Protein target and training to protect muscle",
-                  "Rebound-risk view for when you taper off",
+                  "Log every dose, weight and symptom in seconds",
+                  "See how much medication is still working today",
+                  "Know if you are on track against the clinical trials",
+                  "Lean-mass trend and dose timing (Premium)",
                 ]}
-                href="/product/glp1-progress-tracker"
+                href="/signup?next=/dashboard/glp1"
+                learnMoreHref="/product/glp1-progress-tracker"
                 cta="Start the GLP-1 Progress Tracker"
               />
 

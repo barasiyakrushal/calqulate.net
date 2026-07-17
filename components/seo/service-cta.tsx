@@ -2,8 +2,14 @@ import { ArrowRight, Check, Activity } from "lucide-react"
 import { TrackedLink } from "@/components/analytics/TrackedLink"
 
 /**
- * Green, conversion-focused CTA that sends a free-calculator visitor to the
- * matching paid Calqulate Vitals tracker. Used on high-intent calculator pages.
+ * Green, conversion-focused CTA on high-intent calculator pages.
+ *
+ * `href` should point straight at signup: the tracker is free to start, so an
+ * intermediate product page was just a hop that lost people. `learnMoreHref`
+ * keeps the product page reachable for anyone who wants to read first.
+ *
+ * Bullets must describe FREE-tier features. The button says "free", so anything
+ * listed here has to be there without a card. Mark premium extras explicitly.
  */
 export function ServiceCTA({
   eyebrow,
@@ -12,6 +18,8 @@ export function ServiceCTA({
   bullets,
   href,
   cta,
+  learnMoreHref,
+  learnMoreLabel = "See how it works",
 }: {
   eyebrow: string
   title: string
@@ -19,6 +27,9 @@ export function ServiceCTA({
   bullets: string[]
   href: string
   cta: string
+  /** Optional secondary link for people who want detail before signing up. */
+  learnMoreHref?: string
+  learnMoreLabel?: string
 }) {
   return (
     <section className="relative overflow-hidden rounded-3xl border border-green-200 bg-gradient-to-br from-green-600 via-green-600 to-emerald-700 p-8 text-white shadow-xl">
@@ -48,8 +59,18 @@ export function ServiceCTA({
             {cta}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </TrackedLink>
+          {learnMoreHref && (
+            <TrackedLink
+              href={learnMoreHref}
+              ctaId="service_cta_learn_more"
+              label={learnMoreLabel}
+              className="text-center text-sm font-semibold text-green-50 underline underline-offset-4 hover:text-white lg:text-right"
+            >
+              {learnMoreLabel}
+            </TrackedLink>
+          )}
           <p className="text-center text-xs text-green-100/80 lg:text-right">
-            Free to start. No card needed. Cancel anytime.
+            Free to start. No card needed.
           </p>
         </div>
       </div>

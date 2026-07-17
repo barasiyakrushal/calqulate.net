@@ -23,8 +23,6 @@ import {
   Heart,
   HeartPulse,
   Activity,
-  Scale,
-  Brain,
   Zap,
   Shield,
   Star,
@@ -95,83 +93,6 @@ const allCalculators = [
   { href: "/health/glp-1-dose-calculator", title: "GLP-1 Dose Calculator", category: "Disease Risk" },
   { href: "/health/dress-size-calculator", title: "Dress Size Calculator", category: "Appearance" },
   { href: "/health/ai-attractiveness-test", title: "AI Attractiveness Test", category: "Appearance" },
-]
-
-// ─── Category Groups ─────────────────────────────────────────────────────────
-
-const categoryGroups = [
-  {
-    name: "Body Composition",
-    icon: <Scale className="h-6 w-6" />,
-    description: "BMI, body fat, lean mass, body shape & weight metrics",
-    color: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    iconColor: "text-emerald-600",
-    bgAccent: "bg-emerald-500",
-    count: allCalculators.filter((c) => c.category === "Body Composition").length,
-  },
-  {
-    name: "Cardio Health",
-    icon: <Heart className="h-6 w-6" />,
-    description: "Heart rate, blood pressure, cardiovascular risk",
-    color: "bg-rose-50 text-rose-700 border-rose-200",
-    iconColor: "text-rose-500",
-    bgAccent: "bg-rose-500",
-    count: allCalculators.filter((c) => c.category === "Cardio Health").length,
-  },
-  {
-    name: "Nutrition & Weight",
-    icon: <Zap className="h-6 w-6" />,
-    description: "Calories, macros, TDEE, BMR, deficit & intake",
-    color: "bg-amber-50 text-amber-700 border-amber-200",
-    iconColor: "text-amber-600",
-    bgAccent: "bg-amber-500",
-    count: allCalculators.filter((c) => c.category === "Nutrition").length,
-  },
-  {
-    name: "Fitness Performance",
-    icon: <TrendingUp className="h-6 w-6" />,
-    description: "VO2 max, one-rep max, running pace, draw length",
-    color: "bg-blue-50 text-blue-700 border-blue-200",
-    iconColor: "text-blue-600",
-    bgAccent: "bg-blue-500",
-    count: allCalculators.filter((c) => c.category === "Fitness").length,
-  },
-  {
-    name: "Disease Risk",
-    icon: <Shield className="h-6 w-6" />,
-    description: "Diabetes, ASCVD, Framingham, cancer risk screening",
-    color: "bg-violet-50 text-violet-700 border-violet-200",
-    iconColor: "text-violet-600",
-    bgAccent: "bg-violet-500",
-    count: allCalculators.filter((c) => c.category === "Disease Risk").length,
-  },
-  {
-    name: "Mental Wellness",
-    icon: <Brain className="h-6 w-6" />,
-    description: "Sleep cycles, sleep debt, stress level analysis",
-    color: "bg-teal-50 text-teal-700 border-teal-200",
-    iconColor: "text-teal-600",
-    bgAccent: "bg-teal-500",
-    count: allCalculators.filter((c) => c.category === "Mental Wellness").length,
-  },
-  {
-    name: "Women's Health",
-    icon: <Activity className="h-6 w-6" />,
-    description: "Ovulation, periods, pregnancy weight & IVF dates",
-    color: "bg-pink-50 text-pink-700 border-pink-200",
-    iconColor: "text-pink-600",
-    bgAccent: "bg-pink-500",
-    count: allCalculators.filter((c) => c.category === "Women's Health").length,
-  },
-  {
-    name: "Appearance",
-    icon: <Sparkles className="h-6 w-6" />,
-    description: "Face shape, body shape, personal style guidance",
-    color: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    iconColor: "text-emerald-600",
-    bgAccent: "bg-emerald-500",
-    count: allCalculators.filter((c) => c.category === "Appearance").length,
-  },
 ]
 
 // ─── Why Choose Us Points ─────────────────────────────────────────────────────
@@ -268,9 +189,9 @@ const faqs = [
       "Insurance companies and doctors require proof that your medication is actually making you healthier to keep refilling it. By tracking your labs and your 'Heart Age' in our app, you have undeniable proof that your internal health is drastically improving.",
   },
   {
-    question: "What is the Founding Member Beta offer?",
+    question: "What is the Founding Member offer?",
     answer:
-      "We just launched the GLP-1 suite! For our first 100 users, instead of a $9.99 monthly subscription, we are offering a one-time lifetime pass for just $49. No recurring fees, ever.",
+      "While the GLP-1 suite is new, early members get founding-member pricing: a one-time lifetime pass for $49 instead of the $9.99 monthly subscription. This rate is locked for early users, so the sooner you join, the more you save. No recurring fees, ever.",
   },
   {
     question: "Is my medical data safe?",
@@ -623,7 +544,9 @@ export default async function HomePage() {
             <FreeThenPremium loggedIn={loggedIn} />
             <section className="bg-white py-12 sm:py-16">
               <div className="container mx-auto px-3 sm:px-4">
-                <FreeVsPremium showCta />
+                {/* Collapsed on the home page: the heading carries the message,
+                    and the full table is one click away for anyone who wants it. */}
+                <FreeVsPremium showCta collapsible />
               </div>
             </section>
           </>
@@ -749,39 +672,6 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── CATEGORY SECTION ──────────────────────────────────────────────── */}
-        <section className="py-12 sm:py-16 bg-gray-50">
-          <div className="container mx-auto px-3 sm:px-4">
-            <div className="text-center mb-8 sm:mb-10">
-              <span className="mb-3 inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
-                Browse by Category
-              </span>
-              <h2 id="categories" className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Every Aspect of Your Health, Covered
-              </h2>
-              <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
-                Eight specialized health categories help you find the calculator you need quickly.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto">
-              {categoryGroups.map((cat) => (
-                <div
-                  key={cat.name}
-                  className="group bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-                >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${cat.color} border`}>
-                    <span className={cat.iconColor}>{cat.icon}</span>
-                  </div>
-                  <div className="text-sm font-bold text-gray-800 mb-1">{cat.name}</div>
-                  <div className="text-xs text-gray-400 mb-2 leading-relaxed">{cat.description}</div>
-                  <div className="text-xs font-semibold text-emerald-600">{cat.count} calculators</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ── DIFFERENTIATION / VALUE SECTION ──────────────────────────────── */}
         <section className="relative overflow-hidden py-12 sm:py-16" style={{ background: LUXE_BG }}>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(245,158,11,0.55), transparent)" }} />
@@ -861,63 +751,6 @@ export default async function HomePage() {
                 quality={100}
                 className="relative w-full h-auto rounded-3xl ring-1 ring-emerald-100 shadow-xl"
               />
-            </div>
-          </div>
-        </section>
-
-        {/* ── VISUAL GALLERY ───────────────────────────────────────────────── */}
-        <section className="py-12 sm:py-16 bg-white">
-          <div className="container mx-auto px-3 sm:px-4">
-            <div className="text-center mb-8 sm:mb-10">
-              <span className="mb-3 inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
-                Visual Guides
-              </span>
-              <h2 id="visual-guides" className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Explore Health Visuals
-              </h2>
-              <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
-                Body shapes, face shapes, and BMI charts are easier to understand visually. Click any image to explore detailed guides.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto">
-              {[
-                { title: "Body Shapes", href: "/gallery#pear-shape", image: "/images/body-shapes/pear-shape.webp", color: "bg-rose-50" },
-                { title: "Face Shapes", href: "/gallery#face-shape-comparison", image: "/face-shape-comparison.webp", color: "bg-blue-50" },
-                { title: "BMI Chart", href: "/gallery#bmi-chart", image: "/bmi-chart.webp", color: "bg-emerald-50" },
-                { title: "Sleep Guide", href: "/gallery#sleep-cycle", image: "/recommendation-sleep-cycle-by-age-infographic.webp", color: "bg-violet-50" },
-              ].map((item) => (
-                <Link
-                  key={item.title}
-                  href={item.href}
-                  className="group block rounded-2xl overflow-hidden bg-white ring-1 ring-gray-100 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
-                >
-                  <div className={`relative w-full aspect-[4/3] ${item.color}`}>
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                  </div>
-                  <div className="p-3 text-center">
-                    <p className="text-sm font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">
-                      {item.title}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <div className="text-center mt-8">
-              <Link
-                href="/gallery"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:text-emerald-500 transition-colors"
-              >
-                View All Visual Guides
-                <ArrowRight className="h-4 w-4" />
-              </Link>
             </div>
           </div>
         </section>

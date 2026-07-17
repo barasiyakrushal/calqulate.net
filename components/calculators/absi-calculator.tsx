@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Link from "next/link";
 
+import { SyncPrompt } from "@/components/marketing/SyncPrompt"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -282,6 +283,7 @@ const HistoryPanel = ({ history, onClear }: { history: SavedEntry[]; onClear: ()
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <SyncPrompt ctaId="sync_prompt_absi" />
         <div className="space-y-2">
           {history.map((entry, i) => {
             const nextEntry = history[i + 1];

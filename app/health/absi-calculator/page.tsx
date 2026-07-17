@@ -8,6 +8,7 @@ import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -406,6 +407,22 @@ export default function ABSICalculatorPage() {
               </section>
             </div>
                     
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="One reading today, or the direction over months"
+              title="Turn a single ABSI reading into a trend"
+              body="ABSI is most useful when you can see it move. One number cannot tell you whether your shape is changing. Calqulate Vitals keeps your waist, weight and measurements on one timeline so you can watch the direction over months."
+              bullets={[
+                "Log your waist and weight in seconds",
+                "Everything you log on one timeline",
+                "Track body composition, labs and workouts",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
+
             <RelatedCalculators slug="absi-calculator" />
 
             <FAQSection faqs={faqs} />

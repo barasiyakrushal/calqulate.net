@@ -1,5 +1,6 @@
 "use client"
 
+import { SyncPrompt } from "@/components/marketing/SyncPrompt";
 import { useState, useRef, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -407,6 +408,7 @@ const PonderalIndexCalculator = () => {
                       <div>
                         <h4 className="text-base font-semibold">Saved Ponderal Index History</h4>
                         <p className="text-sm text-muted-foreground">Review recent saved results and compare your latest PI value.</p>
+                        <SyncPrompt ctaId="sync_prompt_ponderal_index" />
                       </div>
                       <Button variant="ghost" size="sm" onClick={clearHistory}>
                         Clear History

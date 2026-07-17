@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthForm } from "@/components/auth/AuthForm";
+import { SignupSocialProof } from "@/components/auth/SignupSocialProof";
 
 export const metadata: Metadata = {
   title: "Create your account | Calqulate",
@@ -29,14 +30,17 @@ export default function SignupPage() {
             </span>
           </Link>
         </div>
-        <Suspense fallback={
-          <div className="mx-auto w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <div className="h-6 w-48 bg-gray-200 rounded animate-pulse" />
-            <div className="mt-4 h-12 bg-gray-200 rounded animate-pulse" />
-          </div>
-        }>
-          <AuthForm mode="signup" />
-        </Suspense>
+        <div className="mx-auto flex w-full max-w-4xl flex-col items-start justify-center gap-8 lg:flex-row">
+          <Suspense fallback={
+            <div className="mx-auto w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="h-6 w-48 bg-gray-200 rounded animate-pulse" />
+              <div className="mt-4 h-12 bg-gray-200 rounded animate-pulse" />
+            </div>
+          }>
+            <AuthForm mode="signup" />
+          </Suspense>
+          <SignupSocialProof />
+        </div>
       </div>
     </main>
   );

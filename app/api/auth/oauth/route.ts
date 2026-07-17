@@ -1,17 +1,27 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+const PROVIDERS = ["google", "azure", "apple"] as const;
+type Provider = (typeof PROVIDERS)[number];
+
+/** Apple returns very little by default; these are the scopes it accepts. */
+const SCOPES: Record<Provider, string> = {
+  google: "email profile",
+  azure: "email openid profile",
+  apple: "email name",
+};
+
 /**
- * Starts an OAuth flow (Google or Azure/Outlook) and returns the provider URL.
- * Provider apps are configured in the Supabase dashboard (Authentication ->
+ * Starts an OAuth flow (Google, Azure/Outlook or Apple) and returns the provider
+ * URL. Provider apps are configured in the Supabase dashboard (Authentication ->
  * Providers). Bots are mitigated by the identity provider itself.
  */
 export async function POST(req: Request) {
   const { provider, next } = (await req.json()) as {
-    provider: "google" | "azure";
+    provider: Provider;
     next?: string;
   };
-  if (provider !== "google" && provider !== "azure") {
+  if (!PROVIDERS.includes(provider)) {
     return NextResponse.json({ error: "Unsupported provider" }, { status: 400 });
   }
 
@@ -22,7 +32,7 @@ export async function POST(req: Request) {
     provider,
     options: {
       redirectTo,
-      scopes: provider === "azure" ? "email openid profile" : "email profile",
+      scopes: SCOPES[provider],
     },
   });
 

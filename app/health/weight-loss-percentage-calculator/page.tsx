@@ -459,12 +459,13 @@ export default function WeightLossPercentageCalculatorPage() {
               title="Make the weight you lose the weight that stays off"
               body="A percentage is a snapshot. What protects your results is watching your loss and your lean mass on one timeline, keeping protein and training on track, and catching the weeks you drop weight too fast to be all fat. Calqulate Vitals does exactly that, and for GLP-1 users it adds an adaptive titration and rebound-risk view."
               bullets={[
-                "Weight loss and lean mass on one timeline",
-                "Projected goal date from your own pace",
-                "Protein target built from your numbers",
-                "Adaptive titration and rebound-risk view for GLP-1 users",
+                "Log a weight in seconds, from any device",
+                "Everything you log on one timeline",
+                "Find out how much protein is really in your meal",
+                "Goal date and fat vs muscle trend (Premium)",
               ]}
-              href="/product/glp1-progress-tracker"
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
               cta="Start the GLP-1 Progress Tracker"
             />
 

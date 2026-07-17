@@ -6,6 +6,7 @@ import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -330,6 +331,22 @@ export default function RFMCalculatorPage() {
               </section>
 
             </div>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="An estimate today, a trend over months"
+              title="Watch your body fat move in the right direction"
+              body="RFM estimates your body fat from your waist and height right now. On its own that is a single dot. Calqulate Vitals keeps your waist, weight and body composition on one timeline so that dot becomes a line you can actually read."
+              bullets={[
+                "Log your waist and weight in seconds",
+                "Everything you log on one timeline",
+                "Track body composition, labs and workouts",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
 
             <RelatedCalculators slug="rfm-calculator" />
 

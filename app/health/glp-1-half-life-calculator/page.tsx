@@ -181,12 +181,13 @@ export default function Glp1HalfLifeCalculatorPage() {
                 title="Track your drug level every day, free"
                 body="Today's percentage tells you why you are hungry today. Calqulate Vitals logs every injection, charts your drug level between doses, forecasts tomorrow's appetite, splits your loss into fat and muscle, and flags the week your progress is likely to plateau."
                 bullets={[
-                  "Daily drug activity, not a one-off snapshot",
-                  "Injection reminders and a full history",
-                  "Tomorrow's appetite forecast",
-                  "Fat vs. muscle trend and plateau risk",
+                  "See how much medication is still working today",
+                  "Never miss an injection",
+                  "Every dose on one timeline",
+                  "Tomorrow's appetite forecast (Premium)",
                 ]}
-                href="/product/glp1-progress-tracker"
+                href="/signup?next=/dashboard/glp1"
+                learnMoreHref="/product/glp1-progress-tracker"
                 cta="Start the GLP-1 Progress Tracker"
               />
 

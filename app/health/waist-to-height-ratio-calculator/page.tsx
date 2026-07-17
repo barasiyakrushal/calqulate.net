@@ -10,6 +10,7 @@ import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import {
   CheckCircle2,
   ArrowRight,
@@ -495,6 +496,22 @@ export default function WHtRCalculatorPage() {
               <h2 className="mb-6 text-2xl font-bold text-slate-900 sm:text-3xl">Frequently asked questions</h2>
               <FAQSection faqs={faqs} />
             </section>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="One ratio today, or the direction over months"
+              title="Watch your waist fall, week after week"
+              body="A single reading tells you where you are. What tells you it is working is the direction it moves. Calqulate Vitals keeps your waist, weight and measurements on one timeline, so you can see the trend instead of guessing from one number."
+              bullets={[
+                "Log your waist and weight in seconds",
+                "Everything you log on one timeline",
+                "Track body composition, labs and workouts",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
           </div>
 
           <div className="mx-auto max-w-3xl">

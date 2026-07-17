@@ -10,6 +10,17 @@ export interface Stat {
   label: string;
 }
 
+/**
+ * GLP-1 tracker member count, shown on the signup page as
+ * "Join {value} people tracking their GLP-1 progress".
+ *
+ * ⚠️ REAL number only, and only once it is genuinely reassuring. Leave "" to
+ * hide the line entirely — an honest small number reads as "no one uses this",
+ * so do not set it until it helps rather than hurts. When set, use a rounded,
+ * defensible figure like "1,200+".
+ */
+export const GLP1_MEMBER_COUNT = "";
+
 /** Headline numbers. Set to your REAL figures, or "" to hide. */
 export const STATS: Stat[] = [
   // "50+ free calculators" is deliberately gone. Counting calculators sells a

@@ -8,6 +8,7 @@ import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { CheckCircle2, ArrowRight } from "lucide-react"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
 
@@ -447,6 +448,22 @@ export default function BMRCalculatorPage() {
               <h2 className="mb-6 text-2xl font-bold text-slate-900 sm:text-3xl">Frequently asked questions</h2>
               <FAQSection faqs={faqs} />
             </section>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="Your BMR is a moving target"
+              title="Your BMR drops as you lose weight"
+              body="The number above is true today. Six weeks and 5 kg from now it is not, which is why calorie targets quietly stop working and fat loss stalls. Calqulate Vitals keeps your weight, meals and doses on one timeline so your numbers stay current instead of going stale."
+              bullets={[
+                "Log a weight or meal in seconds",
+                "Everything you log on one timeline",
+                "Protein check on your meals",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
           </div>
 
           <div className="mx-auto max-w-3xl">

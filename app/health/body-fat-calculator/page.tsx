@@ -644,12 +644,13 @@ export default function BodyFatCalculatorPage() {
                 title="Watch your body fat fall without losing muscle"
                 body="A single reading tells you where you are. What protects your results is trending body fat and lean mass together, keeping protein and training on target, and catching the weeks you lose too fast. Calqulate Vitals does that, and for GLP-1 users it adds an adaptive titration and a rebound-risk view."
                 bullets={[
-                  "Body fat and lean mass on one timeline",
-                  "Protein target built from your own numbers",
-                  "Fat vs muscle flag when you lose too fast",
-                  "Adaptive titration and rebound-risk view for GLP-1 users",
+                  "Log body fat, weight and measurements in seconds",
+                  "Everything you log on one timeline",
+                  "Find out how much protein is really in your meal",
+                  "Fat vs muscle trend and plateau risk (Premium)",
                 ]}
-                href="/product/glp1-progress-tracker"
+                href="/signup?next=/dashboard/glp1"
+                learnMoreHref="/product/glp1-progress-tracker"
                 cta="Start the GLP-1 Progress Tracker"
               />
 

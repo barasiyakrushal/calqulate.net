@@ -8,6 +8,7 @@ import ObesityRiskCalculator from "@/components/calculators/obesity-risk-calcula
 import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data";
 import { FAQSection } from "@/components/seo/faq-section";import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -303,6 +304,22 @@ export default function ObesityRiskCalculatorPage() {
               </section>
 
             </div>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="Risk moves when your numbers move"
+              title="A risk score today is worth more as a trend"
+              body="This score reflects where you are now. What changes it is the direction your weight and waist travel over the coming months. Calqulate Vitals keeps those numbers on one timeline so you can see your risk moving rather than re-running a calculator and hoping."
+              bullets={[
+                "Log a weight or measurement in seconds",
+                "Everything you log on one timeline",
+                "See your metabolic health as one score",
+                "Watch your risk fall over time (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
 
             <RelatedCalculators slug="obesity-risk-calculator" />
 

@@ -9,6 +9,7 @@ import { CalculatorSchema, FAQSchema } from "@/components/seo/structured-data"
 import { FAQSection } from "@/components/seo/faq-section"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
@@ -408,6 +409,22 @@ export default function CalorieDeficitPage() {
               </section>
 
             </div>
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="The size of the deficit decides what you lose"
+              title="A deficit that is too big costs you muscle"
+              body="A deficit sets how fast the weight comes off. It does not decide how much of it is fat. Calqulate Vitals keeps your weight, protein and meals on one timeline, so a fast week shows up as something to look at rather than something to celebrate blindly."
+              bullets={[
+                "Log a weight or meal in seconds",
+                "Protein check on your meals",
+                "Everything you log on one timeline",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
 
             <RelatedCalculators slug="calorie-deficit-calculator" />
 

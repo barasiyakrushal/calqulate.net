@@ -1,5 +1,6 @@
 "use client";
 
+import { SyncPrompt } from "@/components/marketing/SyncPrompt";
 import { useState, useRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -376,6 +377,7 @@ const HistoryPanel = ({ history, onClear, unit }: { history: SavedEntry[]; onCle
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <SyncPrompt ctaId="sync_prompt_calorie_deficit" className="mt-0 mb-4" />
         <div className="space-y-2">
           {history.map((entry, i) => {
             const nextEntry = history[i + 1];

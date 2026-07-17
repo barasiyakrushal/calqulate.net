@@ -211,12 +211,13 @@ export default function Glp1InjectionDayCalculatorPage() {
                 title="Never work this date out again"
                 body="You calculated one injection day. Calqulate Vitals remembers it, reminds you every week, flags a missed dose the moment it happens, and turns a year of injections into a picture of whether your treatment is actually working."
                 bullets={[
-                  "Injection reminders on your day",
-                  "Missed doses flagged automatically",
-                  "Drug levels between injections",
-                  "Weekly consistency score and plateau risk",
+                  "Never miss an injection",
+                  "See how much medication is still working today",
+                  "Every dose on one timeline",
+                  "Plateau risk and dose timing (Premium)",
                 ]}
-                href="/product/glp1-progress-tracker"
+                href="/signup?next=/dashboard/glp1"
+                learnMoreHref="/product/glp1-progress-tracker"
                 cta="Start the GLP-1 Progress Tracker"
               />
 

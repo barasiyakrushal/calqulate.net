@@ -8,6 +8,7 @@ import { FAQSection } from "@/components/seo/faq-section"
 import { Card, CardContent } from "@/components/ui/card"
 import { AuthorSection } from "@/components/seo/author-section"
 import { AuthorSchema } from "@/components/seo/author-schema"
+import { ServiceCTA } from "@/components/seo/service-cta"
 import { MedicalReviewerSection } from "@/components/seo/medical-reviewer-section"
 import { MedicalReviewerSchema } from "@/components/seo/medical-reviewer-schema"
 import { RelatedCalculators } from "@/components/calculators/related-calculators"
@@ -517,6 +518,22 @@ export default function WaistToHipRatioPage() {
             {/* Author Badge Section */}
             <MedicalReviewerSection />
             
+
+            {/* SERVICE CTA */}
+            <ServiceCTA
+              eyebrow="One ratio today, or the direction over months"
+              title="The trend is what tells you it is working"
+              body="A single waist-to-hip reading places you today. What actually matters is which way it moves over the next few months. Calqulate Vitals keeps your measurements and weight on one timeline so you can see the direction instead of guessing from one number."
+              bullets={[
+                "Log measurements and weight in seconds",
+                "Everything you log on one timeline",
+                "Track body composition, labs and workouts",
+                "Fat vs muscle trend (Premium)",
+              ]}
+              href="/signup?next=/dashboard/glp1"
+              learnMoreHref="/product/glp1-progress-tracker"
+              cta="Start tracking free"
+            />
 
             <RelatedCalculators slug="waist-to-hip-ratio-calculator" />
 
