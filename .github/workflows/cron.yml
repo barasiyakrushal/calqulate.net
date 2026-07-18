@@ -4,9 +4,12 @@ name: Scheduled jobs
 # without this workflow, dose reminders never fire and the weekly digest never
 # sends, even though both routes are fully implemented.
 #
-# Required repository secrets (Settings > Secrets and variables > Actions):
+# Required repository secret (Settings > Secrets and variables > Actions):
 #   CRON_SECRET  - must match the CRON_SECRET env var on the deployed site
-#   SITE_URL     - optional; defaults to https://calqulate.net
+#
+# Optional repository VARIABLE (same page, "Variables" tab):
+#   SITE_URL     - only needed to target a non-production site. Defaults to
+#                  https://calqulate.net. It is a public URL, not a secret.
 #
 # Both endpoints authenticate via `Authorization: Bearer <CRON_SECRET>`
 # (they also accept ?secret=, but the header keeps it out of logs and history).
@@ -21,7 +24,6 @@ on:
   # Allows a manual run from the Actions tab, for testing.
   workflow_dispatch:
 
-# Prevents overlapping runs if one is slow.
 concurrency:
   group: scheduled-jobs
   cancel-in-progress: false
@@ -35,23 +37,41 @@ jobs:
       - name: Trigger dose reminders
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
-          SITE_URL: ${{ secrets.SITE_URL || 'https://calqulate.net' }}
+          SITE_URL_VAR: ${{ vars.SITE_URL }}
         run: |
+          # Default in the shell, not in a GitHub expression, so a missing or
+          # empty variable can never produce a URL with no host (curl exit 3).
+          SITE_URL="${SITE_URL_VAR:-https://calqulate.net}"
+          SITE_URL="${SITE_URL%/}"   # strip any trailing slash
+
           if [ -z "$CRON_SECRET" ]; then
-            echo "::error::CRON_SECRET repository secret is not set."
+            echo "::error::CRON_SECRET is not set. Add it under Settings > Secrets and variables > Actions > Secrets."
             exit 1
           fi
+          case "$SITE_URL" in
+            http://*|https://*) ;;
+            *) echo "::error::SITE_URL must start with http:// or https:// (got '$SITE_URL')"; exit 1 ;;
+          esac
+
+          echo "Calling $SITE_URL/api/cron/dose-reminders"
           code=$(curl -sS -o /tmp/out.txt -w "%{http_code}" \
             --max-time 90 \
             -H "Authorization: Bearer $CRON_SECRET" \
-            "$SITE_URL/api/cron/dose-reminders")
+            "$SITE_URL/api/cron/dose-reminders") || {
+              echo "::error::Could not reach $SITE_URL (curl exit $?). Check the site is deployed and the URL is right."
+              exit 1
+            }
+
           echo "HTTP $code"
-          cat /tmp/out.txt
-          echo ""
-          if [ "$code" != "200" ]; then
-            echo "::error::dose-reminders failed with HTTP $code"
-            exit 1
-          fi
+          cat /tmp/out.txt; echo ""
+
+          case "$code" in
+            200) echo "Dose reminders ran successfully." ;;
+            401) echo "::error::401 Unauthorized. The CRON_SECRET here does not match the one on the deployed site."; exit 1 ;;
+            404) echo "::error::404 Not found. Is the latest build deployed to $SITE_URL?"; exit 1 ;;
+            500) echo "::error::500 from the app. Most likely CRON_SECRET is not set in the site's environment."; exit 1 ;;
+            *)   echo "::error::Unexpected HTTP $code"; exit 1 ;;
+          esac
 
   weekly-digest:
     # Only on the weekly schedule and on manual dispatch.
@@ -61,20 +81,36 @@ jobs:
       - name: Trigger weekly digest
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
-          SITE_URL: ${{ secrets.SITE_URL || 'https://calqulate.net' }}
+          SITE_URL_VAR: ${{ vars.SITE_URL }}
         run: |
+          SITE_URL="${SITE_URL_VAR:-https://calqulate.net}"
+          SITE_URL="${SITE_URL%/}"
+
           if [ -z "$CRON_SECRET" ]; then
-            echo "::error::CRON_SECRET repository secret is not set."
+            echo "::error::CRON_SECRET is not set. Add it under Settings > Secrets and variables > Actions > Secrets."
             exit 1
           fi
+          case "$SITE_URL" in
+            http://*|https://*) ;;
+            *) echo "::error::SITE_URL must start with http:// or https:// (got '$SITE_URL')"; exit 1 ;;
+          esac
+
+          echo "Calling $SITE_URL/api/cron/weekly-digest"
           code=$(curl -sS -o /tmp/out.txt -w "%{http_code}" \
             --max-time 90 \
             -H "Authorization: Bearer $CRON_SECRET" \
-            "$SITE_URL/api/cron/weekly-digest")
+            "$SITE_URL/api/cron/weekly-digest") || {
+              echo "::error::Could not reach $SITE_URL (curl exit $?). Check the site is deployed and the URL is right."
+              exit 1
+            }
+
           echo "HTTP $code"
-          cat /tmp/out.txt
-          echo ""
-          if [ "$code" != "200" ]; then
-            echo "::error::weekly-digest failed with HTTP $code"
-            exit 1
-          fi
+          cat /tmp/out.txt; echo ""
+
+          case "$code" in
+            200) echo "Weekly digest ran successfully." ;;
+            401) echo "::error::401 Unauthorized. The CRON_SECRET here does not match the one on the deployed site."; exit 1 ;;
+            404) echo "::error::404 Not found. Is the latest build deployed to $SITE_URL?"; exit 1 ;;
+            500) echo "::error::500 from the app. Most likely CRON_SECRET is not set in the site's environment."; exit 1 ;;
+            *)   echo "::error::Unexpected HTTP $code"; exit 1 ;;
+          esac
