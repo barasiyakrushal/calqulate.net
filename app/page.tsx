@@ -18,7 +18,6 @@ import { getAccess, hasPaidAccess } from "@/lib/auth"
 
 import {
   Calculator,
-  Wrench,
   TrendingUp,
   Heart,
   HeartPulse,
@@ -40,128 +39,12 @@ import Image from "next/image"
 import Link from "next/link"
 
 // Full calculator list (used for count display)
-const allCalculators = [
-  { href: "/health/absi-calculator", title: "ABSI Calculator", category: "Body Composition" },
-  { href: "/health/lean-body-mass-calculator", title: "Lean Body Mass Calculator", category: "Body Composition" },
-  { href: "/health/rfm-calculator", title: "RFM Calculator", category: "Body Composition" },
-  { href: "/health/ponderal-index-calculator", title: "Ponderal Index Calculator", category: "Body Composition" },
-  { href: "/health/adjusted-body-weight-calculator", title: "Adjusted Body Weight Calculator", category: "Body Composition" },
-  { href: "/health/karvonen-formula-calculator", title: "Karvonen Formula Calculator", category: "Cardio Health" },
-  { href: "/health/body-shape-calculator", title: "Body Shape Calculator", category: "Body Composition" },
-  { href: "/health/draw-length-calculator", title: "Draw Length Calculator", category: "Fitness" },
-  { href: "/health/face-shape-calculator", title: "Face Shape Calculator", category: "Appearance" },
-  { href: "/health/cholesterol-ratio-calculator", title: "Cholesterol Ratio Calculator", category: "Cardio Health" },
-  { href: "/health/heart-rate-calculator", title: "Heart Rate Calculator", category: "Cardio Health" },
-  { href: "/health/creatinine-clearance-calculator", title: "Creatinine Clearance Calculator", category: "Disease Risk" },
-  { href: "/health/pregnancy-weight-gain-calculator", title: "Pregnancy Weight Gain Calculator", category: "Women's Health" },
-  { href: "/health/fat-intake-calculator", title: "Fat Intake Calculator", category: "Nutrition" },
-  { href: "/health/mean-arterial-pressure-calculator", title: "Mean Arterial Pressure Calculator", category: "Cardio Health" },
-  { href: "/health/framingham-risk-score-calculator", title: "Framingham Risk Score Calculator", category: "Disease Risk" },
-  { href: "/health/pulse-pressure-calculator", title: "Pulse Pressure Calculator", category: "Cardio Health" },
-  { href: "/health/ascvd-risk-calculator", title: "ASCVD Risk Calculator", category: "Disease Risk" },
-  { href: "/health/qrisk3-calculator", title: "Qrisk3 Calculator", category: "Disease Risk" },
-  { href: "/health/tdee-calculator", title: "TDEE Calculator", category: "Nutrition" },
-  { href: "/health/macro-calculator", title: "Macro Calculator", category: "Nutrition" },
-  { href: "/health/one-rep-max-calculator", title: "One-Rep Max Calculator", category: "Fitness" },
-  { href: "/health/vo2-max-calculator", title: "VO2 Max Calculator", category: "Fitness" },
-  { href: "/health/wilks-calculator", title: "Wilks Calculator", category: "Fitness" },
-  { href: "/health/bmi-calculator", title: "BMI Calculator", category: "Body Composition" },
-  { href: "/health/age-calculator", title: "Age Calculator", category: "General" },
-  { href: "/health/waist-to-height-ratio-calculator", title: "Waist-to-Height Ratio Calculator", category: "Body Composition" },
-  { href: "/health/ideal-body-weight-calculator", title: "Ideal Body Weight Calculator", category: "Body Composition" },
-  { href: "/health/body-fat-calculator", title: "Body Fat Percentage Calculator", category: "Body Composition" },
-  { href: "/health/blood-pressure-calculator", title: "Blood Pressure Calculator", category: "Cardio Health" },
-  { href: "/health/resting-heart-rate-calculator", title: "Resting Heart Rate Calculator", category: "Cardio Health" },
-  { href: "/health/heart-age-calculator", title: "Heart Age Calculator", category: "Cardio Health" },
-  { href: "/health/diabetes-risk-calculator", title: "Diabetes Risk Calculator", category: "Disease Risk" },
-  { href: "/health/estimated-average-glucose-calculator", title: "eAG Calculator", category: "Disease Risk" },
-  { href: "/health/daily-water-intake-calculator", title: "Daily Water Intake Calculator", category: "Nutrition" },
-  { href: "/health/calorie-deficit-calculator", title: "Calorie Deficit Calculator", category: "Nutrition" },
-  { href: "/health/bmr-calculator", title: "BMR Calculator", category: "Nutrition" },
-  { href: "/health/obesity-risk-calculator", title: "Obesity Risk Calculator", category: "Disease Risk" },
-  { href: "/health/stress-level-calculator", title: "Stress Level Calculator", category: "Mental Wellness" },
-  { href: "/health/breast-cancer-risk-calculator", title: "Breast Cancer Risk Calculator", category: "Disease Risk" },
-  { href: "/health/sleep-cycle-calculator", title: "Sleep Cycle Calculator", category: "Mental Wellness" },
-  { href: "/health/sleep-debt-calculator", title: "Sleep Debt Calculator", category: "Mental Wellness" },
-  { href: "/health/calories-burned-calculator", title: "Calories Burned Calculator", category: "Fitness" },
-  { href: "/health/running-pace-calculator", title: "Running Pace Calculator", category: "Fitness" },
-  { href: "/health/period-cycle-calculator", title: "Period Cycle Calculator", category: "Women's Health" },
-  { href: "/health/ovulation-calculator", title: "Ovulation Calculator", category: "Women's Health" },
-  { href: "/health/ivf-pregnancy-due-date-calculator", title: "IVF Due Date Calculator", category: "Women's Health" },
-  { href: "/health/golden-ratio-face-calculator", title: "Golden Ratio Face Calculator", category: "Appearance" },
-  { href: "/health/weight-loss-percentage-calculator", title: "Weight Loss Percentage Calculator", category: "Body Composition" },
-  { href: "/health/glp-1-dose-calculator", title: "GLP-1 Dose Calculator", category: "Disease Risk" },
-  { href: "/health/dress-size-calculator", title: "Dress Size Calculator", category: "Appearance" },
-  { href: "/health/ai-attractiveness-test", title: "AI Attractiveness Test", category: "Appearance" },
-]
 
 // ─── Why Choose Us Points ─────────────────────────────────────────────────────
 
-const trustPoints = [
-  {
-    icon: <CheckCircle2 className="h-5 w-5" />,
-    title: "Clinically-Grounded Formulas",
-    desc: "Every calculator uses peer-reviewed, medically validated formulas, which are the same tools used by healthcare professionals.",
-  },
-  {
-    icon: <Users className="h-5 w-5" />,
-    title: "Built for Real People",
-    desc: "Results come with context, not just numbers. We explain what your score means and what to do next.",
-  },
-  {
-    icon: <Shield className="h-5 w-5" />,
-    title: "100% Private, No Account Needed",
-    desc: "Nothing is stored. Your health data stays on your device. No login, no tracking, no selling your information.",
-  },
-  {
-    icon: <Award className="h-5 w-5" />,
-    title: "Updated to Current Standards",
-    desc: "We regularly review and update our calculators to reflect the latest clinical guidelines from AHA, WHO, and NHS.",
-  },
-  {
-    icon: <Star className="h-5 w-5" />,
-    title: "Trusted by Thousands Monthly",
-    desc: "From fitness enthusiasts to healthcare professionals, Calqulate is a go-to resource for accurate health insight.",
-  },
-  {
-    icon: <Zap className="h-5 w-5" />,
-    title: "Instant, No-Friction Results",
-    desc: "No email gates, no confusing interfaces. Just enter your numbers and get your answer.",
-  },
-  {
-    icon: <LineChart className="h-5 w-5" />,
-    title: "Track Change Over Time",
-    desc: "See your trajectory, not a one-off number. Watch your Metabolic Health Score and risk fall month over month.",
-  },
-  {
-    icon: <Lock className="h-5 w-5" />,
-    title: "Privacy-First Paid Tier",
-    desc: "GDPR/CCPA data export and permanent delete, anytime. Your health data is yours to take or erase.",
-  },
-]
 
 // ─── Calqulate Vitals services ────────────────────────────────────────────────
 
-const vitalsServices = [
-  {
-    icon: <Activity className="h-6 w-6" />,
-    title: "Metabolic Health Tracker",
-    desc: "A composite Metabolic Health Score plus heart age and 10-year ASCVD risk, tracked over time.",
-    href: "/product/metabolic-health-tracker",
-  },
-  {
-    icon: <Heart className="h-6 w-6" />,
-    title: "Heart Age Tracker",
-    desc: "See your vascular age versus your real age with the validated Framingham model - and watch it fall.",
-    href: "/product/heart-age-tracker",
-  },
-  {
-    icon: <TrendingUp className="h-6 w-6" />,
-    title: "GLP-1 Progress Tracker",
-    desc: "On semaglutide or Ozempic? Track results that matter beyond the scale - risk, not just pounds.",
-    href: "/product/glp1-progress-tracker",
-  },
-]
 
 
 // ─── Homepage FAQ (rendered + marked up as FAQPage JSON-LD) ──────────────────
@@ -191,7 +74,7 @@ const faqs = [
   {
     question: "What is the Founding Member offer?",
     answer:
-      "While the GLP-1 suite is new, early members get founding-member pricing: a one-time lifetime pass for $49 instead of the $9.99 monthly subscription. This rate is locked for early users, so the sooner you join, the more you save. No recurring fees, ever.",
+      "Early members get founding-member pricing on Calqulate Vitals: $9.99 a month, or $79 a year which works out around $6.58 a month. That rate is locked in for as long as you stay subscribed, even when the price rises for new members later. Every calculator, and your first snapshot, stay free with no account.",
   },
   {
     question: "Is my medical data safe?",

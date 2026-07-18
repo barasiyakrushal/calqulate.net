@@ -95,10 +95,21 @@ export function Onboarding({ paid = false }: { paid?: boolean }) {
   const sWater = Math.min(100, Math.round((waterCups / 10) * 100));
   const sSleep = Math.min(100, Math.round((sleepH / 8) * 100));
 
+  // Only block on what we genuinely cannot compute without.
+  //   Step 0: current weight is the anchor for every estimate. A target is
+  //           optional, because people maintaining or unsure of a goal were
+  //           previously locked out entirely.
+  //   Step 1: the compound alone is enough to start a medication record; dose
+  //           can be added on the first log, so people who have not started or
+  //           do not know their dose yet are no longer stuck.
   const canNext =
-    step === 0 ? Boolean(currentLb && targetLb && Number(targetLb) < Number(currentLb))
-    : step === 1 ? Boolean(compound && doseMg)
+    step === 0 ? Boolean(currentLb)
+    : step === 1 ? Boolean(compound)
     : true;
+
+  /** Shown inline when a target is present but not below current weight. */
+  const targetAboveCurrent =
+    Boolean(currentLb && targetLb) && Number(targetLb) >= Number(currentLb);
 
   // Commit phase: we always save their plan first (so nothing is lost), then send
   // them either straight into the tracker (free path) or to the premium paywall.
@@ -149,7 +160,7 @@ export function Onboarding({ paid = false }: { paid?: boolean }) {
           <Step title="Tell us about you" sub="The basics that personalize your plan.">
             <div className="grid gap-3 sm:grid-cols-2">
               <Field id="cw" label="Current weight (lb)"><Input id="cw" type="number" min="0" value={currentLb} onChange={(e) => setCurrentLb(e.target.value)} placeholder="210" /></Field>
-              <Field id="tw" label="Target weight (lb)"><Input id="tw" type="number" min="0" value={targetLb} onChange={(e) => setTargetLb(e.target.value)} placeholder="170" /></Field>
+              <Field id="tw" label="Target weight (lb, optional)"><Input id="tw" type="number" min="0" value={targetLb} onChange={(e) => setTargetLb(e.target.value)} placeholder="170" /></Field>
               <Field id="ht" label="Height (inches)"><Input id="ht" type="number" min="0" value={heightIn} onChange={(e) => setHeightIn(e.target.value)} placeholder="66" /></Field>
               <Field id="ag" label="Age"><Input id="ag" type="number" min="0" value={age} onChange={(e) => setAge(e.target.value)} placeholder="44" /></Field>
               <Field id="gn" label="Gender">
@@ -161,6 +172,12 @@ export function Onboarding({ paid = false }: { paid?: boolean }) {
             {lostLb > 0 && (
               <Insight tone="ok">
                 Goal locked in. Losing <b>{round(lostLb, 0)} lb</b> at a healthy pace is realistic — most people get there in roughly <b>{monthsFast}–{monthsSlow} months</b>.
+              </Insight>
+            )}
+            {targetAboveCurrent && (
+              <Insight tone="warn">
+                Your target is at or above your current weight, so we will not show a loss timeline. That is fine
+                if you are maintaining — everything else still works.
               </Insight>
             )}
           </Step>
@@ -247,7 +264,8 @@ export function Onboarding({ paid = false }: { paid?: boolean }) {
             <div className="rounded-2xl bg-emerald-50 p-5 text-center">
               <Trophy className="mx-auto h-8 w-8 text-emerald-600" />
               <p className="mt-2 text-sm text-gray-700">
-                Tracking <b>{COMPOUNDS.find((c) => c.value === compound)?.label.split(" (")[0]}</b>, goal <b>{targetLb} lb</b>.
+                Tracking <b>{COMPOUNDS.find((c) => c.value === compound)?.label.split(" (")[0]}</b>
+                {targetLb && !targetAboveCurrent ? <>, goal <b>{targetLb} lb</b></> : null}.
                 Your coach, medication-level curve and weekly plan are ready.
               </p>
             </div>
@@ -256,7 +274,9 @@ export function Onboarding({ paid = false }: { paid?: boolean }) {
               <div className="mt-4 rounded-2xl border-2 border-gold/40 bg-gradient-to-br from-amber-50 to-white p-5">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-gold" />
-                  <span className="text-sm font-bold uppercase tracking-wide text-gold-ink">Premium, to hit {targetLb} lb the right way</span>
+                  <span className="text-sm font-bold uppercase tracking-wide text-gold-ink">
+                    {targetLb && !targetAboveCurrent ? `Premium, to hit ${targetLb} lb the right way` : "Premium, to protect your results"}
+                  </span>
                 </div>
                 <ul className="mt-3 space-y-2">
                   {[
@@ -289,15 +309,24 @@ export function Onboarding({ paid = false }: { paid?: boolean }) {
               Continue <ArrowRight className="ml-1 h-4 w-4" />
             </Button>
           ) : (
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" onClick={() => finish("tracker")} disabled={saving} className="text-gray-600 hover:text-gray-900">
-                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} {paid ? "Go to dashboard" : "Start free"}
-              </Button>
+            // Finishing setup is the activation moment, so the free path is the
+            // primary action. Premium stays available as a quieter secondary.
+            <div className="flex items-center gap-3">
               {!paid && (
-                <Button onClick={() => finish("premium")} disabled={saving} className="bg-gradient-to-r from-gold-light to-gold text-gold-ink hover:opacity-90">
-                  <Sparkles className="mr-2 h-4 w-4" /> Go Premium
-                </Button>
+                <button
+                  type="button"
+                  onClick={() => finish("premium")}
+                  disabled={saving}
+                  className="text-sm font-medium text-gray-500 underline underline-offset-4 hover:text-gold-ink disabled:opacity-60"
+                >
+                  See Premium
+                </button>
               )}
+              <Button onClick={() => finish("tracker")} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700">
+                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                {paid ? "Go to dashboard" : "Start free"}
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
             </div>
           )}
         </div>

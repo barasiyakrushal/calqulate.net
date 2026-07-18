@@ -39,6 +39,9 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string; consent?: string }>({});
+  /** Set when Supabase requires email confirmation before the session starts. */
+  const [confirmPending, setConfirmPending] = useState(false);
+  const [resendState, setResendState] = useState<"idle" | "sending" | "sent">("idle");
 
   const onToken = useCallback((t: string) => setToken(t), []);
   const strength = mode === "signup" ? passwordStrength(password) : null;
@@ -78,10 +81,11 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         return;
       }
       if (mode === "signup" && data.needsConfirmation) {
-        // Account exists but the user is stranded here until they confirm by email.
-        // Tracked separately so this dead-end is visible in the funnel.
+        // The account exists but there is no session until the user clicks the
+        // link in their email. Show a persistent panel (a toast disappears and
+        // left people staring at the form wondering if it worked).
         track("signup_complete", { method: "email", needs_confirmation: true });
-        toast.success("Account created! Check your email to confirm.");
+        setConfirmPending(true);
         return;
       }
       await fetch("/api/auth/register-session", { method: "POST" });
@@ -91,6 +95,27 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       router.refresh();
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function resendConfirmation() {
+    setResendState("sending");
+    try {
+      const res = await fetch("/api/auth/resend-confirmation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, next }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error ?? "Could not resend the email.");
+        setResendState("idle");
+        return;
+      }
+      setResendState("sent");
+    } catch {
+      setError("Network error. Please try again.");
+      setResendState("idle");
     }
   }
 
@@ -111,6 +136,59 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     } catch {
       setError("Network error. Please try again.");
     }
+  }
+
+  // Account created, but Supabase is holding the session until the email is
+  // confirmed. This replaces the form entirely so the next step is unmissable.
+  if (confirmPending) {
+    return (
+      <div className="mx-auto w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-emerald-50">
+          <Mail className="h-6 w-6 text-emerald-600" />
+        </div>
+        <h1 className="mt-4 text-xl font-bold text-gray-900">Confirm your email</h1>
+        <p className="mt-2 text-sm leading-relaxed text-gray-600">
+          Your account is created. We sent a confirmation link to{" "}
+          <strong className="text-gray-900">{email}</strong>. Click it and you will land straight in your
+          dashboard.
+        </p>
+        <p className="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-xs leading-relaxed text-gray-500">
+          No email after a minute? Check your spam folder, and make sure the address above is spelled
+          correctly.
+        </p>
+
+        {error && (
+          <div className="mt-3 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-left" role="alert">
+            <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-500" />
+            <p className="text-sm text-red-600">{error}</p>
+          </div>
+        )}
+
+        {resendState === "sent" ? (
+          <p className="mt-4 text-sm font-medium text-emerald-700">
+            Sent again. It can take a minute to arrive.
+          </p>
+        ) : (
+          <button
+            type="button"
+            onClick={resendConfirmation}
+            disabled={resendState === "sending"}
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-60 min-h-[44px]"
+          >
+            {resendState === "sending" && <Loader2 className="h-4 w-4 animate-spin" />}
+            {resendState === "sending" ? "Sending…" : "Resend confirmation email"}
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={() => { setConfirmPending(false); setResendState("idle"); setError(null); }}
+          className="mt-3 text-xs font-medium text-blue-600 hover:text-blue-700"
+        >
+          Use a different email address
+        </button>
+      </div>
+    );
   }
 
   return (
