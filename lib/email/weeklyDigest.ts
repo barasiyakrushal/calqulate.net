@@ -180,7 +180,7 @@ export function renderWeeklyDigestHtml(d: WeeklyDigestData): string {
         <div style="font-size:12px;color:${C.sub};line-height:1.6;">
           You're getting this weekly update because you're a Calqulate Vitals member.
           <a href="${prefsUrl}" style="color:${C.brand};">Manage email preferences</a>.<br/>
-          Educational decision-support only — not medical advice. Questions? <a href="mailto:support@calqulate.net" style="color:${C.brand};">support@calqulate.net</a><br/>
+          Educational decision-support only — not medical advice. Questions? <a href="mailto:meet.akabari@calqulate.net" style="color:${C.brand};">meet.akabari@calqulate.net</a><br/>
           © Calqulate.net
         </div>
       </td></tr>

@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { getSupabaseSessionId } from "@/lib/supabase/session-id";
+import { registerAndPruneSessions } from "@/lib/auth/sessionLimit";
 
 /**
- * Registers the current Supabase auth session as the "active" session for
- * single-device login enforcement.  Any previously active session for this
- * user is revoked.
+ * Registers the current Supabase auth session as active, keeping only the most
+ * recent MAX_ACTIVE_SESSIONS devices signed in. Older sessions beyond the cap
+ * are soft-revoked.
  *
  * Called by the client after a successful login / signup / OAuth callback.
  */
@@ -25,20 +26,13 @@ export async function POST(_req: Request) {
 
   const admin = createAdminClient();
 
-  // Revoke any previously active session for this user
-  await admin
-    .from("user_sessions")
-    .update({ revoked_at: new Date().toISOString() })
-    .eq("user_id", user.id)
-    .is("revoked_at", null);
-
-  // Register the new session as active
-  const { error: insertErr } = await admin
-    .from("user_sessions")
-    .insert({ user_id: user.id, session_id: sessionId });
-
-  if (insertErr) {
-    return NextResponse.json({ error: insertErr.message }, { status: 500 });
+  try {
+    await registerAndPruneSessions(admin, user.id, sessionId);
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Could not register session" },
+      { status: 500 },
+    );
   }
 
   return NextResponse.json({ ok: true });

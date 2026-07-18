@@ -1,5 +1,6 @@
 "use client";
 
+import { SyncPrompt } from "@/components/marketing/SyncPrompt";
 import { useState, useRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -206,10 +207,11 @@ const WilksHistoryPanel = ({ history, onClear }: { history: SavedWilksEntry[]; o
           Your Local Wilks Tracking History
         </CardTitle>
         <CardDescription className="text-xs">
-          Stored directly in your browser. No account, logins, or tracking cookies.
+          Stored directly in your browser. Nothing is uploaded and no tracking cookies are set.
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <SyncPrompt ctaId="sync_prompt_wilks" className="mt-0 mb-4" />
         <div className="space-y-2">
           {history.map((entry, i) => {
             const nextEntry = history[i + 1];
@@ -701,7 +703,7 @@ export default function WilksCalculator() {
                 {/* Save / track over time (mirrors ABSI browser-history pattern) */}
                 <div className="mt-6 flex flex-col sm:flex-row items-center gap-3 border-t pt-5">
                   <p className="text-xs text-muted-foreground flex-1 text-center sm:text-left">
-                    Track your Wilks score over time — saved privately in this browser, no account needed.
+                    Track your Wilks score over time. Saved privately in this browser, so clearing your cookies or switching device will clear it.
                   </p>
                   <div className="flex gap-2 w-full sm:w-auto">
                     <Button

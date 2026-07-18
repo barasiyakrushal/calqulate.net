@@ -218,7 +218,7 @@ export default function Glp1InjectionDayCalculatorPage() {
                 ]}
                 href="/signup?next=/dashboard/glp1"
                 learnMoreHref="/product/glp1-progress-tracker"
-                cta="Start the GLP-1 Progress Tracker"
+                cta="Start tracking free"
               />
 
               <RelatedCalculators

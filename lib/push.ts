@@ -15,7 +15,7 @@ function ensure(): boolean {
   if (!pushConfigured()) return false;
   if (!configured) {
     webpush.setVapidDetails(
-      process.env.VAPID_SUBJECT || "mailto:support@calqulate.net",
+      process.env.VAPID_SUBJECT || "mailto:meet.akabari@calqulate.net",
       process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
       process.env.VAPID_PRIVATE_KEY!,
     );

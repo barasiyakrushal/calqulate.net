@@ -53,22 +53,29 @@ export async function updateSession(request: NextRequest) {
     return applySecurityHeaders(NextResponse.redirect(url));
   }
 
-  // Single-device login enforcement — only for authenticated dashboard/admin
-  // pages (skip API routes and static assets).
+  // Device-limit enforcement: a user may be signed in on up to
+  // MAX_ACTIVE_SESSIONS devices. Only sessions pushed out beyond that cap are
+  // rejected. Applies to gated pages only (skips API routes and static assets).
   const sessionId = getSupabaseSessionId(session);
   if (user && sessionId && !path.startsWith("/api/") && !path.startsWith("/auth/")) {
     try {
-      const { data: activeSession } = await supabase
+      const { data: activeSessions } = await supabase
         .from("user_sessions")
         .select("session_id")
         .eq("user_id", user.id)
-        .is("revoked_at", null)
-        .maybeSingle();
+        .is("revoked_at", null);
 
-      if (activeSession && activeSession.session_id !== sessionId) {
+      // Only sign out if this user has active sessions on record AND this one
+      // is not among them (i.e. it was revoked to make room for a newer device).
+      // An empty list means the session has not been registered yet, which is a
+      // normal race right after login, so we let it through.
+      const hasActive = activeSessions && activeSessions.length > 0;
+      const isStillActive = activeSessions?.some((s) => s.session_id === sessionId);
+
+      if (hasActive && !isStillActive) {
         const url = request.nextUrl.clone();
         url.pathname = "/login";
-        url.searchParams.set("reason", "logged_out_elsewhere");
+        url.searchParams.set("reason", "device_limit");
         url.searchParams.set("next", path);
         return applySecurityHeaders(NextResponse.redirect(url));
       }

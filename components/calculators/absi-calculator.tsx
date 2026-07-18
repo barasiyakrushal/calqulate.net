@@ -279,7 +279,7 @@ const HistoryPanel = ({ history, onClear }: { history: SavedEntry[]; onClear: ()
           Your Local ABSI Tracking History
         </CardTitle>
         <CardDescription className="text-xs">
-          Stored directly in your browser. No account, logins, or tracking cookies.
+          Stored directly in your browser. Nothing is uploaded and no tracking cookies are set.
         </CardDescription>
       </CardHeader>
       <CardContent>

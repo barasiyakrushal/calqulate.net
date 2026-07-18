@@ -179,7 +179,7 @@ export default function Glp1HalfLifeCalculatorPage() {
               <ServiceCTA
                 eyebrow="One day is a number. Every day is a pattern."
                 title="Track your drug level every day, free"
-                body="Today's percentage tells you why you are hungry today. Calqulate Vitals logs every injection, charts your drug level between doses, forecasts tomorrow's appetite, splits your loss into fat and muscle, and flags the week your progress is likely to plateau."
+                body="Today's percentage tells you why you are hungry today. Calqulate Vitals logs every injection, charts your drug level between doses and reminds you when the next one is due, all free. Premium forecasts tomorrow's appetite, splits your loss into fat and muscle, and flags the week your progress is likely to plateau."
                 bullets={[
                   "See how much medication is still working today",
                   "Never miss an injection",
@@ -188,7 +188,7 @@ export default function Glp1HalfLifeCalculatorPage() {
                 ]}
                 href="/signup?next=/dashboard/glp1"
                 learnMoreHref="/product/glp1-progress-tracker"
-                cta="Start the GLP-1 Progress Tracker"
+                cta="Start tracking free"
               />
 
               <RelatedCalculators

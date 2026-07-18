@@ -430,7 +430,7 @@ export default function Glp1UnitConverterPage() {
                 ]}
                 href="/signup?next=/dashboard/glp1"
                 learnMoreHref="/product/glp1-progress-tracker"
-                cta="Start the GLP-1 Progress Tracker"
+                cta="Start tracking free"
               />
 
               {/* 12. GLP-1 JOURNEY HUB (internal links) */}

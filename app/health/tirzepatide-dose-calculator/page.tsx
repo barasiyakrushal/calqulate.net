@@ -136,7 +136,7 @@ export default function TirzepatideDoseCalculatorPage() {
               <ServiceCTA
                 eyebrow="Track your treatment, not just today's dose"
                 title="On tirzepatide? See what happens next, week by week"
-                body="This snapshot is one moment in your treatment. Calqulate Vitals logs every injection, charts your drug levels between doses, splits your weight loss into fat and muscle, and predicts the week your progress is likely to plateau, before it happens."
+                body="This snapshot is one moment in your treatment. Calqulate Vitals logs every injection, charts your drug levels between doses, and checks you against the clinical trials, all free. Premium splits your weight loss into fat and muscle and predicts the week your progress is likely to plateau, before it happens."
                 bullets={[
                   "Every injection and dose change, on one timeline",
                   "See how much medication is still working today",
@@ -145,7 +145,7 @@ export default function TirzepatideDoseCalculatorPage() {
                 ]}
                 href="/signup?next=/dashboard/glp1"
                 learnMoreHref="/product/glp1-progress-tracker"
-                cta="Start the GLP-1 Progress Tracker"
+                cta="Start tracking free"
               />
 
               <RelatedCalculators

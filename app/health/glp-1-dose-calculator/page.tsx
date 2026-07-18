@@ -459,7 +459,7 @@ export default async function GLP1BodyCompositionPage() {
               <ServiceCTA
                 eyebrow="Track results, not just the scale"
                 title="On a GLP-1? Prove it's working at the level that matters"
-                body="This snapshot is one moment in time. What protects your results is watching lean mass over time, keeping protein and training on track, and catching the weeks you drop weight too fast. Calqulate Vitals tracks fat vs. muscle, builds an adaptive titration and protein plan, and flags rebound risk before you taper off."
+                body="This snapshot is one moment in time. What protects your results is logging every dose, your weight and your protein consistently. Calqulate Vitals keeps all of that on one timeline, shows how much medication is still working today, and checks you against the clinical trials, all free. Premium adds the fat vs muscle trend, dose timing and rebound risk."
                 bullets={[
                   "Log every dose, weight and symptom in seconds",
                   "See how much medication is still working today",
@@ -468,7 +468,7 @@ export default async function GLP1BodyCompositionPage() {
                 ]}
                 href="/signup?next=/dashboard/glp1"
                 learnMoreHref="/product/glp1-progress-tracker"
-                cta="Start the GLP-1 Progress Tracker"
+                cta="Start tracking free"
               />
 
               <RelatedCalculators

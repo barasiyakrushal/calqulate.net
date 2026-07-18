@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { getSupabaseSessionId } from "@/lib/supabase/session-id";
+import { registerAndPruneSessions } from "@/lib/auth/sessionLimit";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://calqulate.net";
 
@@ -18,21 +19,16 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      // Register this session as active for single-device enforcement
+      // Register this session, pruning anything beyond the device cap.
       const { data: { user } } = await supabase.auth.getUser();
       const { data: { session } } = await supabase.auth.getSession();
       const sessionId = getSupabaseSessionId(session);
       if (user && sessionId) {
-        const admin = createAdminClient();
-        await admin
-          .from("user_sessions")
-          .update({ revoked_at: new Date().toISOString() })
-          .eq("user_id", user.id)
-          .is("revoked_at", null);
-        await admin
-          .from("user_sessions")
-          .insert({ user_id: user.id, session_id: sessionId })
-          .maybeSingle();
+        try {
+          await registerAndPruneSessions(createAdminClient(), user.id, sessionId);
+        } catch {
+          // Never block a successful login on session bookkeeping.
+        }
       }
       return NextResponse.redirect(`${base}${next}`);
     }

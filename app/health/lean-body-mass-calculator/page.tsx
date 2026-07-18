@@ -464,7 +464,7 @@ export default function LeanBodyMassCalculatorPage() {
               <ServiceCTA
                 eyebrow="Track results, not just the scale"
                 title="Keep your muscle where you can see it"
-                body="A single lean-mass reading is a snapshot. What protects your results is watching lean mass over time, keeping protein and training on track, and catching the weeks you lose too fast. Calqulate Vitals trends your lean mass, builds a protein plan from your own numbers, and, for GLP-1 users, adds an adaptive titration and rebound-risk view."
+                body="A single lean-mass reading is a snapshot. What protects your results is logging your weight, body composition and protein over time. Calqulate Vitals keeps all of that on one timeline and checks the protein in a real meal for free, with the lean-mass trend and dose-timing views on Premium."
                 bullets={[
                   "Log weight and body composition in seconds",
                   "Everything you log on one timeline",
@@ -473,7 +473,7 @@ export default function LeanBodyMassCalculatorPage() {
                 ]}
                 href="/signup?next=/dashboard/glp1"
                 learnMoreHref="/product/glp1-progress-tracker"
-                cta="Start the GLP-1 Progress Tracker"
+                cta="Start tracking free"
               />
 
               <RelatedCalculators slug="lean-body-mass-calculator" />

@@ -457,7 +457,7 @@ export default function WeightLossPercentageCalculatorPage() {
             <ServiceCTA
               eyebrow="Track results, not just the scale"
               title="Make the weight you lose the weight that stays off"
-              body="A percentage is a snapshot. What protects your results is watching your loss and your lean mass on one timeline, keeping protein and training on track, and catching the weeks you drop weight too fast to be all fat. Calqulate Vitals does exactly that, and for GLP-1 users it adds an adaptive titration and rebound-risk view."
+              body="A percentage is a snapshot. What protects your results is logging your weight and protein consistently, so a fast week shows up as something to check rather than something to celebrate. Calqulate Vitals keeps it all on one timeline for free, and Premium adds your projected goal date and the fat vs muscle trend."
               bullets={[
                 "Log a weight in seconds, from any device",
                 "Everything you log on one timeline",
@@ -466,7 +466,7 @@ export default function WeightLossPercentageCalculatorPage() {
               ]}
               href="/signup?next=/dashboard/glp1"
               learnMoreHref="/product/glp1-progress-tracker"
-              cta="Start the GLP-1 Progress Tracker"
+              cta="Start tracking free"
             />
 
             {/* SCIENTIFIC REFERENCES */}

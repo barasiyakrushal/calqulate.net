@@ -642,7 +642,7 @@ export default function BodyFatCalculatorPage() {
               <ServiceCTA
                 eyebrow="Track results, not just the scale"
                 title="Watch your body fat fall without losing muscle"
-                body="A single reading tells you where you are. What protects your results is trending body fat and lean mass together, keeping protein and training on target, and catching the weeks you lose too fast. Calqulate Vitals does that, and for GLP-1 users it adds an adaptive titration and a rebound-risk view."
+                body="A single reading tells you where you are. What protects your results is logging body fat, weight and protein consistently, so you can see a direction instead of one dot. Calqulate Vitals keeps all of that on one timeline for free, and Premium adds the fat vs muscle trend, plateau risk and dose-timing views."
                 bullets={[
                   "Log body fat, weight and measurements in seconds",
                   "Everything you log on one timeline",
@@ -651,7 +651,7 @@ export default function BodyFatCalculatorPage() {
                 ]}
                 href="/signup?next=/dashboard/glp1"
                 learnMoreHref="/product/glp1-progress-tracker"
-                cta="Start the GLP-1 Progress Tracker"
+                cta="Start tracking free"
               />
 
             </div>

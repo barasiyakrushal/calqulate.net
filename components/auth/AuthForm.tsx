@@ -39,47 +39,17 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string; consent?: string }>({});
-  /** Passwordless mode: collect an email and send a one-time link instead. */
-  const [magicLink, setMagicLink] = useState(false);
-  const [magicSent, setMagicSent] = useState(false);
 
   const onToken = useCallback((t: string) => setToken(t), []);
-  const strength = mode === "signup" && !magicLink ? passwordStrength(password) : null;
+  const strength = mode === "signup" ? passwordStrength(password) : null;
 
   function validate(): boolean {
     const errs: typeof fieldErrors = {};
     if (!email.includes("@") || !email.includes(".")) errs.email = "Enter a valid email address.";
-    if (!magicLink && password.length < 8) errs.password = "Use at least 8 characters.";
+    if (password.length < 8) errs.password = "Use at least 8 characters.";
     if (mode === "signup" && !consent) errs.consent = "You must accept the terms to continue.";
     setFieldErrors(errs);
     return Object.keys(errs).length === 0;
-  }
-
-  async function sendMagicLink(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    if (!validate()) return;
-
-    track("signup_start", { method: "magic_link", next });
-    setBusy(true);
-    try {
-      const res = await fetch("/api/auth/magic-link", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, next, turnstileToken: token, consent: mode === "signup" ? consent : undefined }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "Could not send the link.");
-        track("signup_error", { method: "magic_link", reason: data.error ?? "unknown" });
-        return;
-      }
-      setMagicSent(true);
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setBusy(false);
-    }
   }
 
   async function submit(e: React.FormEvent) {
@@ -154,10 +124,13 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           : "Sign in to your dashboard."}
       </p>
 
-      {reason === "logged_out_elsewhere" && mode === "login" && (
+      {(reason === "device_limit" || reason === "logged_out_elsewhere") && mode === "login" && (
         <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-          <span>You were signed out because you logged in on another device. Only one active session is allowed per account.</span>
+          <span>
+            You were signed out because your account was signed in on too many devices. Sign back in to continue,
+            and this device will be reconnected.
+          </span>
         </div>
       )}
 
@@ -207,24 +180,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         <div className="h-px flex-1 bg-gray-200" />
       </div>
 
-      {magicSent ? (
-        <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center">
-          <Mail className="mx-auto h-6 w-6 text-emerald-600" />
-          <p className="mt-2 text-sm font-semibold text-emerald-900">Check your email</p>
-          <p className="mt-1 text-xs leading-relaxed text-emerald-800">
-            If an account can be created for <strong>{email}</strong>, a sign-in link is on its way. The link
-            expires shortly, so open it soon.
-          </p>
-          <button
-            type="button"
-            onClick={() => { setMagicSent(false); setMagicLink(false); }}
-            className="mt-3 text-xs font-semibold text-emerald-700 underline underline-offset-2 hover:text-emerald-900"
-          >
-            Use a different method
-          </button>
-        </div>
-      ) : (
-      <form onSubmit={magicLink ? sendMagicLink : submit} className="space-y-3" noValidate>
+      <form onSubmit={submit} className="space-y-3" noValidate>
         <div className="space-y-1">
           <label className="block text-sm font-medium text-gray-700">
             Email
@@ -247,7 +203,6 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           {fieldErrors.email && <p id="email-error" className="text-xs text-red-500">{fieldErrors.email}</p>}
         </div>
 
-        {!magicLink && (
         <div className="space-y-1">
           <div className="flex items-center justify-between">
             <label className="block text-sm font-medium text-gray-700">Password</label>
@@ -304,7 +259,6 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
             </ul>
           )}
         </div>
-        )}
 
         {mode === "signup" && (
           <div className="space-y-1">
@@ -339,28 +293,9 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition-colors min-h-[44px]"
         >
           {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-          {busy
-            ? "Please wait…"
-            : magicLink
-              ? "Email me a sign-in link"
-              : mode === "signup"
-                ? "Create account"
-                : "Sign in"}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => { setMagicLink((v) => !v); setError(null); setFieldErrors({}); }}
-          className="w-full text-center text-xs font-medium text-blue-600 hover:text-blue-700"
-        >
-          {magicLink
-            ? "Use a password instead"
-            : mode === "signup"
-              ? "Sign up with a magic link instead"
-              : "Email me a magic link instead"}
+          {busy ? "Please wait…" : mode === "signup" ? "Create account" : "Sign in"}
         </button>
       </form>
-      )}
 
       <p className="mt-4 text-center text-sm text-gray-500">
         {mode === "signup" ? (
