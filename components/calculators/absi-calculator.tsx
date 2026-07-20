@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { parseNumber } from "@/lib/utils"
 import {
   Calculator, RefreshCw, Loader2, Scale, Target, TrendingDown, TrendingUp,
   Activity, Info, Save, History, ChevronRight, AlertCircle, Award, Flame,
@@ -100,7 +101,7 @@ function saveABSIEntry(entry: SavedEntry) {
 }
 
 function absiDelta(current: number, previous: number) {
-  return parseFloat((current - previous).toFixed(5));
+  return parseNumber((current - previous).toFixed(5));
 }
 
 function getAbsiDeltaLabel(delta: number): { label: string; color: string; improving: boolean } {
@@ -445,7 +446,7 @@ export default function ABSICalculator() {
     const updatedValues: Record<string, any> = { ...currentValues };
 
     if (currentValues.height) {
-      const h = parseFloat(currentValues.height);
+      const h = parseNumber(currentValues.height);
       if (!isNaN(h)) {
         updatedValues.height =
           newUnit === "imperial" ? cmToInches(h).toFixed(1) : inchesToCm(h).toFixed(1);
@@ -453,7 +454,7 @@ export default function ABSICalculator() {
     }
 
     if (currentValues.waist) {
-      const w = parseFloat(currentValues.waist);
+      const w = parseNumber(currentValues.waist);
       if (!isNaN(w)) {
         updatedValues.waist =
           newUnit === "imperial" ? cmToInches(w).toFixed(1) : inchesToCm(w).toFixed(1);
@@ -461,7 +462,7 @@ export default function ABSICalculator() {
     }
 
     if (currentValues.weight) {
-      const wt = parseFloat(currentValues.weight);
+      const wt = parseNumber(currentValues.weight);
       if (!isNaN(wt)) {
         updatedValues.weight =
           newUnit === "imperial" ? kgToLbs(wt).toFixed(1) : lbsToKg(wt).toFixed(1);
@@ -479,9 +480,9 @@ export default function ABSICalculator() {
     setSaved(false);
 
     setTimeout(() => {
-      const waist = parseFloat(values.waist);
-      const weight = parseFloat(values.weight);
-      const height = parseFloat(values.height);
+      const waist = parseNumber(values.waist);
+      const weight = parseNumber(values.weight);
+      const height = parseNumber(values.height);
       const age = parseInt(values.age);
       const gender = values.gender;
 

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { parseNumber } from "@/lib/utils"
 import {
   Select,
   SelectContent,
@@ -164,10 +165,10 @@ export default function PregnancyWeightGainCalculator() {
     if (h) {
       if (newUnit === "metric") {
          // ft -> cm
-         setValue("height", (parseFloat(h) * 30.48).toFixed(1));
+         setValue("height", (parseNumber(h) * 30.48).toFixed(1));
       } else {
          // cm -> ft
-         setValue("height", (parseFloat(h) / 30.48).toFixed(1));
+         setValue("height", (parseNumber(h) / 30.48).toFixed(1));
       }
     }
 
@@ -178,10 +179,10 @@ export default function PregnancyWeightGainCalculator() {
       if (val) {
         if (newUnit === "metric") {
             // lbs -> kg
-            setValue(key, (parseFloat(val) / conversion).toFixed(1));
+            setValue(key, (parseNumber(val) / conversion).toFixed(1));
         } else {
             // kg -> lbs
-            setValue(key, (parseFloat(val) * conversion).toFixed(1));
+            setValue(key, (parseNumber(val) * conversion).toFixed(1));
         }
       }
     });
@@ -199,13 +200,13 @@ export default function PregnancyWeightGainCalculator() {
       let weightCurrentKg = 0;
 
       if (values.units === "metric") {
-        heightM = parseFloat(values.height) / 100;
-        weightBeforeKg = parseFloat(values.weightBefore);
-        weightCurrentKg = values.weightCurrent ? parseFloat(values.weightCurrent) : weightBeforeKg;
+        heightM = parseNumber(values.height) / 100;
+        weightBeforeKg = parseNumber(values.weightBefore);
+        weightCurrentKg = values.weightCurrent ? parseNumber(values.weightCurrent) : weightBeforeKg;
       } else {
-        heightM = parseFloat(values.height) * 0.3048; // ft to m approx
-        weightBeforeKg = parseFloat(values.weightBefore) / 2.20462;
-        weightCurrentKg = values.weightCurrent ? (parseFloat(values.weightCurrent) / 2.20462) : weightBeforeKg;
+        heightM = parseNumber(values.height) * 0.3048; // ft to m approx
+        weightBeforeKg = parseNumber(values.weightBefore) / 2.20462;
+        weightCurrentKg = values.weightCurrent ? (parseNumber(values.weightCurrent) / 2.20462) : weightBeforeKg;
       }
 
       // 2. Calculate BMI
@@ -262,8 +263,8 @@ export default function PregnancyWeightGainCalculator() {
 
         chartData.push({
             week: i,
-            min: parseFloat(minW.toFixed(1)),
-            max: parseFloat(maxW.toFixed(1))
+            min: parseNumber(minW.toFixed(1)),
+            max: parseNumber(maxW.toFixed(1))
         });
       }
 
@@ -424,7 +425,7 @@ export default function PregnancyWeightGainCalculator() {
                     <FormItem>
                       <FormLabel>Current Week (1-40)</FormLabel>
                       <FormControl>
-                        <Input type="number" min="0" max="40" {...field} />
+                        <Input type="number" min="0" max="40" placeholder="e.g. 20" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -451,15 +452,15 @@ export default function PregnancyWeightGainCalculator() {
                       <FormLabel>Pre-Pregnancy Weight</FormLabel>
                       <FormControl>
                          <div className="relative">
-                            <Input type="number" step="0.1" {...field} />
-                            <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{units === 'metric' ? 'kg' : 'lbs'}</span>
-                         </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                             <Input type="number" step="0.1" placeholder={units === 'metric' ? 'e.g. 70' : 'e.g. 154'} {...field} />
+                             <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{units === 'metric' ? 'kg' : 'lbs'}</span>
+                          </div>
+                       </FormControl>
+                       <FormMessage />
+                     </FormItem>
+                   )}
+                 />
+               </div>
 
               {/* Optional Current Weight */}
               <div className="md:w-1/3">
@@ -471,7 +472,7 @@ export default function PregnancyWeightGainCalculator() {
                       <FormLabel className="flex items-center gap-1">Current Weight <span className="text-muted-foreground font-normal text-xs">(Optional)</span></FormLabel>
                       <FormControl>
                          <div className="relative">
-                            <Input type="number" step="0.1" {...field} />
+                            <Input type="number" step="0.1" placeholder={units === 'metric' ? 'e.g. 75' : 'e.g. 165'} {...field} />
                             <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{units === 'metric' ? 'kg' : 'lbs'}</span>
                          </div>
                       </FormControl>

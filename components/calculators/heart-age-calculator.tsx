@@ -9,11 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { 
+import {
   Heart, Activity, RefreshCw, Loader2,
   TrendingDown, CheckCircle2, AlertCircle,
   Stethoscope, Droplets, Flame, User, ArrowDownCircle, Sparkles
 } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 const formSchema = z.object({
   age: z.string().min(1, "Required"),
@@ -48,7 +49,7 @@ export default function HeartAgeCalculator() {
       const smokerYears = values.isSmoker === "yes" ? 6 : 0;
       const diabeticYears = values.isDiabetic === "yes" ? 4 : 0;
       const sbpYears = parseInt(values.sbp) > 140 ? 3 : 0;
-      const bmiYears = parseFloat(values.bmi) > 28 ? 2 : 0;
+      const bmiYears = parseNumber(values.bmi) > 28 ? 2 : 0;
       const cholYears = ratio > 5 ? 3 : 0;
 
       const hAge = age + smokerYears + diabeticYears + sbpYears + bmiYears + cholYears;
@@ -135,7 +136,7 @@ export default function HeartAgeCalculator() {
                   <FormField control={form.control} name="sbp" render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-sm font-semibold flex items-center gap-2"><Stethoscope className="w-4 h-4 text-green-600"/> Systolic BP</FormLabel>
-                      <FormControl><Input type="number" {...field} className="h-10 bg-white" /></FormControl>
+                      <FormControl><Input type="number" placeholder="e.g. 120" {...field} className="h-10 bg-white" /></FormControl>
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="isDiabetic" render={({ field }) => (
@@ -152,10 +153,10 @@ export default function HeartAgeCalculator() {
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <FormField control={form.control} name="chol" render={({ field }) => (
-                      <FormItem><FormLabel className="text-xs font-bold">Total Chol</FormLabel><FormControl><Input {...field} className="h-10 bg-white" /></FormControl></FormItem>
+                      <FormItem><FormLabel className="text-xs font-bold">Total Chol</FormLabel><FormControl><Input placeholder="e.g. 180" {...field} className="h-10 bg-white" /></FormControl></FormItem>
                     )} />
                     <FormField control={form.control} name="hdl" render={({ field }) => (
-                      <FormItem><FormLabel className="text-xs font-bold">HDL (Good)</FormLabel><FormControl><Input {...field} className="h-10 bg-white" /></FormControl></FormItem>
+                      <FormItem><FormLabel className="text-xs font-bold">HDL (Good)</FormLabel><FormControl><Input placeholder="e.g. 50" {...field} className="h-10 bg-white" /></FormControl></FormItem>
                     )} />
                   </div>
                   <FormField control={form.control} name="isSmoker" render={({ field }) => (

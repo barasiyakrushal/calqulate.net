@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Calculator, RefreshCw, Loader2, Activity, HeartPulse, Info, AlertTriangle, Gauge, ShieldCheck, ArrowRight } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -19,8 +20,8 @@ const formSchema = z.object({
   // Optional, non-breaking: lets us add age context to the result.
   age: z.string().optional(),
 }).refine((data) => {
-  const sys = parseFloat(data.systolic);
-  const dia = parseFloat(data.diastolic);
+  const sys = parseNumber(data.systolic);
+  const dia = parseNumber(data.diastolic);
   return !isNaN(sys) && !isNaN(dia) && sys > dia;
 }, {
   message: "Systolic must be higher than Diastolic.",
@@ -226,8 +227,8 @@ export default function PulsePressureCalculator() {
     setIsLoading(true);
     // Simulate calculation delay for UX
     setTimeout(() => {
-      const sys = parseFloat(values.systolic);
-      const dia = parseFloat(values.diastolic);
+      const sys = parseNumber(values.systolic);
+      const dia = parseNumber(values.diastolic);
       const ageNum = values.age && !isNaN(parseInt(values.age)) ? parseInt(values.age) : null;
 
       const calcResult = calculatePulsePressure(sys, dia, ageNum);

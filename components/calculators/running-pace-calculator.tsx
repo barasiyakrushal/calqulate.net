@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calculator, RefreshCw, Loader2, Timer, FastForward, Activity, Flame, Route, Goal } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -119,7 +120,7 @@ export default function RunningPaceCalculator() {
 
   // Validate custom requirement depending on mode before submit
   const validateForm = (v: FormValues): boolean => {
-    const parseNum = (str?: string) => parseFloat(str || "0");
+    const parseNum = (str?: string) => parseNumber(str || "0");
     if (v.calcMode === "pace" && (parseNum(v.distanceVal) <= 0 || (parseNum(v.timeHrs) + parseNum(v.timeMins) + parseNum(v.timeSecs) <= 0))) return false;
     if (v.calcMode === "time" && (parseNum(v.distanceVal) <= 0 || (parseNum(v.paceMins) + parseNum(v.paceSecs) <= 0))) return false;
     if (v.calcMode === "distance" && ((parseNum(v.timeHrs) + parseNum(v.timeMins) + parseNum(v.timeSecs) <= 0) || (parseNum(v.paceMins) + parseNum(v.paceSecs) <= 0))) return false;
@@ -134,7 +135,7 @@ export default function RunningPaceCalculator() {
 
     setIsLoading(true);
     setTimeout(() => {
-      const parseNum = (str?: string) => parseFloat(str || "0") || 0;
+      const parseNum = (str?: string) => parseNumber(str || "0") || 0;
       
       let totalSecs = 0;
       let distKm = 0;
@@ -236,11 +237,11 @@ export default function RunningPaceCalculator() {
   // per-mile pace required: pace = finishTime ÷ distance.
   function calculateGoalPace() {
     const values = form.getValues();
-    const parseNum = (str?: string) => parseFloat(str || "0") || 0;
+    const parseNum = (str?: string) => parseNumber(str || "0") || 0;
     const race = GOAL_RACES.find((r) => r.value === (values.goalRace ?? "42.195"));
     if (!race) return;
 
-    const raceKm = parseFloat(race.value);
+    const raceKm = parseNumber(race.value);
     const finishSecs =
       parseNum(values.goalHrs) * 3600 + parseNum(values.goalMins) * 60 + parseNum(values.goalSecs);
 
@@ -317,13 +318,13 @@ export default function RunningPaceCalculator() {
                   <h3 className="font-semibold flex items-center gap-2"><Timer className="w-4 h-4 text-slate-500"/> Time</h3>
                   <div className="grid grid-cols-3 gap-2">
                     <FormField control={form.control} name="timeHrs" render={({ field }) => (
-                      <FormItem><FormLabel className="text-xs text-slate-500">Hours</FormLabel><FormControl><Input type="number" min="0" disabled={calcMode === 'time'} {...field} /></FormControl></FormItem>
+                      <FormItem><FormLabel className="text-xs text-slate-500">Hours</FormLabel><FormControl><Input type="number" min="0" placeholder="0" disabled={calcMode === 'time'} {...field} /></FormControl></FormItem>
                     )} />
                     <FormField control={form.control} name="timeMins" render={({ field }) => (
-                      <FormItem><FormLabel className="text-xs text-slate-500">Minutes</FormLabel><FormControl><Input type="number" min="0" max="59" disabled={calcMode === 'time'} {...field} /></FormControl></FormItem>
+                      <FormItem><FormLabel className="text-xs text-slate-500">Minutes</FormLabel><FormControl><Input type="number" min="0" max="59" placeholder="30" disabled={calcMode === 'time'} {...field} /></FormControl></FormItem>
                     )} />
                     <FormField control={form.control} name="timeSecs" render={({ field }) => (
-                      <FormItem><FormLabel className="text-xs text-slate-500">Seconds</FormLabel><FormControl><Input type="number" min="0" max="59" disabled={calcMode === 'time'} {...field} /></FormControl></FormItem>
+                      <FormItem><FormLabel className="text-xs text-slate-500">Seconds</FormLabel><FormControl><Input type="number" min="0" max="59" placeholder="0" disabled={calcMode === 'time'} {...field} /></FormControl></FormItem>
                     )} />
                   </div>
                 </div>
@@ -344,7 +345,7 @@ export default function RunningPaceCalculator() {
                   </div>
                   <div className="flex gap-2">
                     <FormField control={form.control} name="distanceVal" render={({ field }) => (
-                      <FormItem className="flex-1"><FormLabel className="text-xs text-slate-500">Value</FormLabel><FormControl><Input type="number" step="0.01" min="0" disabled={calcMode === 'distance'} {...field} /></FormControl></FormItem>
+                      <FormItem className="flex-1"><FormLabel className="text-xs text-slate-500">Value</FormLabel><FormControl><Input type="number" step="0.01" min="0" placeholder="e.g. 10" disabled={calcMode === 'distance'} {...field} /></FormControl></FormItem>
                     )} />
                     <FormField control={form.control} name="distanceUnit" render={({ field }) => (
                       <FormItem className="w-24">
@@ -363,10 +364,10 @@ export default function RunningPaceCalculator() {
                   <h3 className="font-semibold flex items-center gap-2"><Activity className="w-4 h-4 text-slate-500"/> Pace</h3>
                   <div className="flex gap-2 items-end">
                     <FormField control={form.control} name="paceMins" render={({ field }) => (
-                      <FormItem className="w-1/3"><FormLabel className="text-xs text-slate-500">Minutes</FormLabel><FormControl><Input type="number" min="0" disabled={calcMode === 'pace'} {...field} /></FormControl></FormItem>
+                      <FormItem className="w-1/3"><FormLabel className="text-xs text-slate-500">Minutes</FormLabel><FormControl><Input type="number" min="0" placeholder="5" disabled={calcMode === 'pace'} {...field} /></FormControl></FormItem>
                     )} />
                     <FormField control={form.control} name="paceSecs" render={({ field }) => (
-                      <FormItem className="w-1/3"><FormLabel className="text-xs text-slate-500">Seconds</FormLabel><FormControl><Input type="number" min="0" max="59" disabled={calcMode === 'pace'} {...field} /></FormControl></FormItem>
+                      <FormItem className="w-1/3"><FormLabel className="text-xs text-slate-500">Seconds</FormLabel><FormControl><Input type="number" min="0" max="59" placeholder="30" disabled={calcMode === 'pace'} {...field} /></FormControl></FormItem>
                     )} />
                     <div className="pb-2 text-slate-400 font-medium px-2">per</div>
                     <FormField control={form.control} name="paceUnit" render={({ field }) => (

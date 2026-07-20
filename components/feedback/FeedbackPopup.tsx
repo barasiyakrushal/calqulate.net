@@ -170,7 +170,7 @@ export default function FeedbackPopup() {
               maxLength={4000}
               required
               placeholder="What would make Calqulate Vitals better for you?"
-              className="mt-1.5 w-full resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30"
+              className="mt-1.5 w-full resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-base text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30"
             />
 
             <label htmlFor="cv-fb-email" className="mt-4 block text-sm font-medium text-gray-700">
@@ -185,7 +185,7 @@ export default function FeedbackPopup() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="you@example.com"
-              className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30"
+              className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-base text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30"
             />
             <p className="mt-1.5 text-xs leading-relaxed text-gray-500">
               Why your email? So we can tell you when the improvements you suggested go live — and send the

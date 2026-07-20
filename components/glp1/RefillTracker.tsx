@@ -113,7 +113,7 @@ export function RefillTracker({
             </div>
             <div>
               <Label htmlFor="rf-doses">Doses supplied</Label>
-              <Input id="rf-doses" type="number" min="1" value={doses} onChange={(e) => setDoses(e.target.value)} />
+              <Input id="rf-doses" type="number" min="1" value={doses} onChange={(e) => setDoses(e.target.value)} placeholder="e.g. 28" />
             </div>
             <div>
               <Label htmlFor="rf-pharm">Pharmacy (optional)</Label>

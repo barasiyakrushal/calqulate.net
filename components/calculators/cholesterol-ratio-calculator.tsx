@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { HeartPulse, TestTube, Activity, ShieldCheck, Calculator as CalculatorIcon, Target, AlertTriangle } from "lucide-react"
+import { parseNumber } from "@/lib/utils"
 
 // Define validation schema
 const formSchema = z.object({
@@ -115,10 +116,10 @@ export default function CholesterolRatioCalculator() {
     setResults(null)
     setFeatureData(null)
 
-    const tc = parseFloat(values.totalCholesterol)
-    const hdlVal = parseFloat(values.hdl)
-    let ldlVal = values.ldl ? parseFloat(values.ldl) : NaN
-    const tg = parseFloat(values.triglycerides)
+    const tc = parseNumber(values.totalCholesterol)
+    const hdlVal = parseNumber(values.hdl)
+    let ldlVal = values.ldl ? parseNumber(values.ldl) : NaN
+    const tg = parseNumber(values.triglycerides)
 
     if (isNaN(tc) || isNaN(hdlVal) || isNaN(tg)) {
       setError("Please enter valid numbers for all required fields.")
@@ -299,8 +300,8 @@ export default function CholesterolRatioCalculator() {
                     <p className="text-sm font-medium text-gray-600">Total Cholesterol / HDL Ratio</p>
                     <p className="text-2xl font-bold text-gray-900">{results.tcHdlRatio}</p>
                   </div>
-                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getInterpretation("tcHdl", parseFloat(results.tcHdlRatio)).color} bg-opacity-20`}>
-                    {getInterpretation("tcHdl", parseFloat(results.tcHdlRatio)).text}
+                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getInterpretation("tcHdl", parseNumber(results.tcHdlRatio)).color} bg-opacity-20`}>
+                    {getInterpretation("tcHdl", parseNumber(results.tcHdlRatio)).text}
                   </div>
                 </div>
 
@@ -309,8 +310,8 @@ export default function CholesterolRatioCalculator() {
                     <p className="text-sm font-medium text-gray-600">LDL / HDL Ratio</p>
                     <p className="text-2xl font-bold text-gray-900">{results.ldlHdlRatio}</p>
                   </div>
-                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getInterpretation("ldlHdl", parseFloat(results.ldlHdlRatio)).color} bg-opacity-20`}>
-                    {getInterpretation("ldlHdl", parseFloat(results.ldlHdlRatio)).text}
+                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getInterpretation("ldlHdl", parseNumber(results.ldlHdlRatio)).color} bg-opacity-20`}>
+                    {getInterpretation("ldlHdl", parseNumber(results.ldlHdlRatio)).text}
                   </div>
                 </div>
 
@@ -319,8 +320,8 @@ export default function CholesterolRatioCalculator() {
                     <p className="text-sm font-medium text-gray-600">Triglyceride / HDL Ratio</p>
                     <p className="text-2xl font-bold text-gray-900">{results.tgHdlRatio}</p>
                   </div>
-                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getInterpretation("tgHdl", parseFloat(results.tgHdlRatio)).color} bg-opacity-20`}>
-                    {getInterpretation("tgHdl", parseFloat(results.tgHdlRatio)).text}
+                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getInterpretation("tgHdl", parseNumber(results.tgHdlRatio)).color} bg-opacity-20`}>
+                    {getInterpretation("tgHdl", parseNumber(results.tgHdlRatio)).text}
                   </div>
                 </div>
 

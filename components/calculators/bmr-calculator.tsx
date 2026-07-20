@@ -13,6 +13,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calculator, RefreshCw, Loader2, Flame, Info } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -25,7 +26,7 @@ const formSchema = z.object({
   bodyFat: z.string().optional(),
   activityLevel: z.string({ required_error: "Please select an activity level." }),
 }).superRefine((data, ctx) => {
-  if (data.formula === "katch" && (!data.bodyFat || parseFloat(data.bodyFat) <= 0)) {
+  if (data.formula === "katch" && (!data.bodyFat || parseNumber(data.bodyFat) <= 0)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: "Body Fat % is required for the Katch-McArdle formula.",
@@ -81,8 +82,8 @@ export default function BMRCalculator() {
     const currentUnit = getValues("units");
     if (newUnit === currentUnit) return;
 
-    const weightVal = parseFloat(getValues("weight"));
-    const heightVal = parseFloat(getValues("height"));
+    const weightVal = parseNumber(getValues("weight"));
+    const heightVal = parseNumber(getValues("height"));
 
     if (newUnit === "imperial") {
       if (!isNaN(weightVal)) setValue("weight", (weightVal * 2.20462).toFixed(1));
@@ -98,10 +99,10 @@ export default function BMRCalculator() {
     setIsLoading(true);
 
     setTimeout(() => {
-      const weightKg = values.units === "imperial" ? parseFloat(values.weight) / 2.20462 : parseFloat(values.weight);
-      const heightCm = values.units === "imperial" ? parseFloat(values.height) * 2.54 : parseFloat(values.height);
+      const weightKg = values.units === "imperial" ? parseNumber(values.weight) / 2.20462 : parseNumber(values.weight);
+      const heightCm = values.units === "imperial" ? parseNumber(values.height) * 2.54 : parseNumber(values.height);
       const age = parseInt(values.age);
-      const bodyFat = values.bodyFat ? parseFloat(values.bodyFat) : 0;
+      const bodyFat = values.bodyFat ? parseNumber(values.bodyFat) : 0;
 
       let calculatedBMR = 0;
 

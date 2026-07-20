@@ -21,6 +21,7 @@
 
 import React, { useMemo, useState } from "react"
 import Link from "next/link"
+import { parseNumber } from "@/lib/utils"
 import {
   Scale,
   ArrowRight,
@@ -191,25 +192,25 @@ function fromKg(kg: number, units: Units) {
 
 function estimate(a: Answers): Result | null {
   const units = a.units ?? "metric"
-  const rawWeight = parseFloat(a.weight ?? "")
+  const rawWeight = parseNumber(a.weight ?? "")
   if (!(rawWeight > 0)) return null
 
   // Normalise to kg / cm.
   const weightKg = toKg(rawWeight, units)
   let heightCm = 0
   if (units === "imperial") {
-    const ft = parseFloat(a.heightFt ?? "")
-    const inch = parseFloat(a.heightIn ?? "0") || 0
+    const ft = parseNumber(a.heightFt ?? "")
+    const inch = parseNumber(a.heightIn ?? "0") || 0
     if (!(ft > 0)) return null
     heightCm = (ft * 12 + inch) * 2.54
   } else {
-    heightCm = parseFloat(a.heightCm ?? "")
+    heightCm = parseNumber(a.heightCm ?? "")
   }
   if (!(heightCm > 0)) return null
 
   const sex = a.sex ?? "male"
-  const age = parseFloat(a.age ?? "") || 35
-  const bf = parseFloat(a.bodyFat ?? "")
+  const age = parseNumber(a.age ?? "") || 35
+  const bf = parseNumber(a.bodyFat ?? "")
   const usedBodyFat = bf > 0 && bf < 65
 
   // Boer, Hume, James (kg / cm).
@@ -329,7 +330,7 @@ export default function LeanBodyMassWizard() {
 
   const submitNumber = () => {
     const s = current as NumberStep
-    const n = parseFloat(numDraft)
+    const n = parseNumber(numDraft)
     if (!(n > 0)) return
     if (s.min && n < s.min) return
     if (s.max && n > s.max) return
@@ -339,11 +340,11 @@ export default function LeanBodyMassWizard() {
 
   const submitHeight = () => {
     if (units === "imperial") {
-      const ft = parseFloat(ftDraft)
+      const ft = parseNumber(ftDraft)
       if (!(ft > 0)) return
       setAnswers((a) => ({ ...a, heightFt: ftDraft, heightIn: inDraft || "0" }))
     } else {
-      const cm = parseFloat(numDraft)
+      const cm = parseNumber(numDraft)
       if (!(cm > 0)) return
       setAnswers((a) => ({ ...a, heightCm: numDraft }))
     }
@@ -459,7 +460,7 @@ export default function LeanBodyMassWizard() {
               </div>
               <button
                 type="submit"
-                disabled={!(parseFloat(numDraft) > 0)}
+                disabled={!(parseNumber(numDraft) > 0)}
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-4 text-base font-bold text-white shadow-sm transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Continue
@@ -528,7 +529,7 @@ export default function LeanBodyMassWizard() {
               )}
               <button
                 type="submit"
-                disabled={units === "imperial" ? !(parseFloat(ftDraft) > 0) : !(parseFloat(numDraft) > 0)}
+                disabled={units === "imperial" ? !(parseNumber(ftDraft) > 0) : !(parseNumber(numDraft) > 0)}
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-4 text-base font-bold text-white shadow-sm transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Continue

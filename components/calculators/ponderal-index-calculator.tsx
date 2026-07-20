@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Calculator, RefreshCw, Loader2, User, Baby, CheckCircle2, History, ChevronRight, Ruler, ScrollText } from "lucide-react"
+import { parseNumber } from "@/lib/utils"
 
 // Define validation schema
 const formSchema = z.object({
@@ -143,12 +144,12 @@ const PonderalIndexCalculator = () => {
     const updatedValues: Record<string, any> = { ...currentValues }
 
     if (currentValues.height) {
-      const h = parseFloat(currentValues.height)
+      const h = parseNumber(currentValues.height)
       updatedValues.height = newUnit === "imperial" ? cmToInches(h).toFixed(1) : inchesToCm(h).toFixed(1)
     }
 
     if (currentValues.weight) {
-      const wt = parseFloat(currentValues.weight)
+      const wt = parseNumber(currentValues.weight)
       updatedValues.weight = newUnit === "imperial" ? kgToLbs(wt).toFixed(1) : lbsToKg(wt).toFixed(1)
     }
 
@@ -161,8 +162,8 @@ const PonderalIndexCalculator = () => {
     setIsLoading(true)
 
     setTimeout(() => {
-      const weightInput = parseFloat(values.weight)
-      const heightInput = parseFloat(values.height)
+      const weightInput = parseNumber(values.weight)
+      const heightInput = parseNumber(values.height)
       const userType = values.userType
 
       let pi: number;

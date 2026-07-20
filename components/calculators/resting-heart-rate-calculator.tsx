@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Activity, Timer, RefreshCw, Zap, ShieldCheck, Info, Award, BarChart3, History, Save, CheckCircle2, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { parseNumber } from "@/lib/utils";
 
 // ─── FEATURE 1: AGE & SEX HEALTHY-RANGE BANDS ────────────────────────────────
 // Reference resting-heart-rate fitness bands (bpm) sourced from widely used
@@ -214,7 +215,7 @@ export default function RestingHeartRateCalculator() {
           <div className="mb-6 p-4 bg-slate-50 rounded-lg border flex flex-col md:flex-row gap-4 items-end">
              <div className="flex-1 w-full">
                 <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Your Age</label>
-                <Input type="number" value={age} onChange={(e) => setAge(e.target.value === "" ? "" : Number(e.target.value))} className="text-lg" />
+                <Input type="number" value={age} onChange={(e) => setAge(e.target.value === "" ? "" : parseNumber(e.target.value))} className="text-lg" placeholder="e.g. 35" />
              </div>
              <div className="flex-1 w-full">
                 <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Sex</label>
@@ -248,7 +249,7 @@ export default function RestingHeartRateCalculator() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Resting BPM</label>
                 <div className="relative">
-                  <Input type="number" placeholder="Enter your RHR" value={bpmInput} onChange={(e) => setBpmInput(e.target.value === "" ? "" : Number(e.target.value))} className="text-xl py-6 pr-16" />
+                   <Input type="number" placeholder="Enter your RHR" value={bpmInput} onChange={(e) => setBpmInput(e.target.value === "" ? "" : parseNumber(e.target.value))} className="text-xl py-6 pr-16" />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">BPM</span>
                 </div>
               </div>

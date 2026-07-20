@@ -70,7 +70,7 @@ export function ForgotPasswordForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 pl-9 pr-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="w-full rounded-lg border border-gray-300 pl-9 pr-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               placeholder="name@example.com"
               autoComplete="email"
               autoFocus

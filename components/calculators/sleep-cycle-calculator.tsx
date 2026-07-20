@@ -285,7 +285,7 @@ export default function SleepCycleCalculator() {
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Input type="number" min="0" max="120" className="text-lg py-6 pr-16" {...field} />
+                          <Input type="number" min="0" max="120" placeholder="15" className="text-lg py-6 pr-16" {...field} />
                           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-medium">mins</span>
                         </div>
                       </FormControl>

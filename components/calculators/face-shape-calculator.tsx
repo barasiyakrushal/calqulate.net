@@ -1079,7 +1079,7 @@ const HairstyleViewer3D = ({
     };
 
     document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = "clip";
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
@@ -1112,7 +1112,7 @@ const HairstyleViewer3D = ({
   const handleDragMove = (clientX: number) => {
     if (!isDragging) return;
     const diff = clientX - startX;
-    if (Math.abs(diff) > 50) {
+    if (Math.abs(diff) > 30) {
       setCurrentAngle((prev) => (diff > 0 ? (prev - 1 + 4) % 4 : (prev + 1) % 4));
       setStartX(clientX);
     }
@@ -1127,7 +1127,7 @@ const HairstyleViewer3D = ({
       {/* 3D Viewer */}
       <div 
         ref={containerRef}
-        className="relative w-full max-w-[280px] sm:max-w-[340px] md:max-w-[420px] mx-auto aspect-[7/10] min-h-[380px] sm:min-h-[460px] md:min-h-[540px] bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing select-none"
+        className="relative w-full max-w-[280px] sm:max-w-[340px] md:max-w-[420px] mx-auto aspect-[7/10] min-h-[380px] sm:min-h-[460px] md:min-h-[540px] bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none"
         onMouseDown={(e) => handleDragStart(e.clientX)}
         onMouseMove={(e) => handleDragMove(e.clientX)}
         onMouseUp={handleDragEnd}
@@ -1189,7 +1189,7 @@ const HairstyleViewer3D = ({
               <button
                 type="button"
                 onClick={() => setZoomSrc(null)}
-                className="absolute right-0 top-0 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/30 md:-right-4 md:-top-4"
+                className="absolute right-1 top-1 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/30 md:-right-4 md:-top-4"
                 aria-label="Close image preview"
               >
                 <X className="w-5 h-5" />
@@ -1726,8 +1726,10 @@ const AnalyzingView = ({
       </div>
 
       <style>{`
-        @keyframes fsSweep { 0% { transform: translateY(0); } 100% { transform: translateY(320%); } }
-        @keyframes fsPulse { 0%,100% { opacity:.2 } 50% { opacity:1 } }
+        @media (prefers-reduced-motion: no-preference) {
+          @keyframes fsSweep { 0% { transform: translateY(0); } 100% { transform: translateY(320%); } }
+          @keyframes fsPulse { 0%,100% { opacity:.2 } 50% { opacity:1 } }
+        }
       `}</style>
     </div>
   );

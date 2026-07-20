@@ -13,6 +13,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calculator, RefreshCw, BarChart2, Loader2, ArrowDown, Info, CircleHelp } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { parseNumber } from "@/lib/utils"
 
 // Define validation schema
 const formSchema = z.object({
@@ -200,19 +201,19 @@ export default function RFMCalculator() {
 
     // Convert height, waist, and weight
     if (currentValues.height) {
-      const h = parseFloat(currentValues.height);
+      const h = parseNumber(currentValues.height);
       updatedValues.height =
         newUnit === "imperial" ? cmToInches(h).toFixed(1) : inchesToCm(h).toFixed(1);
     }
 
     if (currentValues.waist) {
-      const w = parseFloat(currentValues.waist);
+      const w = parseNumber(currentValues.waist);
       updatedValues.waist =
         newUnit === "imperial" ? cmToInches(w).toFixed(1) : inchesToCm(w).toFixed(1);
     }
 
     if (currentValues.weight) {
-      const wt = parseFloat(currentValues.weight);
+      const wt = parseNumber(currentValues.weight);
       updatedValues.weight =
         newUnit === "imperial" ? kgToLbs(wt).toFixed(1) : lbsToKg(wt).toFixed(1);
     }
@@ -245,11 +246,11 @@ export default function RFMCalculator() {
     setIsLoading(true)
 
     setTimeout(() => { // Simulate calculation delay
-        const heightInput = parseFloat(values.height);
-        const waistInput = parseFloat(values.waist);
+        const heightInput = parseNumber(values.height);
+        const waistInput = parseNumber(values.waist);
         const sex = values.sex;
         const age = values.age ? parseInt(values.age) : undefined;
-        const weightInput = values.weight ? parseFloat(values.weight) : undefined;
+        const weightInput = values.weight ? parseNumber(values.weight) : undefined;
         const activityLevel = values.activityLevel;
         const goal = values.goal;
 
@@ -690,7 +691,7 @@ export default function RFMCalculator() {
                             <BodyCompositionChart
                                 fatMass={result.fatMassKg}
                                 leanMass={result.leanMassKg}
-                                totalWeight={parseFloat(form.getValues("weight") || "")}
+                                totalWeight={parseNumber(form.getValues("weight") || "")}
                             />
                         </div>
                     )}

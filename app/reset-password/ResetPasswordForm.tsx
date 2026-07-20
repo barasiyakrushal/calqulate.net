@@ -5,13 +5,6 @@ import Link from "next/link";
 import { Eye, EyeOff, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-function mapSupabaseError(msg: string): string {
-  if (/same as the old password/i.test(msg)) return "New password must be different from your current password.";
-  if (/at least 8 characters/i.test(msg)) return "Password must be at least 8 characters.";
-  if (/too many requests/i.test(msg)) return "Too many attempts. Please wait a moment and try again.";
-  return "Something went wrong. Please try again.";
-}
-
 function passwordStrength(pw: string): { label: string; color: string; width: string } {
   if (!pw) return { label: "", color: "", width: "0%" };
   if (pw.length < 8) return { label: "Too short", color: "bg-red-500", width: "25%" };
@@ -48,16 +41,17 @@ export function ResetPasswordForm() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (password !== confirm) {
-      setError("Passwords do not match.");
-      return;
-    }
+    if (password !== confirm) { setError("Passwords do not match."); return; }
     setBusy(true);
     try {
-      const supabase = createClient();
-      const { error: updateError } = await supabase.auth.updateUser({ password });
-      if (updateError) {
-        setError(mapSupabaseError(updateError.message));
+      const res = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error ?? "Something went wrong. Please try again.");
         return;
       }
       setDone(true);
@@ -121,7 +115,7 @@ export function ResetPasswordForm() {
               minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 pl-9 pr-10 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="w-full rounded-lg border border-gray-300 pl-9 pr-10 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               placeholder="Min. 8 characters"
               autoComplete="new-password"
               autoFocus
@@ -151,7 +145,7 @@ export function ResetPasswordForm() {
               minLength={8}
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
-              className={`w-full rounded-lg border pl-9 pr-3 py-2 text-sm outline-none ${
+              className={`w-full rounded-lg border pl-9 pr-3 py-2 text-base outline-none ${
                 matchError ? "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               }`}
               placeholder="Re-enter your new password"

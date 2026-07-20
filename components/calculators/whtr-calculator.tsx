@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { parseNumber } from "@/lib/utils"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Calculator,
@@ -69,8 +70,8 @@ export default function WHtRCalculator() {
     const currentUnit = form.getValues("units")
     if (newUnit === currentUnit) return
 
-    const height = parseFloat(form.getValues("height"))
-    const waist = parseFloat(form.getValues("waist"))
+    const height = parseNumber(form.getValues("height"))
+    const waist = parseNumber(form.getValues("waist"))
 
     if (height) {
       const newHeight = newUnit === "imperial" ? height / 2.54 : height * 2.54
@@ -86,8 +87,8 @@ export default function WHtRCalculator() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     setTimeout(() => {
-      const h = parseFloat(values.height)
-      const w = parseFloat(values.waist)
+      const h = parseNumber(values.height)
+      const w = parseNumber(values.waist)
       const ratio = w / h
 
       let category = ""

@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Activity, Calculator, RefreshCw, Loader2, Heart, AlertCircle, Info, TrendingUp, TrendingDown, CheckCircle2, History, ChevronRight, BarChart3, Users, Minus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -77,12 +78,12 @@ const effectFrom = (multiplier: number): { effectLabel: string; direction: "up" 
 // Note: The actual Qrisk3 algorithm uses a proprietary coefficient table with thousands of data points.
 // This function SIMULATES the weighting logic for educational purposes.
 const calculateRisk = (values: z.infer<typeof formSchema>): QriskResult => {
-  const age = parseFloat(values.age);
-  const height = parseFloat(values.height) / 100; // convert to m
-  const weight = parseFloat(values.weight);
+  const age = parseNumber(values.age);
+  const height = parseNumber(values.height) / 100; // convert to m
+  const weight = parseNumber(values.weight);
   const bmi = weight / (height * height);
-  const sbp = parseFloat(values.systolicBP);
-  const ratio = parseFloat(values.cholesterolRatio);
+  const sbp = parseNumber(values.systolicBP);
+  const ratio = parseNumber(values.cholesterolRatio);
 
   // 1. Base Risk (Exponential age curve)
   // Male starts higher, Female catches up post-menopause
@@ -262,16 +263,16 @@ const calculateRisk = (values: z.infer<typeof formSchema>): QriskResult => {
   const relativeRisk = healthyReferenceRisk > 0 ? finalScore / healthyReferenceRisk : 1;
 
   return {
-    score: parseFloat(finalScore.toFixed(1)),
+    score: parseNumber(finalScore.toFixed(1)),
     heartAge,
-    bmi: parseFloat(bmi.toFixed(1)),
+    bmi: parseNumber(bmi.toFixed(1)),
     riskLevel: level,
     riskColor: color,
     recommendations: recs,
-    baseRisk: parseFloat(baseRisk.toFixed(1)),
+    baseRisk: parseNumber(baseRisk.toFixed(1)),
     factors,
-    healthyReferenceRisk: parseFloat(healthyReferenceRisk.toFixed(1)),
-    relativeRisk: parseFloat(relativeRisk.toFixed(1)),
+    healthyReferenceRisk: parseNumber(healthyReferenceRisk.toFixed(1)),
+    relativeRisk: parseNumber(relativeRisk.toFixed(1)),
     age,
     gender: values.gender,
   };

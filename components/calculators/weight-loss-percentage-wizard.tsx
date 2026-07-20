@@ -20,6 +20,7 @@
 
 import React, { useMemo, useState } from "react"
 import Link from "next/link"
+import { parseNumber } from "@/lib/utils"
 import {
   TrendingDown,
   ArrowRight,
@@ -178,8 +179,8 @@ interface Result {
 }
 
 function estimate(a: Answers): Result | null {
-  const start = parseFloat(a.start ?? "")
-  const current = parseFloat(a.current ?? "")
+  const start = parseNumber(a.start ?? "")
+  const current = parseNumber(a.current ?? "")
   if (!(start > 0) || !(current > 0)) return null
   const unit = a.units ?? "lbs"
 
@@ -188,7 +189,7 @@ function estimate(a: Answers): Result | null {
   const totalLost = Math.round(Math.abs(diff) * 10) / 10
   const pct = Math.round((Math.abs(diff) / start) * 1000) / 10
 
-  const weeks = parseFloat(a.weeks ?? "")
+  const weeks = parseNumber(a.weeks ?? "")
   const weeklyPct = weeks > 0 && !gained ? Math.round((pct / weeks) * 100) / 100 : null
 
   let pace: Result["pace"] = null
@@ -198,7 +199,7 @@ function estimate(a: Answers): Result | null {
     else pace = "fast"
   }
 
-  const goal = parseFloat(a.goal ?? "")
+  const goal = parseNumber(a.goal ?? "")
   let progressPct: number | null = null
   let remaining: number | null = null
   if (goal > 0 && goal < start) {
@@ -293,7 +294,7 @@ export default function WeightLossPercentageWizard() {
 
   const submitNumber = () => {
     const s = current as NumberStep
-    const n = parseFloat(numDraft)
+    const n = parseNumber(numDraft)
     if (!(n > 0)) return
     if (s.min && n < s.min) return
     if (s.max && n > s.max) return
@@ -453,7 +454,7 @@ export default function WeightLossPercentageWizard() {
               </div>
               <button
                 type="submit"
-                disabled={!(parseFloat(numDraft) > 0)}
+                disabled={!(parseNumber(numDraft) > 0)}
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-4 text-base font-bold text-white shadow-sm transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Continue

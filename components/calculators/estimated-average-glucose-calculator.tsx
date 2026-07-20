@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calculator, RefreshCw, Loader2, Activity, Droplet, Info, HeartPulse, Target, TrendingDown } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -19,7 +20,7 @@ const formSchema = z.object({
   inputValue: z.string().min(1, "Please enter a value."),
   glucoseUnit: z.enum(["mg/dl", "mmol/l"]),
 }).superRefine((data, ctx) => {
-  const val = parseFloat(data.inputValue);
+  const val = parseNumber(data.inputValue);
   if (isNaN(val)) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Must be a valid number", path: ["inputValue"] });
     return;
@@ -174,7 +175,7 @@ export default function EstimatedAverageGlucoseCalculator() {
     setIsLoading(true);
     
     setTimeout(() => {
-      const input = parseFloat(values.inputValue);
+      const input = parseNumber(values.inputValue);
       let calcA1c = 0;
       let calcMgdl = 0;
       let calcMmol = 0;

@@ -24,6 +24,7 @@ import {
   classify, type Sex, type Classification, type FemaleInput, type MaleInput,
   SOMATOTYPE_NOTE,
 } from "@/lib/body-shape/shapes"
+import { parseNumber } from "@/lib/utils"
 import { buildProfile } from "@/lib/body-shape/body-profile"
 import {
   ArrowRight, ArrowLeft, RotateCcw, Sparkles, Lock, ShieldCheck, Ruler,
@@ -82,9 +83,9 @@ export default function BodyShapeExperience() {
   const prefersReduced = usePrefersReducedMotion()
 
   const required = fields.filter((f) => !f.optional)
-  const canSubmit = required.every((f) => parseFloat(draft[f.key] as string) > 0)
+  const canSubmit = required.every((f) => parseNumber(draft[f.key] as string) > 0)
 
-  const toCm = (v: string) => (draft.units === "metric" ? parseFloat(v) : parseFloat(v) * CM_PER_IN)
+  const toCm = (v: string) => (draft.units === "metric" ? parseNumber(v) : parseNumber(v) * CM_PER_IN)
 
   const measures = useMemo(() => {
     const heightCm = draft.height ? toCm(draft.height) : undefined
@@ -246,6 +247,7 @@ function MeasurementForm({
             <span className="mb-1 block text-sm font-semibold text-copy">{f.label}</span>
             <div className="flex items-stretch overflow-hidden rounded-xl border border-line focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20">
               <input
+                name={f.key}
                 inputMode="decimal"
                 type="number"
                 step="any"
@@ -265,6 +267,7 @@ function MeasurementForm({
           <span className="mb-1 block text-sm font-semibold text-copy">Height (optional)</span>
           <div className="flex items-stretch overflow-hidden rounded-xl border border-line focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20">
             <input
+              name="height"
               inputMode="decimal"
               type="number"
               step="any"
@@ -383,13 +386,13 @@ function ResultCard({
 
       {/* buttons */}
       <div className="mt-5 grid grid-cols-2 gap-2">
-        <button type="button" onClick={onToggleCompare} aria-pressed={compare} className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-sm font-bold transition-colors ${compare ? "border-brand bg-brand-50 text-brand-800" : "border-line text-copy hover:bg-surface"}`}>
+        <button type="button" onClick={onToggleCompare} aria-pressed={compare} className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-4 py-3 text-sm font-bold transition-colors ${compare ? "border-brand bg-brand-50 text-brand-800" : "border-line text-copy hover:bg-surface"}`}>
           <GitCompare className="h-4 w-4" /> Compare
         </button>
-        <button type="button" onClick={download} className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-line px-3 py-2.5 text-sm font-bold text-copy transition-colors hover:bg-surface">
+        <button type="button" onClick={download} className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-line px-4 py-3 text-sm font-bold text-copy transition-colors hover:bg-surface">
           <Download className="h-4 w-4" /> Report
         </button>
-        <button type="button" onClick={onReset} className="col-span-2 inline-flex items-center justify-center gap-1.5 rounded-xl border border-line px-3 py-2.5 text-sm font-bold text-copy transition-colors hover:bg-surface">
+        <button type="button" onClick={onReset} className="col-span-2 inline-flex items-center justify-center gap-1.5 rounded-xl border border-line px-4 py-3 text-sm font-bold text-copy transition-colors hover:bg-surface">
           <RotateCcw className="h-4 w-4" /> Reset
         </button>
       </div>

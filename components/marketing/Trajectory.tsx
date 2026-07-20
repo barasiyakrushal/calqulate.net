@@ -1,5 +1,7 @@
 "use client"
 
+import { parseNumber } from "@/lib/utils";
+
 /**
  * The story layer.
  *
@@ -135,7 +137,7 @@ export function WhatAreYouLosing() {
               </span>
               <input
                 type="range" min={0} max={100} value={protein}
-                onChange={(e) => setProtein(Number(e.target.value))}
+                onChange={(e) => setProtein(parseNumber(e.target.value))}
                 aria-label="Percent of protein target hit"
                 className="mt-3 h-2 w-full accent-brand"
               />
@@ -150,7 +152,7 @@ export function WhatAreYouLosing() {
               </span>
               <input
                 type="range" min={0} max={5} value={training}
-                onChange={(e) => setTraining(Number(e.target.value))}
+                onChange={(e) => setTraining(parseNumber(e.target.value))}
                 aria-label="Resistance training days per week"
                 className="mt-3 h-2 w-full accent-brand"
               />

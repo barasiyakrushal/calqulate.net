@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { parseNumber } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge";
 import {
   Calculator, RefreshCw, Loader2, Flame, AlertTriangle, Calendar, Apple,
@@ -476,22 +477,22 @@ export default function CalorieDeficitCalculator() {
     const weightVal = getValues("weight");
     const heightVal = getValues("height");
 
-    if (weightVal && !isNaN(parseFloat(weightVal))) {
-      const weight = parseFloat(weightVal);
+    if (weightVal && !isNaN(parseNumber(weightVal))) {
+      const weight = parseNumber(weightVal);
       const newWeight = newUnit === 'imperial' ? weight * 2.20462 : weight / 2.20462;
       setValue("weight", newWeight.toFixed(1));
     }
 
-    if (heightVal && !isNaN(parseFloat(heightVal))) {
-      const height = parseFloat(heightVal);
+    if (heightVal && !isNaN(parseNumber(heightVal))) {
+      const height = parseNumber(heightVal);
       const newHeight = newUnit === 'imperial' ? height / 2.54 : height * 2.54;
       setValue("height", newHeight.toFixed(1));
     }
 
     // ── ADDITIVE: convert the optional goal weight alongside current weight ──
     const goalWeightVal = getValues("goalWeight");
-    if (goalWeightVal && !isNaN(parseFloat(goalWeightVal))) {
-      const gw = parseFloat(goalWeightVal);
+    if (goalWeightVal && !isNaN(parseNumber(goalWeightVal))) {
+      const gw = parseNumber(goalWeightVal);
       const newGw = newUnit === 'imperial' ? gw * 2.20462 : gw / 2.20462;
       setValue("goalWeight", newGw.toFixed(1));
     }
@@ -506,8 +507,8 @@ export default function CalorieDeficitCalculator() {
     
     setTimeout(() => {
       const age = parseInt(values.age);
-      const weightKg = values.units === 'metric' ? parseFloat(values.weight) : parseFloat(values.weight) / 2.20462;
-      const heightCm = values.units === 'metric' ? parseFloat(values.height) : parseFloat(values.height) * 2.54;
+      const weightKg = values.units === 'metric' ? parseNumber(values.weight) : parseNumber(values.weight) / 2.20462;
+      const heightCm = values.units === 'metric' ? parseNumber(values.height) : parseNumber(values.height) * 2.54;
 
       // 1. Calculate BMR (Mifflin-St Jeor)
       let bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age);
@@ -544,7 +545,7 @@ export default function CalorieDeficitCalculator() {
 
       // Optional goal weight: if the user supplied a lower target weight, aim for
       // that; otherwise fall back to the ~5% body-weight first milestone.
-      const goalWeightRaw = values.goalWeight ? parseFloat(values.goalWeight) : NaN;
+      const goalWeightRaw = values.goalWeight ? parseNumber(values.goalWeight) : NaN;
       const goalWeightKg = !isNaN(goalWeightRaw)
         ? (values.units === "metric" ? goalWeightRaw : goalWeightRaw / 2.20462)
         : NaN;
@@ -618,7 +619,7 @@ export default function CalorieDeficitCalculator() {
       bmr: result.bmr,
       tdee: result.tdee,
       targetCalories: result.targetCalories,
-      weight: parseFloat(values.weight),
+      weight: parseNumber(values.weight),
       units: values.units,
       gender: values.gender,
       goal: values.goal,

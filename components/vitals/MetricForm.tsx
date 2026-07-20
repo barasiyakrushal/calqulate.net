@@ -23,7 +23,7 @@ const schema = z.object({
   physicallyActive: z.boolean().optional(),
 });
 
-const field = "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm";
+const field = "w-full rounded-lg border border-gray-300 px-3 py-2 text-base";
 
 export function MetricForm({
   productSlug,
@@ -122,7 +122,7 @@ export function MetricForm({
           </div>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <label className="flex flex-col gap-1 text-sm">Age<input name="age" type="number" required className={field} /></label>
+          <label className="flex flex-col gap-1 text-sm">Age<input name="age" type="number" required className={field} placeholder="e.g. 45" /></label>
           <label className="flex flex-col gap-1 text-sm">Sex
             <select name="sex" required className={field}>
               <option value="male">Male</option>
@@ -131,10 +131,10 @@ export function MetricForm({
           </label>
           <label className="flex flex-col gap-1 text-sm">Height ({units === "us" ? "in" : "cm"})<input name="heightCm" type="number" step="any" required className={field} placeholder={units === "us" ? "e.g. 70" : "e.g. 178"} /></label>
           <label className="flex flex-col gap-1 text-sm">Weight ({units === "us" ? "lb" : "kg"})<input name="weightKg" type="number" step="any" required className={field} placeholder={units === "us" ? "e.g. 200" : "e.g. 90"} /></label>
-          <label className="flex flex-col gap-1 text-sm">Waist ({units === "us" ? "in" : "cm"})<input name="waistCm" type="number" step="any" className={field} /></label>
-          <label className="flex flex-col gap-1 text-sm">Systolic BP<input name="systolicBp" type="number" className={field} /></label>
-          <label className="flex flex-col gap-1 text-sm">Total chol (mg/dL)<input name="totalCholesterol" type="number" className={field} /></label>
-          <label className="flex flex-col gap-1 text-sm">HDL (mg/dL)<input name="hdl" type="number" className={field} /></label>
+          <label className="flex flex-col gap-1 text-sm">Waist ({units === "us" ? "in" : "cm"})<input name="waistCm" type="number" step="any" className={field} placeholder={units === "us" ? "e.g. 38" : "e.g. 94"} /></label>
+          <label className="flex flex-col gap-1 text-sm">Systolic BP<input name="systolicBp" type="number" className={field} placeholder="e.g. 120" /></label>
+          <label className="flex flex-col gap-1 text-sm">Total chol (mg/dL)<input name="totalCholesterol" type="number" className={field} placeholder="e.g. 180" /></label>
+          <label className="flex flex-col gap-1 text-sm">HDL (mg/dL)<input name="hdl" type="number" className={field} placeholder="e.g. 50" /></label>
           <label className="flex flex-col gap-1 text-sm sm:col-span-2">Race/ethnicity (for ASCVD)
             <select name="race" className={field}>
               <option value="white">White / other</option>

@@ -438,7 +438,7 @@ export default function CreatinineClearanceCalculator() {
                     <FormItem className="w-24">
                       <FormLabel>&nbsp;</FormLabel>
                       <Select onValueChange={(val) => handleWeightUnitChange(val as "kg" | "lbs")} defaultValue={form.getValues("weightUnit")}>
-                        <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
+                        <FormControl><SelectTrigger><SelectValue placeholder="Unit" /></SelectTrigger></FormControl>
                         <SelectContent>
                             <SelectItem value="kg">kg</SelectItem>
                             <SelectItem value="lbs">lbs</SelectItem>
@@ -460,7 +460,7 @@ export default function CreatinineClearanceCalculator() {
                   <FormItem className="w-24">
                     <FormLabel>&nbsp;</FormLabel>
                     <Select onValueChange={(val) => handleHeightUnitChange(val as "cm" | "in")} defaultValue={form.getValues("heightUnit") ?? "cm"}>
-                      <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
+                      <FormControl><SelectTrigger><SelectValue placeholder="Unit" /></SelectTrigger></FormControl>
                       <SelectContent>
                         <SelectItem value="cm">cm</SelectItem>
                         <SelectItem value="in">in</SelectItem>
@@ -481,7 +481,7 @@ export default function CreatinineClearanceCalculator() {
                     <FormItem className="w-32">
                       <FormLabel>&nbsp;</FormLabel>
                       <Select onValueChange={(val) => handleCreatinineUnitChange(val as "mgdl" | "umol")} defaultValue={form.getValues("creatinineUnit")}>
-                        <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
+                        <FormControl><SelectTrigger><SelectValue placeholder="Unit" /></SelectTrigger></FormControl>
                         <SelectContent>
                             <SelectItem value="mgdl">mg/dL</SelectItem>
                             <SelectItem value="umol">µmol/L</SelectItem>

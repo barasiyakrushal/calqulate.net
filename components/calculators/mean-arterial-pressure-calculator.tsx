@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Activity, RefreshCw, Loader2, HeartPulse, AlertTriangle, CheckCircle2, Gauge, Brain } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -188,8 +189,8 @@ export default function MAPCalculator() {
     
     // Simulate slight delay for UX feel
     setTimeout(() => {
-      const sbp = parseFloat(values.systolic);
-      const dbp = parseFloat(values.diastolic);
+      const sbp = parseNumber(values.systolic);
+      const dbp = parseNumber(values.diastolic);
 
       // MAP Formula: (SBP + 2*DBP) / 3 — equivalent to DBP + 1/3(SBP - DBP)
       const mapValue = (sbp + (2 * dbp)) / 3;

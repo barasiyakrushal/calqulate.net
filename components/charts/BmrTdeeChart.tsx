@@ -63,6 +63,7 @@ export default function BmrTdeeChart() {
             step={10}
             onChange={(e) => setBmr(parseInt(e.target.value, 10))}
             className="w-24 rounded-lg border border-slate-200 px-2 py-1 text-right font-bold text-slate-900 focus:border-emerald-500 focus:outline-none"
+            placeholder="e.g. 1650"
           />
           <span className="ml-1 text-slate-500">kcal</span>
         </label>

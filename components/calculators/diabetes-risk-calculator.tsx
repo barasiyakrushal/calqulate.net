@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { 
+import {
   ArrowRight, 
   ArrowLeft, 
   RefreshCw, 
@@ -24,6 +24,7 @@ import {
   TrendingDown,
   Target
 } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 // --- TYPES & INTERFACES ---
 type UnitSystem = "metric" | "imperial";
@@ -259,12 +260,12 @@ export default function DiabetesRiskCalculator() {
     let weightCurrent = 0;
     
     if (formData.units === "metric") {
-      heightM = parseFloat(formData.heightCm) / 100;
-      weightCurrent = parseFloat(formData.weightKg);
+      heightM = parseNumber(formData.heightCm) / 100;
+      weightCurrent = parseNumber(formData.weightKg);
     } else {
-      const heightInches = (parseFloat(formData.heightFt) * 12) + (parseFloat(formData.heightIn) || 0);
+      const heightInches = (parseNumber(formData.heightFt) * 12) + (parseNumber(formData.heightIn) || 0);
       heightM = heightInches * 0.0254;
-      weightCurrent = parseFloat(formData.weightLbs);
+      weightCurrent = parseNumber(formData.weightLbs);
     }
 
     const bmiWeightKg = formData.units === "imperial" ? weightCurrent * 0.453592 : weightCurrent;
@@ -276,7 +277,7 @@ export default function DiabetesRiskCalculator() {
       // 5-7% weight loss goal
       const minLoss = (weightCurrent * 0.05).toFixed(1);
       const maxLoss = (weightCurrent * 0.07).toFixed(1);
-      weightLossGoal = { min: parseFloat(minLoss), max: parseFloat(maxLoss), unit: formData.units === "metric" ? "kg" : "lbs" };
+      weightLossGoal = { min: parseNumber(minLoss), max: parseNumber(maxLoss), unit: formData.units === "metric" ? "kg" : "lbs" };
 
       actionPlan.push({ icon: Apple, title: "Targeted Weight Loss", desc: `Losing just 5-7% of your body weight (${minLoss} - ${maxLoss} ${weightLossGoal.unit}) can reduce your diabetes risk by up to 58%.`});
 

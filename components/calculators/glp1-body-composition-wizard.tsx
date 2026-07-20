@@ -21,6 +21,7 @@
 
 import React, { useMemo, useState } from "react"
 import Link from "next/link"
+import { parseNumber } from "@/lib/utils"
 import {
   Syringe,
   ArrowRight,
@@ -176,9 +177,9 @@ interface Result {
 }
 
 function estimate(a: Answers): Result | null {
-  const start = parseFloat(a.startWeight ?? "")
-  const current = parseFloat(a.currentWeight ?? "")
-  const weeks = parseFloat(a.weeks ?? "")
+  const start = parseNumber(a.startWeight ?? "")
+  const current = parseNumber(a.currentWeight ?? "")
+  const weeks = parseNumber(a.weeks ?? "")
   if (!(start > 0) || !(current > 0) || !(weeks > 0)) return null
 
   const totalLost = Math.max(0, start - current)
@@ -258,7 +259,7 @@ export default function GLP1BodyCompositionWizard() {
 
   const submitNumber = () => {
     const s = current as NumberStep
-    const n = parseFloat(numDraft)
+    const n = parseNumber(numDraft)
     if (!(n > 0)) return
     if (s.min && n < s.min) return
     if (s.max && n > s.max) return
@@ -366,7 +367,7 @@ export default function GLP1BodyCompositionWizard() {
               </div>
               <button
                 type="submit"
-                disabled={!(parseFloat(numDraft) > 0)}
+                disabled={!(parseNumber(numDraft) > 0)}
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-4 text-base font-bold text-white shadow-sm transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Continue

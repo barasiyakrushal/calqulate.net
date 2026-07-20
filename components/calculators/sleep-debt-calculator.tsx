@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calculator, RefreshCw, Loader2, Moon, Sun, Battery, BatteryWarning, Brain, Activity, Clock, AlertTriangle, CalendarClock, Zap } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -73,7 +74,7 @@ const buildRecoverySchedule = (totalDebt: number): { nights: RecoveryNight[]; da
     const isWeekend = weekendSlots.has(dayIndex % 7);
     const cap = isWeekend ? 2 : 1; // weekend recovery limit of +2h
     const addTonight = Math.min(cap, remaining);
-    remaining = parseFloat((remaining - addTonight).toFixed(2));
+    remaining = parseNumber((remaining - addTonight).toFixed(2));
     nights.push({
       label: `Night ${dayIndex + 1}${isWeekend ? " (weekend)" : ""}`,
       detail: `Add +${addTonight.toFixed(addTonight % 1 === 0 ? 0 : 1)}h sleep · ${remaining > 0.05 ? `${remaining.toFixed(1)}h debt left` : "debt cleared"}`,
@@ -249,10 +250,10 @@ export default function SleepDebtCalculator() {
     setIsLoading(true);
     
     setTimeout(() => {
-      const ideal = parseFloat(values.idealSleep);
-      const wkday = parseFloat(values.weekdaySleep);
-      const wkend = parseFloat(values.weekendSleep);
-      const wks = parseFloat(values.weeks);
+      const ideal = parseNumber(values.idealSleep);
+      const wkday = parseNumber(values.weekdaySleep);
+      const wkend = parseNumber(values.weekendSleep);
+      const wks = parseNumber(values.weeks);
 
       // Total sleep you SHOULD have gotten
       const totalIdeal = ideal * 7 * wks;

@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calculator, RefreshCw, Loader2, Target, CheckCircle2 } from "lucide-react"
+import { parseNumber } from "@/lib/utils"
 
 // ─── VALIDATION SCHEMA ────────────────────────────────────────────────────────
 const formSchema = z.object({
@@ -87,11 +88,11 @@ export default function AdjustedBodyWeightCalculator() {
     const updated: Record<string, string> = { ...current }
 
     if (current.height) {
-      const h = parseFloat(current.height)
+      const h = parseNumber(current.height)
       if (!isNaN(h)) updated.height = newUnit === "imperial" ? cmToInches(h).toFixed(1) : inchesToCm(h).toFixed(1)
     }
     if (current.weight) {
-      const wt = parseFloat(current.weight)
+      const wt = parseNumber(current.weight)
       if (!isNaN(wt)) updated.weight = newUnit === "imperial" ? kgToLbs(wt).toFixed(1) : lbsToKg(wt).toFixed(1)
     }
 
@@ -105,8 +106,8 @@ export default function AdjustedBodyWeightCalculator() {
     setResult(null)
 
     setTimeout(() => {
-      const weight = parseFloat(values.weight)
-      const height = parseFloat(values.height)
+      const weight = parseNumber(values.weight)
+      const height = parseNumber(values.height)
       const gender = values.gender
 
       const weightInKg = units === "metric" ? weight : lbsToKg(weight)

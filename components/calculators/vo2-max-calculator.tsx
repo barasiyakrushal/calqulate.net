@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { cn } from "@/lib/utils"; // Assuming you have this standard shadcn util
+import { cn, parseNumber } from "@/lib/utils"; // Assuming you have this standard shadcn util
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -236,28 +236,28 @@ export default function VO2MaxCalculator() {
     
     // Simulate calculation delay for "processing" feel
     setTimeout(() => {
-      const age = parseFloat(values.age);
-      const weightKg = values.units === "metric" ? parseFloat(values.weight) : parseFloat(values.weight) / 2.20462;
+      const age = parseNumber(values.age);
+      const weightKg = values.units === "metric" ? parseNumber(values.weight) : parseNumber(values.weight) / 2.20462;
       let vo2 = 0;
 
       // 1. Resting HR (Uth-Sorensen-Overgaard-Pedersen)
       if (values.method === "rest_hr" && values.restingHR) {
         const maxHR = 208 - (0.7 * age);
-        const rhr = parseFloat(values.restingHR);
+        const rhr = parseNumber(values.restingHR);
         vo2 = 15.3 * (maxHR / rhr);
       }
       
       // 2. Cooper 1.5 Mile Run
       else if (values.method === "cooper_run" && values.cooperTimeMin) {
-        const time = parseFloat(values.cooperTimeMin) + (parseFloat(values.cooperTimeSec || "0") / 60);
+        const time = parseNumber(values.cooperTimeMin) + (parseNumber(values.cooperTimeSec || "0") / 60);
         vo2 = (483 / time) + 3.5;
       }
 
       // 3. Rockport 1 Mile Walk
       else if (values.method === "rockport_walk" && values.walkTimeMin && values.endHeartRate) {
         const weightLbs = weightKg * 2.20462;
-        const time = parseFloat(values.walkTimeMin) + (parseFloat(values.walkTimeSec || "0") / 60);
-        const hr = parseFloat(values.endHeartRate);
+        const time = parseNumber(values.walkTimeMin) + (parseNumber(values.walkTimeSec || "0") / 60);
+        const hr = parseNumber(values.endHeartRate);
         const genderVal = values.gender === "male" ? 1 : 0;
         vo2 = 132.853 - (0.0769 * weightLbs) - (0.3877 * age) + (6.315 * genderVal) - (3.2649 * time) - (0.1565 * hr);
       }
@@ -354,7 +354,7 @@ export default function VO2MaxCalculator() {
                   <FormItem>
                     <FormLabel>Weight</FormLabel>
                     <div className="flex gap-2">
-                      <FormControl><Input type="number" placeholder={units === 'metric' ? "kg" : "lbs"} {...field} /></FormControl>
+                      <FormControl><Input type="number" placeholder={units === 'metric' ? "e.g. 70" : "e.g. 154"} {...field} /></FormControl>
                       <div className="flex bg-gray-100 rounded-md p-1">
                          <button type="button" onClick={() => setValue('units', 'metric')} className={cn("px-2 text-xs rounded", units==='metric' ? "bg-white shadow text-black" : "text-gray-500")}>kg</button>
                          <button type="button" onClick={() => setValue('units', 'imperial')} className={cn("px-2 text-xs rounded", units==='imperial' ? "bg-white shadow text-black" : "text-gray-500")}>lbs</button>
@@ -468,7 +468,7 @@ export default function VO2MaxCalculator() {
                   <h3 className="text-slate-300 font-medium text-sm uppercase tracking-wider mb-2">Fitness Age</h3>
                   <div className="text-6xl font-extrabold mb-1 tracking-tighter">{result.fitnessAge}</div>
                   <p className="text-sm text-slate-300">
-                    {result.fitnessAge < parseFloat(form.getValues('age')) 
+                    {result.fitnessAge < parseNumber(form.getValues('age')) 
                       ? "Your heart is younger than you! 🎉" 
                       : "Room for improvement."}
                   </p>

@@ -6,7 +6,11 @@ import { rateLimit, clientIp } from "@/lib/security/rateLimit";
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string().min(8, "Use at least 8 characters."),
+  password: z.string()
+    .min(8, "Use at least 8 characters.")
+    .regex(/[A-Z]/, "Must include at least one uppercase letter.")
+    .regex(/[a-z]/, "Must include at least one lowercase letter.")
+    .regex(/\d/, "Must include at least one number."),
   turnstileToken: z.string().optional(),
   consent: z.literal(true, { errorMap: () => ({ message: "You must accept the terms." }) }),
   next: z.string().optional(),
@@ -43,7 +47,12 @@ export async function POST(req: Request) {
     options: { emailRedirectTo: redirectTo },
   });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  if (error) {
+    if (error.message?.includes("already registered")) {
+      return NextResponse.json({ ok: true, needsConfirmation: true, next });
+    }
+    return NextResponse.json({ error: error.message }, { status: 400 });
+  }
 
   // session present => no email confirmation required.
   return NextResponse.json({ ok: true, needsConfirmation: !data.session, next });

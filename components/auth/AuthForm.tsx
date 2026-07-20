@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { track } from "@/lib/analytics/track";
 
 const inputBase =
-  "w-full rounded-lg border bg-white pl-9 pr-3 py-2 text-sm outline-none transition-colors";
+  "w-full rounded-lg border bg-white pl-9 pr-3 py-2 text-base outline-none transition-colors";
 const inputNormal = "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
 const inputError = "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500";
 
@@ -50,6 +50,11 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     const errs: typeof fieldErrors = {};
     if (!email.includes("@") || !email.includes(".")) errs.email = "Enter a valid email address.";
     if (password.length < 8) errs.password = "Use at least 8 characters.";
+    if (mode === "signup") {
+      if (!/[A-Z]/.test(password)) errs.password = "Must include at least one uppercase letter.";
+      else if (!/[a-z]/.test(password)) errs.password = "Must include at least one lowercase letter.";
+      else if (!/\d/.test(password)) errs.password = "Must include at least one number.";
+    }
     if (mode === "signup" && !consent) errs.consent = "You must accept the terms to continue.";
     setFieldErrors(errs);
     return Object.keys(errs).length === 0;
@@ -187,6 +192,12 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         >
           Use a different email address
         </button>
+        <p className="mt-4 text-xs text-gray-400">
+          Already have an account?{" "}
+          <Link href="/login" className="font-medium text-blue-600 hover:text-blue-700">
+            Log in
+          </Link>
+        </p>
       </div>
     );
   }

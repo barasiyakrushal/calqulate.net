@@ -13,6 +13,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calculator, RefreshCw, Loader2, Info, Beef, Wheat, Droplets, Target, Flame, GlassWater, ChevronRight, UtensilsCrossed, TrendingDown, Scale, TrendingUp } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 // --- MACRO MATH HELPERS (additive) ---
 // Build protein / fat / carb grams (rounded) for an arbitrary calorie target,
@@ -132,12 +133,12 @@ export default function MacroCalculator() {
     if (newUnit === currentUnit) return;
     const weight = getValues("weight");
     const height = getValues("height");
-    if (weight && !isNaN(parseFloat(weight))) {
-        const val = parseFloat(weight);
+    if (weight && !isNaN(parseNumber(weight))) {
+        const val = parseNumber(weight);
         setValue("weight", (newUnit === 'metric' ? val / 2.20462 : val * 2.20462).toFixed(1));
     }
-    if (height && !isNaN(parseFloat(height))) {
-        const val = parseFloat(height);
+    if (height && !isNaN(parseNumber(height))) {
+        const val = parseNumber(height);
         setValue("height", (newUnit === 'metric' ? val * 2.54 : val / 2.54).toFixed(1));
     }
     setValue("units", newUnit);
@@ -147,15 +148,15 @@ export default function MacroCalculator() {
     setIsLoading(true);
     setTimeout(() => {
       // Inputs
-      const weightKg = values.units === 'metric' ? parseFloat(values.weight) : parseFloat(values.weight) / 2.20462;
-      const heightCm = values.units === 'metric' ? parseFloat(values.height) : parseFloat(values.height) * 2.54;
-      const age = parseFloat(values.age);
-      const activityMultiplier = parseFloat(values.activity);
+      const weightKg = values.units === 'metric' ? parseNumber(values.weight) : parseNumber(values.weight) / 2.20462;
+      const heightCm = values.units === 'metric' ? parseNumber(values.height) : parseNumber(values.height) * 2.54;
+      const age = parseNumber(values.age);
+      const activityMultiplier = parseNumber(values.activity);
       
       // BMR Calculation
       let bmr = 0;
       if (values.knowBodyFat === 'yes' && values.bodyFat) {
-        const lbm = weightKg * (1 - (parseFloat(values.bodyFat) / 100));
+        const lbm = weightKg * (1 - (parseNumber(values.bodyFat) / 100));
         bmr = 370 + (21.6 * lbm);
       } else {
         bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) + (values.gender === 'male' ? 5 : -161);

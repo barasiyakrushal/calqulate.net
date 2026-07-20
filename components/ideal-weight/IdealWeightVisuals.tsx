@@ -1,5 +1,7 @@
 "use client"
 
+import { parseNumber } from "@/lib/utils";
+
 /**
  * The visuals this page was missing, driven by Search Console.
  *
@@ -110,7 +112,7 @@ export function FormulaExplorer() {
             min={140}
             max={210}
             value={cm}
-            onChange={(e) => setCm(Number(e.target.value))}
+            onChange={(e) => setCm(parseNumber(e.target.value))}
             aria-label="Height in centimetres"
             className="mt-3 h-2 w-full accent-emerald-700"
           />

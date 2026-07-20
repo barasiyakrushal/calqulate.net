@@ -187,3 +187,24 @@
     }
   }
 }
+
+/* mobile touch optimisation */
+input, select, textarea, label, button, a {
+  touch-action: manipulation;
+}
+
+/* press feedback on interactive elements (feels app-like) */
+button:active:not(:disabled),
+[role="button"]:active:not(:disabled),
+label:active {
+  transform: scale(0.97);
+}
+
+/* ensure press animation is smooth */
+@media (prefers-reduced-motion: reduce) {
+  button:active:not(:disabled),
+  [role="button"]:active:not(:disabled),
+  label:active {
+    transform: none;
+  }
+}

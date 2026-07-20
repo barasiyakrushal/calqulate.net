@@ -21,6 +21,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { FilesetResolver, PoseLandmarker } from "@mediapipe/tasks-vision"
+import { parseNumber } from "@/lib/utils"
 import {
   measureFromPose,
   navyBodyFat,
@@ -274,7 +275,7 @@ export default function BodyFatWizard() {
   // ── tape submit ────────────────────────────────────────────────────────────
   const submitNumber = () => {
     if (current.kind !== "number") return
-    const n = parseFloat(numDraft)
+    const n = parseNumber(numDraft)
     if (!(n > 0)) return
     const next = { ...answers, [current.key]: numDraft }
     setAnswers(next)
@@ -284,8 +285,8 @@ export default function BodyFatWizard() {
 
   const computeTape = (a: Answers) => {
     const metric = (a.units ?? "metric") === "metric"
-    const toCm = (v: string) => (metric ? parseFloat(v) : parseFloat(v) * CM_PER_IN)
-    const toKg = (v: string) => (metric ? parseFloat(v) : parseFloat(v) / LB_PER_KG)
+    const toCm = (v: string) => (metric ? parseNumber(v) : parseNumber(v) * CM_PER_IN)
+    const toKg = (v: string) => (metric ? parseNumber(v) : parseNumber(v) / LB_PER_KG)
     const sex = (a.sex ?? "male") as Sex
     const heightCm = toCm(a.height!)
     const weightKg = toKg(a.weight!)
@@ -336,8 +337,8 @@ export default function BodyFatWizard() {
 
       const metric = units === "metric"
       const sex = (answers.sex ?? "male") as Sex
-      const heightCm = metric ? parseFloat(answers.height!) : parseFloat(answers.height!) * CM_PER_IN
-      const weightKg = metric ? parseFloat(answers.weight!) : parseFloat(answers.weight!) / LB_PER_KG
+      const heightCm = metric ? parseNumber(answers.height!) : parseNumber(answers.height!) * CM_PER_IN
+      const weightKg = metric ? parseNumber(answers.weight!) : parseNumber(answers.weight!) / LB_PER_KG
 
       const m = measureFromPose({
         front: { landmarks: front.landmarks, mask: front.mask },
@@ -472,7 +473,7 @@ export default function BodyFatWizard() {
                 <span className="flex items-center bg-surface px-4 text-sm font-semibold text-faint">{suffixLabel(current.suffix)}</span>
               </div>
               {poseError && <p className="mt-3 text-sm font-medium text-rose-600">{poseError}</p>}
-              <button type="submit" disabled={!(parseFloat(numDraft) > 0)} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-4 text-base font-bold text-white transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40">
+              <button type="submit" disabled={!(parseNumber(numDraft) > 0)} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 py-4 text-base font-bold text-white transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40">
                 {step === total - 1 ? "See my result" : "Continue"} <ArrowRight className="h-4 w-4" />
               </button>
             </form>

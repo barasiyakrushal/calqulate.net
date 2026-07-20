@@ -32,15 +32,15 @@ export function ReconstitutionCalculator() {
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <div>
           <Label htmlFor="rc-vial">Vial peptide (mg)</Label>
-          <Input id="rc-vial" type="number" step="0.5" min="0" value={vialMg} onChange={(e) => setVialMg(e.target.value)} />
+          <Input id="rc-vial" type="number" step="0.5" min="0" value={vialMg} onChange={(e) => setVialMg(e.target.value)} placeholder="e.g. 10" />
         </div>
         <div>
           <Label htmlFor="rc-water">BAC water (mL)</Label>
-          <Input id="rc-water" type="number" step="0.5" min="0" value={bacWaterMl} onChange={(e) => setBacWaterMl(e.target.value)} />
+          <Input id="rc-water" type="number" step="0.5" min="0" value={bacWaterMl} onChange={(e) => setBacWaterMl(e.target.value)} placeholder="e.g. 2" />
         </div>
         <div>
           <Label htmlFor="rc-dose">Your dose (mg)</Label>
-          <Input id="rc-dose" type="number" step="0.05" min="0" value={doseMg} onChange={(e) => setDoseMg(e.target.value)} />
+          <Input id="rc-dose" type="number" step="0.05" min="0" value={doseMg} onChange={(e) => setDoseMg(e.target.value)} placeholder="e.g. 0.5" />
         </div>
       </div>
 

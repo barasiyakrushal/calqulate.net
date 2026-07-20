@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Syringe, Ruler, CalendarClock, ShieldAlert } from "lucide-react"
+import { parseNumber } from "@/lib/utils"
 
 // ─── TITRATION SCHEDULES (general reference, NOT a prescription) ──────────────
 // Source: FDA prescribing information for Wegovy (semaglutide) & Zepbound (tirzepatide).
@@ -52,8 +53,8 @@ export default function GLP1DoseCalculator() {
   } | null>(null)
 
   const calculate = () => {
-    const d = parseFloat(dose)
-    const c = parseFloat(concentration)
+    const d = parseNumber(dose)
+    const c = parseNumber(concentration)
     if (d > 0 && c > 0) {
       const units = (d / c) * 100
       const volume = d / c
@@ -103,7 +104,7 @@ export default function GLP1DoseCalculator() {
             id="medication"
             value={medication}
             onChange={(e) => setMedication(e.target.value as Medication)}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <option value="semaglutide">Semaglutide (Wegovy / Ozempic)</option>
             <option value="tirzepatide">Tirzepatide (Zepbound / Mounjaro)</option>
@@ -137,8 +138,8 @@ export default function GLP1DoseCalculator() {
                   <strong className="text-emerald-700">
                     {result.exactVolume.toFixed(3)} mL
                   </strong>{" "}
-                  of your {parseFloat(concentration)} mg/mL vial for a{" "}
-                  {parseFloat(dose)} mg dose. One unit equals 0.01 mL.
+                  of your {parseNumber(concentration)} mg/mL vial for a{" "}
+                  {parseNumber(dose)} mg dose. One unit equals 0.01 mL.
                 </p>
                 <div className="mt-4 grid grid-cols-3 gap-3">
                   <div className="rounded-xl border bg-slate-50 p-3 text-center">

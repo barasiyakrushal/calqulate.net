@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { parseNumber } from "@/lib/utils";
 import {
   faceShapeGuides,
   quizQuestions,
@@ -412,7 +413,7 @@ function MeasurePanel({
             onChange={(e) =>
               setMeasurements({
                 ...measurements,
-                [f.key]: parseFloat(e.target.value) || 0,
+                [f.key]: parseNumber(e.target.value) || 0,
               })
             }
             placeholder={unit === "cm" ? "e.g. 14.5" : "e.g. 5.7"}

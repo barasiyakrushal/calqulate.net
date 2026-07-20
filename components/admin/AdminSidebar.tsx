@@ -49,15 +49,18 @@ export function AdminSidebar({ email }: { email: string | null }) {
         })}
       </nav>
 
-      <div className="hidden border-t border-gray-800 p-2 lg:block">
-        <Link href="/" className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">
-          <ExternalLink className="h-4 w-4" /> Back to site
-        </Link>
-        <form action="/auth/signout" method="post">
-          <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-gray-400 hover:bg-gray-800 hover:text-white">
-            Sign out
-          </button>
-        </form>
+      <div className="border-t border-gray-800 p-2 lg:block">
+        <div className="flex gap-1 lg:flex-col">
+          <Link href="/" className="flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">
+            <ExternalLink className="h-4 w-4" /> <span className="hidden lg:inline">Back to site</span>
+          </Link>
+          <form action="/auth/signout" method="post">
+            <button className="flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+              <span className="hidden lg:inline">Sign out</span>
+            </button>
+          </form>
+        </div>
       </div>
     </aside>
   );

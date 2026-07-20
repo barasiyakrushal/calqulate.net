@@ -29,6 +29,7 @@ import {
   Flag,
 } from "lucide-react";
 import Link from "next/link";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z
@@ -42,10 +43,10 @@ const formSchema = z
     currentDate: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    const start = parseFloat(data.startingWeight);
-    const current = parseFloat(data.currentWeight);
-    const target = data.targetWeight ? parseFloat(data.targetWeight) : null;
-    const height = data.height ? parseFloat(data.height) : null;
+    const start = parseNumber(data.startingWeight);
+    const current = parseNumber(data.currentWeight);
+    const target = data.targetWeight ? parseNumber(data.targetWeight) : null;
+    const height = data.height ? parseNumber(data.height) : null;
 
     if (isNaN(start) || start <= 0) {
       ctx.addIssue({
@@ -239,10 +240,10 @@ export default function WeightLossPercentageCalculator() {
 
   // Live calculation while typing
   useEffect(() => {
-    const start = parseFloat(startingWeight);
-    const current = parseFloat(currentWeight);
-    const target = targetWeight ? parseFloat(targetWeight) : null;
-    const heightVal = height ? parseFloat(height) : null;
+    const start = parseNumber(startingWeight);
+    const current = parseNumber(currentWeight);
+    const target = targetWeight ? parseNumber(targetWeight) : null;
+    const heightVal = height ? parseNumber(height) : null;
 
     if (
       !isNaN(start) &&
@@ -327,8 +328,8 @@ export default function WeightLossPercentageCalculator() {
 
     fields.forEach((f) => {
       const val = getValues(f);
-      if (val && !isNaN(parseFloat(val))) {
-        const num = parseFloat(val);
+      if (val && !isNaN(parseNumber(val))) {
+        const num = parseNumber(val);
         const converted = newUnit === "imperial" ? num / 0.453592 : num * 0.453592;
         setValue(f, converted.toFixed(1));
       }
@@ -336,8 +337,8 @@ export default function WeightLossPercentageCalculator() {
 
     // Convert height (cm <-> inches)
     const heightVal = getValues("height");
-    if (heightVal && !isNaN(parseFloat(heightVal))) {
-      const num = parseFloat(heightVal);
+    if (heightVal && !isNaN(parseNumber(heightVal))) {
+      const num = parseNumber(heightVal);
       const converted = newUnit === "imperial" ? num / 2.54 : num * 2.54;
       setValue("height", converted.toFixed(1));
     }

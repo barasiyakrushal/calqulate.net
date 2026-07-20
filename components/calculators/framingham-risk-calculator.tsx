@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Loader2, Activity, Heart, AlertCircle, Info, HeartPulse, Target, Stethoscope } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 // --- VALIDATION SCHEMA ---
 const formSchema = z.object({
@@ -439,8 +440,8 @@ export default function FraminghamCalculator() {
       
       if(newUnit === "mmol/L" && unitType === "mg/dL") {
           // Convert to mmol/L
-          setValue("totalCholesterol", parseFloat((currentTotal / 38.67).toFixed(2)));
-          setValue("hdlCholesterol", parseFloat((currentHDL / 38.67).toFixed(2)));
+          setValue("totalCholesterol", parseNumber((currentTotal / 38.67).toFixed(2)));
+          setValue("hdlCholesterol", parseNumber((currentHDL / 38.67).toFixed(2)));
       } else if (newUnit === "mg/dL" && unitType === "mmol/L") {
           // Convert to mg/dL
           setValue("totalCholesterol", Math.round(currentTotal * 38.67));
@@ -514,7 +515,7 @@ export default function FraminghamCalculator() {
                     <FormItem>
                       <FormLabel>Age (Years)</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} className="font-medium" />
+                        <Input type="number" placeholder="e.g. 55" {...field} className="font-medium" />
                       </FormControl>
                       <FormDescription className="text-xs">Valid range: 20 - 79</FormDescription>
                       <FormMessage />
@@ -550,7 +551,7 @@ export default function FraminghamCalculator() {
                           <FormLabel>Total Cholesterol</FormLabel>
                           <FormControl>
                             <div className="relative">
-                                <Input type="number" step="0.1" {...field} />
+                                <Input type="number" step="0.1" placeholder="e.g. 180" {...field} />
                                 <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{unitType}</span>
                             </div>
                           </FormControl>
@@ -566,7 +567,7 @@ export default function FraminghamCalculator() {
                           <FormLabel>HDL Cholesterol</FormLabel>
                           <FormControl>
                             <div className="relative">
-                                <Input type="number" step="0.1" {...field} />
+                                <Input type="number" step="0.1" placeholder="e.g. 50" {...field} />
                                 <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">{unitType}</span>
                             </div>
                           </FormControl>
@@ -596,7 +597,7 @@ export default function FraminghamCalculator() {
                         </FormLabel>
                         <FormControl>
                             <div className="relative">
-                                <Input type="number" {...field} />
+                                <Input type="number" placeholder="e.g. 120" {...field} />
                                 <span className="absolute right-3 top-2.5 text-xs text-muted-foreground">mmHg</span>
                             </div>
                         </FormControl>

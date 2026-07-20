@@ -20,6 +20,7 @@ import {
   type Gender,
   type Pt,
 } from "@/lib/blog/facial-harmony-data";
+import { parseNumber } from "@/lib/utils";
 
 type NPt = { x: number; y: number };
 type PointMap = Record<string, NPt[]>;
@@ -171,7 +172,7 @@ export default function FacialHarmonyCalculator() {
   }
 
   function onManual(id: string, raw: string) {
-    const v = raw.trim() === "" ? null : Number(raw);
+    const v = raw.trim() === "" ? null : parseNumber(raw);
     setValues((prev) => ({ ...prev, [id]: v === null || Number.isNaN(v) ? null : v }));
   }
 
@@ -220,7 +221,7 @@ export default function FacialHarmonyCalculator() {
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
+              className={`rounded-lg px-5 py-2.5 text-sm font-semibold transition ${
                 mode === m
                   ? "bg-white text-emerald-700 shadow"
                   : "text-slate-500 hover:text-slate-700"
@@ -246,7 +247,7 @@ export default function FacialHarmonyCalculator() {
               <button
                 key={g.k}
                 onClick={() => setGender(g.k)}
-                className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
+                className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition ${
                   gender === g.k
                     ? "bg-white text-emerald-700 shadow"
                     : "text-slate-500 hover:text-slate-700"
@@ -364,7 +365,7 @@ function PhotoPanel(props: {
             <button
               key={m.id}
               onClick={() => setActiveId(m.id)}
-              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+              className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${
                 activeId === m.id
                   ? "text-white"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -486,20 +487,20 @@ function PhotoPanel(props: {
               <button
                 onClick={undoPoint}
                 disabled={pts.length === 0}
-                className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-100 disabled:opacity-40"
+                className="rounded-lg bg-white px-4 py-2.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-100 disabled:opacity-40"
               >
                 Undo point
               </button>
               <button
                 onClick={clearPoints}
                 disabled={pts.length === 0}
-                className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-100 disabled:opacity-40"
+                className="rounded-lg bg-white px-4 py-2.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-100 disabled:opacity-40"
               >
                 Clear this metric
               </button>
               <button
                 onClick={resetAll}
-                className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-rose-600 ring-1 ring-rose-200 transition hover:bg-rose-50"
+                className="rounded-lg bg-white px-4 py-2.5 text-xs font-semibold text-rose-600 ring-1 ring-rose-200 transition hover:bg-rose-50"
               >
                 New photo
               </button>
@@ -546,8 +547,8 @@ function ManualPanel(props: {
                   step={m.unit === "deg" ? 1 : 0.01}
                   value={v === null || v === undefined ? "" : v}
                   onChange={(e) => onManual(m.id, e.target.value)}
-                  placeholder={m.unit === "deg" ? "deg" : "ratio"}
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-right text-sm font-semibold text-slate-800 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+                  placeholder={m.unit === "deg" ? "e.g. 120" : "e.g. 0.85"}
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-right text-base font-semibold text-slate-800 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
                 />
                 <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
                   {m.unit === "deg" ? "°" : ""}
@@ -613,7 +614,7 @@ function ResultsPanel(props: {
           <button
             onClick={onSave}
             disabled={overall === null}
-            className="mt-3 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-3 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
             💾 Save this result
           </button>
@@ -698,7 +699,7 @@ function SavedPanel(props: {
                 type="checkbox"
                 checked={checked}
                 onChange={() => toggleCompare(s.id)}
-                className="h-4 w-4 shrink-0 accent-emerald-600"
+                className="h-5 w-5 shrink-0 accent-emerald-600"
               />
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold text-white"
@@ -717,14 +718,14 @@ function SavedPanel(props: {
               </div>
               <button
                 onClick={() => loadSaved(s)}
-                className="rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200 transition hover:bg-emerald-50"
+                className="rounded-lg bg-white px-4 py-2.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200 transition hover:bg-emerald-50"
               >
                 Load
               </button>
               <button
                 onClick={() => deleteSaved(s.id)}
                 aria-label="Delete result"
-                className="rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold text-rose-600 ring-1 ring-rose-200 transition hover:bg-rose-50"
+                className="rounded-lg bg-white px-4 py-2.5 text-xs font-semibold text-rose-600 ring-1 ring-rose-200 transition hover:bg-rose-50"
               >
                 ✕
               </button>

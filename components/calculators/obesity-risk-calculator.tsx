@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { parseNumber } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Calculator, RefreshCw, Loader2, HeartPulse, AlertCircle,
@@ -277,9 +278,9 @@ export default function ObesityRiskCalculator() {
     const currentUnit = getValues("units");
     if (newUnit === currentUnit) return;
     
-    const heightVal = parseFloat(getValues("height"));
-    const weightVal = parseFloat(getValues("weight"));
-    const waistVal = parseFloat(getValues("waist"));
+    const heightVal = parseNumber(getValues("height"));
+    const weightVal = parseNumber(getValues("weight"));
+    const waistVal = parseNumber(getValues("waist"));
 
     if (newUnit === "imperial") {
       if (!isNaN(heightVal)) setValue("height", (heightVal / 2.54).toFixed(1)); 
@@ -296,9 +297,9 @@ export default function ObesityRiskCalculator() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setTimeout(() => {
-      const heightCm = values.units === "metric" ? parseFloat(values.height) : parseFloat(values.height) * 2.54;
-      const weightKg = values.units === "metric" ? parseFloat(values.weight) : parseFloat(values.weight) / 2.20462;
-      const waistCm = values.units === "metric" ? parseFloat(values.waist) : parseFloat(values.waist) * 2.54;
+      const heightCm = values.units === "metric" ? parseNumber(values.height) : parseNumber(values.height) * 2.54;
+      const weightKg = values.units === "metric" ? parseNumber(values.weight) : parseNumber(values.weight) / 2.20462;
+      const waistCm = values.units === "metric" ? parseNumber(values.waist) : parseNumber(values.waist) * 2.54;
 
       const riskData = calculateRisk(values.gender as Gender, weightKg, heightCm, waistCm, values.activityLevel);
       

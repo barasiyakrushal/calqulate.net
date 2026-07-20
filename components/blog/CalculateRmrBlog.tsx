@@ -468,7 +468,7 @@ export default function CalculateRmrBlog({ blog }: Props) {
         </div>
 
         {/* Activity multiplier table */}
-        <div className="mt-8 overflow-hidden rounded-2xl ring-1 ring-slate-200">
+        <div className="mt-8 overflow-x-auto rounded-2xl ring-1 ring-slate-200">
           <table className="w-full text-sm">
             <thead className="bg-slate-900 text-white">
               <tr>

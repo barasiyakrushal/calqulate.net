@@ -128,7 +128,7 @@ function AddMedication({ onAdded, onCancel }: { onAdded: () => void; onCancel?: 
         </div>
         <div>
           <Label htmlFor="m-interval">Dose every (days)</Label>
-          <Input id="m-interval" type="number" min="1" max="60" value={intervalDays} onChange={(e) => setIntervalDays(e.target.value)} />
+          <Input id="m-interval" type="number" min="1" max="60" value={intervalDays} onChange={(e) => setIntervalDays(e.target.value)} placeholder="e.g. 7" />
         </div>
       </div>
 

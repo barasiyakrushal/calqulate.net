@@ -16,6 +16,7 @@ import {
   BarChart3, Save, History, ChevronRight, CheckCircle2, Award, AlertCircle, Info
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -88,7 +89,7 @@ function saveWilksEntry(entry: SavedWilksEntry) {
 }
 
 function wilksDelta(current: number, previous: number) {
-  return parseFloat((current - previous).toFixed(2));
+  return parseNumber((current - previous).toFixed(2));
 }
 
 // Pick the true prior entry, skipping a saved copy of the current result.
@@ -301,9 +302,9 @@ export default function WilksCalculator() {
   // Auto-calculate total if detailed mode inputs change
   useEffect(() => {
     if (mode === "detailed") {
-      const s = parseFloat(getValues("squat") || "0");
-      const b = parseFloat(getValues("bench") || "0");
-      const d = parseFloat(getValues("deadlift") || "0");
+      const s = parseNumber(getValues("squat") || "0");
+      const b = parseNumber(getValues("bench") || "0");
+      const d = parseNumber(getValues("deadlift") || "0");
       if (!isNaN(s) || !isNaN(b) || !isNaN(d)) {
         setValue("totalWeight", (s + b + d).toFixed(1));
       }
@@ -320,8 +321,8 @@ export default function WilksCalculator() {
 
     fields.forEach(field => {
       const val = getValues(field);
-      if (val && !isNaN(parseFloat(val))) {
-        let num = parseFloat(val);
+      if (val && !isNaN(parseNumber(val))) {
+        let num = parseNumber(val);
         // Metric to Imperial (Kg -> Lbs)
         if (newUnit === "imperial") {
            num = num * factor;
@@ -342,8 +343,8 @@ export default function WilksCalculator() {
 
     // Simulate calculation delay for effect
     setTimeout(() => {
-      let bw = parseFloat(values.bodyWeight);
-      let total = parseFloat(values.totalWeight || "0");
+      let bw = parseNumber(values.bodyWeight);
+      let total = parseNumber(values.totalWeight || "0");
 
       // Normalize to Metric (KG) for calculation
       if (values.units === "imperial") {
@@ -355,7 +356,7 @@ export default function WilksCalculator() {
       const cat = getCategory(score);
 
       // Display total in current unit
-      const displayTotal = parseFloat(values.totalWeight || "0");
+      const displayTotal = parseNumber(values.totalWeight || "0");
 
       // FEATURE 1 — strength-level rating + plain-language meaning
       const level = getStrengthLevel(score);

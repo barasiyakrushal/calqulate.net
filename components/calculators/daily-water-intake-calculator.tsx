@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calculator, RefreshCw, Loader2, Droplet, Clock, Utensils, CupSoda, Sun, Activity, ThermometerSun, Dumbbell, Sliders, GlassWater, Milk } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -130,12 +131,12 @@ export default function DailyWaterIntakeCalculator() {
     if (newUnit === currentUnit) return;
     
     const weightVal = getValues("weight");
-    if (weightVal && !isNaN(parseFloat(weightVal))) {
+    if (weightVal && !isNaN(parseNumber(weightVal))) {
       // 1 kg = 2.20462 lbs
       if (newUnit === "imperial") {
-        setValue("weight", (parseFloat(weightVal) * 2.20462).toFixed(1));
+        setValue("weight", (parseNumber(weightVal) * 2.20462).toFixed(1));
       } else {
-        setValue("weight", (parseFloat(weightVal) / 2.20462).toFixed(1));
+        setValue("weight", (parseNumber(weightVal) / 2.20462).toFixed(1));
       }
     }
     setValue("units", newUnit);
@@ -146,7 +147,7 @@ export default function DailyWaterIntakeCalculator() {
     
     setTimeout(() => {
       // 1. Normalize weight to kg
-      let weightKg = parseFloat(values.weight);
+      let weightKg = parseNumber(values.weight);
       if (values.units === "imperial") {
         weightKg = weightKg / 2.20462;
       }
@@ -164,7 +165,7 @@ export default function DailyWaterIntakeCalculator() {
       totalRequirementMl += activityAddMl;
 
       // 3. Exercise adjustment: Add ~350ml (12oz) per 30 mins of exercise
-      const exerciseMins = parseFloat(values.exerciseMinutes) || 0;
+      const exerciseMins = parseNumber(values.exerciseMinutes) || 0;
       const exerciseAddMl = (exerciseMins / 30) * 350;
       totalRequirementMl += exerciseAddMl;
 

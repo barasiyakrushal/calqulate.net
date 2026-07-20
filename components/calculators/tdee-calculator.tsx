@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calculator, RefreshCw, Loader2, Flame, Utensils, TrendingUp, TrendingDown, Activity, Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { parseNumber } from "@/lib/utils"
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -129,8 +130,8 @@ export default function TDEECalculator() {
     const currentUnit = getValues("units");
     if (newUnit === currentUnit) return;
 
-    const weight = parseFloat(getValues("weight"));
-    const height = parseFloat(getValues("height"));
+    const weight = parseNumber(getValues("weight"));
+    const height = parseNumber(getValues("height"));
 
     if (!isNaN(weight)) {
       setValue("weight", (newUnit === "metric" ? weight / 2.20462 : weight * 2.20462).toFixed(1));
@@ -154,11 +155,11 @@ export default function TDEECalculator() {
     setIsLoading(true);
     
     setTimeout(() => {
-        let weightKg = parseFloat(values.weight);
-        let heightCm = parseFloat(values.height);
-        const age = parseFloat(values.age);
-        const activityMultiplier = parseFloat(values.activity);
-        const bodyFat = values.bodyFat ? parseFloat(values.bodyFat) : null;
+        let weightKg = parseNumber(values.weight);
+        let heightCm = parseNumber(values.height);
+        const age = parseNumber(values.age);
+        const activityMultiplier = parseNumber(values.activity);
+        const bodyFat = values.bodyFat ? parseNumber(values.bodyFat) : null;
 
         if (values.units === "imperial") {
             weightKg = weightKg * 0.453592;

@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
+import { parseNumber } from "@/lib/utils"
 import {
   Calculator, RefreshCw, Loader2, Scale, Target, TrendingDown, TrendingUp,
   Activity, Info, Save, History, ChevronRight, AlertCircle, Award, Flame,
@@ -110,7 +111,7 @@ function saveToStorage(entry: SavedEntry) {
 }
 
 function bmiDelta(current: number, previous: number) {
-  const diff = parseFloat((current - previous).toFixed(1));
+  const diff = parseNumber((current - previous).toFixed(1));
   return diff;
 }
 
@@ -292,7 +293,7 @@ export default function BmiCalculator() {
     const oldUnit = getValues("units");
     if (newUnit === oldUnit) return;
     // Convert the optional waist value alongside the rest (cm ⇄ in).
-    const waistVal = parseFloat(getValues("waist") || "0");
+    const waistVal = parseNumber(getValues("waist") || "0");
     if (waistVal > 0) {
       setValue(
         "waist",
@@ -302,8 +303,8 @@ export default function BmiCalculator() {
       );
     }
     if (newUnit === "imperial") {
-      const cm = parseFloat(getValues("heightCm") || "0");
-      const kg = parseFloat(getValues("weightKg") || "0");
+      const cm = parseNumber(getValues("heightCm") || "0");
+      const kg = parseNumber(getValues("weightKg") || "0");
       if (cm > 0) {
         const totalInches = cm * CM_TO_IN;
         setValue("heightFt", Math.floor(totalInches / 12).toString());
@@ -315,9 +316,9 @@ export default function BmiCalculator() {
         setValue("weightKg", "");
       }
     } else {
-      const ft = parseFloat(getValues("heightFt") || "0");
-      const inch = parseFloat(getValues("heightIn") || "0");
-      const lbs = parseFloat(getValues("weightLbs") || "0");
+      const ft = parseNumber(getValues("heightFt") || "0");
+      const inch = parseNumber(getValues("heightIn") || "0");
+      const lbs = parseNumber(getValues("weightLbs") || "0");
       if (ft > 0 || inch > 0) {
         const totalInches = (ft * 12) + inch;
         setValue("heightCm", (totalInches * 2.54).toFixed(1));
@@ -433,18 +434,18 @@ export default function BmiCalculator() {
       let weightKg = 0, heightM = 0;
 
       if (values.units === "metric") {
-        weightKg = parseFloat(values.weightKg || "0");
-        heightM = parseFloat(values.heightCm || "0") / 100;
+        weightKg = parseNumber(values.weightKg || "0");
+        heightM = parseNumber(values.heightCm || "0") / 100;
       } else {
-        weightKg = parseFloat(values.weightLbs || "0") / KG_TO_LBS;
-        const totalInches = (parseFloat(values.heightFt || "0") * 12) + parseFloat(values.heightIn || "0");
+        weightKg = parseNumber(values.weightLbs || "0") / KG_TO_LBS;
+        const totalInches = (parseNumber(values.heightFt || "0") * 12) + parseNumber(values.heightIn || "0");
         heightM = totalInches * 0.0254;
       }
 
       if (heightM > 0 && weightKg > 0) {
-        const bmi = parseFloat((weightKg / (heightM * heightM)).toFixed(1));
-        const pi = parseFloat((weightKg / Math.pow(heightM, 3)).toFixed(2));
-        const prime = parseFloat((bmi / 25).toFixed(2));
+        const bmi = parseNumber((weightKg / (heightM * heightM)).toFixed(1));
+        const pi = parseNumber((weightKg / Math.pow(heightM, 3)).toFixed(2));
+        const prime = parseNumber((bmi / 25).toFixed(2));
 
         let category = "", color = "", textColor = "", badgeBg = "", desc = "", riskLevel: BMIResult["riskLevel"] = "low";
 
@@ -505,13 +506,13 @@ export default function BmiCalculator() {
         // same unit) and sanity-check whether an "overweight"/"obese" BMI might be
         // muscle rather than fat. If absent, we still surface the athlete caveat
         // conditionally and note that adding a waist measurement sharpens the read.
-        let waistRaw = parseFloat(values.waist || "0");
+        let waistRaw = parseNumber(values.waist || "0");
         let waistM = 0;
         if (waistRaw > 0) {
           waistM = values.units === "metric" ? waistRaw / 100 : (waistRaw * 2.54) / 100;
         }
         const hasWaist = waistM > 0;
-        const whtr = hasWaist ? parseFloat((waistM / heightM).toFixed(3)) : null;
+        const whtr = hasWaist ? parseNumber((waistM / heightM).toFixed(3)) : null;
         const whtrTone: "low" | "elevated" | null =
           whtr === null ? null : whtr < 0.5 ? "low" : "elevated";
 

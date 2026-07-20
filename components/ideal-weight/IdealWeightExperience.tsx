@@ -1,5 +1,7 @@
 "use client"
 
+import { parseNumber } from "@/lib/utils";
+
 /**
  * Ideal Body Weight — a guided health assessment, not a form.
  *
@@ -70,7 +72,7 @@ export default function IdealWeightExperience() {
   }, [units, draft.heightCm, draft.heightFt, draft.heightIn])
 
   const weightKg = useMemo(() => {
-    const w = parseFloat(draft.weight)
+  const w = parseNumber(draft.weight)
     if (!(w > 0)) return NaN
     return units === "metric" ? w : w / LB
   }, [units, draft.weight])
@@ -696,7 +698,7 @@ function useCountUp(target: number, reduced: boolean, ms = 900) {
 }
 
 function parseWeight(draft: Draft): number {
-  const w = parseFloat(draft.weight)
+  const w = parseNumber(draft.weight)
   if (!(w > 0)) return 0
   return draft.units === "metric" ? w : w / LB
 }

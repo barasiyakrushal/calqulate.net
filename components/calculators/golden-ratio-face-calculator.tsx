@@ -37,6 +37,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { parseNumber } from "@/lib/utils"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Form,
@@ -93,31 +94,31 @@ const manualSchema = z.object({
   faceLength: z
     .string()
     .min(1, "Required")
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, "Enter a valid measurement"),
+    .refine((v) => !isNaN(parseNumber(v)) && parseNumber(v) > 0, "Enter a valid measurement"),
   faceWidth: z
     .string()
     .min(1, "Required")
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, "Enter a valid measurement"),
+    .refine((v) => !isNaN(parseNumber(v)) && parseNumber(v) > 0, "Enter a valid measurement"),
   foreheadWidth: z
     .string()
     .min(1, "Required")
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, "Enter a valid measurement"),
+    .refine((v) => !isNaN(parseNumber(v)) && parseNumber(v) > 0, "Enter a valid measurement"),
   noseWidth: z
     .string()
     .min(1, "Required")
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, "Enter a valid measurement"),
+    .refine((v) => !isNaN(parseNumber(v)) && parseNumber(v) > 0, "Enter a valid measurement"),
   lipWidth: z
     .string()
     .min(1, "Required")
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, "Enter a valid measurement"),
+    .refine((v) => !isNaN(parseNumber(v)) && parseNumber(v) > 0, "Enter a valid measurement"),
   eyeSpacing: z
     .string()
     .min(1, "Required")
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, "Enter a valid measurement"),
+    .refine((v) => !isNaN(parseNumber(v)) && parseNumber(v) > 0, "Enter a valid measurement"),
   jawWidth: z
     .string()
     .min(1, "Required")
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, "Enter a valid measurement"),
+    .refine((v) => !isNaN(parseNumber(v)) && parseNumber(v) > 0, "Enter a valid measurement"),
 });
 
 type ManualFormValues = z.infer<typeof manualSchema>;
@@ -561,13 +562,13 @@ export default function GoldenRatioFaceCalculator() {
     setErrorMessage(null);
 
     const landmarks: FaceLandmarks = {
-      faceLength: parseFloat(values.faceLength),
-      faceWidth: parseFloat(values.faceWidth),
-      foreheadWidth: parseFloat(values.foreheadWidth),
-      noseWidth: parseFloat(values.noseWidth),
-      lipWidth: parseFloat(values.lipWidth),
-      eyeSpacing: parseFloat(values.eyeSpacing),
-      jawWidth: parseFloat(values.jawWidth),
+      faceLength: parseNumber(values.faceLength),
+      faceWidth: parseNumber(values.faceWidth),
+      foreheadWidth: parseNumber(values.foreheadWidth),
+      noseWidth: parseNumber(values.noseWidth),
+      lipWidth: parseNumber(values.lipWidth),
+      eyeSpacing: parseNumber(values.eyeSpacing),
+      jawWidth: parseNumber(values.jawWidth),
     };
 
     setTimeout(() => {
@@ -738,7 +739,7 @@ export default function GoldenRatioFaceCalculator() {
                         if (fileInputRef.current) fileInputRef.current.value = "";
                       }}
                       aria-label="Remove uploaded image"
-                      className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition-colors"
+                      className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition-colors"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -839,8 +840,9 @@ export default function GoldenRatioFaceCalculator() {
                                   {...field}
                                   placeholder="e.g. 120"
                                   type="number"
+                                  inputMode="decimal"
                                   min="1"
-                                  className="rounded-xl border-slate-200 focus:border-amber-400 focus:ring-amber-400/20 text-sm h-11"
+                                  className="rounded-xl border-slate-200 focus:border-amber-400 focus:ring-amber-400/20 text-base h-11"
                                 />
                               </FormControl>
                               <FormMessage className="text-xs" />

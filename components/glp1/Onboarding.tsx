@@ -63,6 +63,7 @@ export function Onboarding({ paid = false }: { paid?: boolean }) {
       step_index: step + 1,
       step_name: STEPS[step],
       step_total: STEPS.length,
+      onboarding_version: 1,
     });
   }, [step]);
 

@@ -188,7 +188,7 @@ export default function SemaglutideDosageBlog({ blog }: Props) {
           step up to each new dose.
         </p>
 
-        <div className="mt-6 overflow-hidden rounded-2xl ring-1 ring-slate-200">
+        <div className="mt-6 overflow-x-auto rounded-2xl ring-1 ring-slate-200">
           <table className="w-full border-collapse text-left text-sm">
             <thead>
               <tr className="bg-slate-900 text-white">
@@ -252,7 +252,7 @@ export default function SemaglutideDosageBlog({ blog }: Props) {
           Here&rsquo;s the side-by-side.
         </p>
 
-        <div className="mt-6 overflow-hidden rounded-2xl ring-1 ring-slate-200">
+        <div className="mt-6 overflow-x-auto rounded-2xl ring-1 ring-slate-200">
           <table className="w-full border-collapse text-left text-sm">
             <thead>
               <tr className="bg-slate-100 text-slate-900">

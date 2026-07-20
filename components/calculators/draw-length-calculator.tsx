@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 // Updated icon import: Replaced Calculator with Target
 import { Target, RefreshCw, Loader2, ArrowDown, Ruler, Crosshair, GraduationCap, Trophy } from "lucide-react"
+import { parseNumber } from "@/lib/utils"
 
 // Define validation schema for draw length (no changes here)
 const formSchema = z.object({
@@ -54,7 +55,7 @@ export default function DrawLengthCalculator() {
   const handleUnitChange = (newUnit: UnitSystem) => {
     const currentWingspan = form.getValues("wingspan");
     if (currentWingspan) {
-      const wingspanValue = parseFloat(currentWingspan);
+      const wingspanValue = parseNumber(currentWingspan);
       if (!isNaN(wingspanValue)) {
         const convertedWingspan = newUnit === "imperial" 
           ? cmToInches(wingspanValue).toFixed(1) 
@@ -69,7 +70,7 @@ export default function DrawLengthCalculator() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     setTimeout(() => {
-        const wingspan = parseFloat(values.wingspan)
+        const wingspan = parseNumber(values.wingspan)
         const wingspanInInches = units === "imperial" ? wingspan : cmToInches(wingspan)
         const calculatedDrawLength = wingspanInInches / 2.5
 

@@ -199,7 +199,7 @@ export default function OzempicMuscleLossBlog({ blog }: Props) {
           tells you and what your body composition actually shows.
         </p>
 
-        <div className="mt-6 overflow-hidden rounded-2xl ring-1 ring-slate-200">
+        <div className="mt-6 overflow-x-auto rounded-2xl ring-1 ring-slate-200">
           <table className="w-full border-collapse text-left text-sm">
             <thead>
               <tr className="bg-slate-900 text-white">

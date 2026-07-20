@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Target, Pencil, Loader2, FileText } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 
 const LB_PER_KG = 2.2046226218;
 
@@ -18,7 +19,7 @@ export function GoalEditor({ goalKg, unit = "lb" }: { goalKg: number | null; uni
   const [err, setErr] = useState<string | null>(null);
 
   async function save() {
-    const n = parseFloat(val);
+    const n = parseNumber(val);
     if (!Number.isFinite(n) || n <= 0) { setErr("Enter a valid weight"); return; }
     const goalKgToSave = unit === "lb" ? n / LB_PER_KG : n;
     setSaving(true); setErr(null);
@@ -60,6 +61,7 @@ export function GoalEditor({ goalKg, unit = "lb" }: { goalKg: number | null; uni
               onChange={(e) => setVal(e.target.value)}
               className="w-24 rounded-lg border border-gray-300 px-2 py-1 text-lg font-bold text-gray-900 focus:border-emerald-500 focus:outline-none"
               autoFocus
+              placeholder="e.g. 170"
             />
             <span className="text-sm text-gray-400">{unit}</span>
           </div>

@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calculator, RefreshCw, Loader2, Flame, HeartPulse, Timer, Utensils, TrendingDown, Activity, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { parseNumber } from "@/lib/utils"
 
 // --- MET VALUES DATABASE ---
 const activities = [
@@ -96,9 +97,9 @@ export default function CaloriesBurnedCalculator() {
     if (newUnit === currentUnit) return;
     
     const currentWeight = getValues("weight");
-    if (currentWeight && !isNaN(parseFloat(currentWeight))) {
-      const weightInKg = newUnit === 'imperial' ? parseFloat(currentWeight) : parseFloat(currentWeight) * 0.453592;
-      const weightInLbs = newUnit === 'metric' ? parseFloat(currentWeight) : parseFloat(currentWeight) / 0.453592;
+    if (currentWeight && !isNaN(parseNumber(currentWeight))) {
+      const weightInKg = newUnit === 'imperial' ? parseNumber(currentWeight) : parseNumber(currentWeight) * 0.453592;
+      const weightInLbs = newUnit === 'metric' ? parseNumber(currentWeight) : parseNumber(currentWeight) / 0.453592;
       setValue("weight", (newUnit === 'metric' ? weightInLbs : weightInKg).toFixed(1));
     }
     setValue("units", newUnit);
@@ -144,18 +145,18 @@ export default function CaloriesBurnedCalculator() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setTimeout(() => {
-      const weightKg = values.units === 'metric' ? parseFloat(values.weight) : parseFloat(values.weight) * 0.453592;
-      const durationMins = parseFloat(values.duration);
+      const weightKg = values.units === 'metric' ? parseNumber(values.weight) : parseNumber(values.weight) * 0.453592;
+      const durationMins = parseNumber(values.duration);
       let calories = 0;
 
       if (values.calcMethod === "activity") {
-        const met = parseFloat(values.activityMet!);
+        const met = parseNumber(values.activityMet!);
         // Standard formula: Calories = Time * (MET * 3.5 * Weight in kg) / 200
         calories = durationMins * (met * 3.5 * weightKg) / 200;
       } else {
         // Standard Heart Rate Formula
-        const hr = parseFloat(values.heartRate!);
-        const age = parseFloat(values.age!);
+        const hr = parseNumber(values.heartRate!);
+        const age = parseNumber(values.age!);
         if (values.gender === "male") {
           calories = ((-55.0969 + (0.6309 * hr) + (0.1988 * weightKg) + (0.2017 * age)) / 4.184) * durationMins;
         } else {
@@ -168,8 +169,8 @@ export default function CaloriesBurnedCalculator() {
       // Computed whenever age + heart rate + gender are present, even on the
       // Activity tab, so users can cross-check the MET figure.
       let hrEstimate: number | null = null;
-      const hrVal = values.heartRate ? parseFloat(values.heartRate) : NaN;
-      const ageVal = values.age ? parseFloat(values.age) : NaN;
+      const hrVal = values.heartRate ? parseNumber(values.heartRate) : NaN;
+      const ageVal = values.age ? parseNumber(values.age) : NaN;
       if (!isNaN(hrVal) && hrVal > 0 && !isNaN(ageVal) && ageVal > 0 && values.gender) {
         hrEstimate = getHeartRateCalories(hrVal, ageVal, weightKg, durationMins, values.gender);
       }

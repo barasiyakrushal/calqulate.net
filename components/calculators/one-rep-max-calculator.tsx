@@ -21,9 +21,9 @@ import {
   ListChecks,
   Medal
 } from "lucide-react";
+import { parseNumber } from "@/lib/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { 
-  AreaChart,
+import {
   Area, 
   XAxis, 
   YAxis, 
@@ -162,7 +162,7 @@ const getStrengthRanking = (
 
   return {
     level,
-    ratio: parseFloat(ratio.toFixed(2)),
+    ratio: parseNumber(ratio.toFixed(2)),
     nextLevel,
     toNextLevel,
     thresholds,
@@ -204,15 +204,15 @@ export default function OneRepMaxCalculator() {
         ? val / 2.20462
         : val;
 
-    if (currentWeight && !isNaN(parseFloat(currentWeight))) {
+    if (currentWeight && !isNaN(parseNumber(currentWeight))) {
       // Update the input with 1 decimal place accuracy
-      setValue("weight", convert(parseFloat(currentWeight)).toFixed(1));
+      setValue("weight", convert(parseNumber(currentWeight)).toFixed(1));
     }
 
     // Keep the optional bodyweight field in sync with the selected unit too.
     const currentBodyweight = getValues("bodyweight");
-    if (currentBodyweight && !isNaN(parseFloat(currentBodyweight))) {
-      setValue("bodyweight", convert(parseFloat(currentBodyweight)).toFixed(1));
+    if (currentBodyweight && !isNaN(parseNumber(currentBodyweight))) {
+      setValue("bodyweight", convert(parseNumber(currentBodyweight)).toFixed(1));
     }
 
     setValue("units", newUnit);
@@ -222,7 +222,7 @@ export default function OneRepMaxCalculator() {
     setIsLoading(true);
     
     setTimeout(() => {
-      const weight = parseFloat(values.weight);
+      const weight = parseNumber(values.weight);
       const reps = parseInt(values.reps);
       const orm = calculateORM(weight, reps);
 
@@ -257,7 +257,7 @@ export default function OneRepMaxCalculator() {
 
       // FEATURE 2 — bodyweight-relative strength ranking (Novice → Elite).
       // Optional: only computed when the user supplies a bodyweight.
-      const bodyweightVal = values.bodyweight ? parseFloat(values.bodyweight) : NaN;
+      const bodyweightVal = values.bodyweight ? parseNumber(values.bodyweight) : NaN;
       const strengthRanking = !isNaN(bodyweightVal)
         ? getStrengthRanking(orm, bodyweightVal, values.sex || "male", values.units)
         : null;

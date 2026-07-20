@@ -1,5 +1,7 @@
 "use client"
 
+import { parseNumber } from "@/lib/utils";
+
 /**
  * The Calqulate.net Shopping Assistant.
  *
@@ -84,7 +86,7 @@ export default function DressSizeAssistant() {
   const topRef = useRef<HTMLDivElement>(null)
 
   const current: Step = STEPS[step]
-  const toIn = (v: string) => (draft.units === "in" ? parseFloat(v) : cmToIn(parseFloat(v)))
+  const toIn = (v: string) => (draft.units === "in" ? parseNumber(v) : cmToIn(parseNumber(v)))
 
   const report = useMemo(() => {
     if (phase !== "report") return null
@@ -118,7 +120,7 @@ export default function DressSizeAssistant() {
     setTimeout(next, 150)
   }
   const submitNum = () => {
-    const n = parseFloat(num)
+    const n = parseNumber(num)
     if (!(n > 0)) return
     setDraft((d) => ({ ...d, [current]: num }))
     next()
@@ -233,7 +235,7 @@ export default function DressSizeAssistant() {
                     {draft.units}
                   </span>
                 </div>
-                <button type="submit" disabled={!(parseFloat(num) > 0)}
+                <button type="submit" disabled={!(parseNumber(num) > 0)}
                   className="mt-5 inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 text-base font-bold text-white transition hover:bg-emerald-800 disabled:opacity-40">
                   {current === "hips" ? "Build my report" : "Continue"} <ArrowRight className="h-4 w-4" />
                 </button>

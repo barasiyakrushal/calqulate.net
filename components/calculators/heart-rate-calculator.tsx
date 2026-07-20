@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Activity, Heart, Flame, Zap, Timer, Info } from "lucide-react"
+import { parseNumber } from "@/lib/utils"
 
 // Define validation schema
 const formSchema = z.object({
@@ -60,8 +61,8 @@ export default function HeartRateCalculator() {
     setError("")
     setResults(null)
 
-    const age = parseFloat(values.age)
-    const rhr = values.restingHeartRate ? parseFloat(values.restingHeartRate) : NaN
+    const age = parseNumber(values.age)
+    const rhr = values.restingHeartRate ? parseNumber(values.restingHeartRate) : NaN
     
     // 1. Calculate Max Heart Rate (MHR)
     let mhr = 0

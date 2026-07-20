@@ -190,7 +190,7 @@ export function ShareScorecard({ data }: { data: ScorecardData }) {
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               rows={4}
-              className="mt-1 w-full resize-y rounded-xl border border-input bg-background p-3 text-sm text-gray-700"
+              className="mt-1 w-full resize-y rounded-xl border border-input bg-background p-3 text-base text-gray-700"
             />
           </div>
 
