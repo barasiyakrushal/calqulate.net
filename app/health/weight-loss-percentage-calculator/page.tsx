@@ -20,7 +20,8 @@ import {
 
 const TITLE = "Too Fast or Too Slow? Weight Loss Percentage Calculator"
 const DESCRIPTION =
-"Lost 8 kg in 7 weeks — is that good? Get your weight loss %, see if your rate is safe, and check if you've hit the 5% and 10% health milestones."
+"Lost 8 kg in 7 weeks - is that good? Get your weight loss %, see if your rate is safe, and check if you've hit the 5% and 10% health milestones."
+
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
