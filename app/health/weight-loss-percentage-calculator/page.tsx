@@ -18,10 +18,9 @@ import {
   AlertTriangle, Info, Baby, Calculator as CalcIcon,
 } from "lucide-react"
 
-const TITLE = "Weight Loss Percentage Calculator: What Percent of Your Body Weight Have You Lost?"
+const TITLE = "Too Fast or Too Slow? Weight Loss Percentage Calculator"
 const DESCRIPTION =
-  "Free weight loss percentage calculator. Find out exactly what percent of your body weight you have lost, in kg, lb or stone, and see whether your pace is healthy. Includes a clinical milestone chart and a fat vs water vs muscle breakdown."
-
+"Lost 8 kg in 7 weeks — is that good? Get your weight loss %, see if your rate is safe, and check if you've hit the 5% and 10% health milestones."
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
