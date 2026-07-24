@@ -4,10 +4,11 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, Search, ArrowRight, Activity, LayoutDashboard, Settings, Download, LogOut, User } from "lucide-react"
+import { Menu, X, ChevronDown, Search, Activity, LayoutDashboard, Settings, Download, LogOut, User, Check } from "lucide-react"
 import { SearchBar } from "@/components/search/search-bar"
 import { createClient } from "@/lib/supabase/client"
-import { track } from "@/lib/analytics/track"
+import { PrimaryCTA } from "@/components/layout/PrimaryCTA"
+import { ctaSuppressed } from "@/lib/cta"
 
 // ─── Product links (listed first) ─────────────────────────────────────────────
 
@@ -19,16 +20,44 @@ const productLinks = [
   { name: "Pricing", href: "/pricing", desc: "One simple plan, everything included" },
 ]
 
-// ─── GLP-1 Companion (every tool, in the order the questions come up) ────────
+// ─── GLP-1 Companion — grouped by where you are in the journey ────────────────
 
-const glp1Links = [
-  { name: "Semaglutide Dose Calculator", href: "/health/semaglutide-dose-calculator", desc: "Am I on the right dose?" },
-  { name: "Tirzepatide Dose Calculator", href: "/health/tirzepatide-dose-calculator", desc: "Mounjaro & Zepbound schedules" },
-  { name: "GLP-1 Half-Life Calculator", href: "/health/glp-1-half-life-calculator", desc: "Is my medication still active?" },
-  { name: "GLP-1 Unit Converter", href: "/health/glp-1-unit-converter", desc: "Am I measuring it correctly?" },
-  { name: "GLP-1 Injection Day Calculator", href: "/health/glp-1-injection-day-calculator", desc: "When should I inject next?" },
-  { name: "GLP-1 Body Composition Tracker", href: "/health/glp-1-dose-calculator", desc: "Am I losing fat or muscle?" },
-  { name: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker", desc: "How is my treatment working over time?" },
+const glp1Groups = [
+  {
+    title: "Your journey",
+    items: [
+      { name: "First 30 Days on a GLP-1", href: "/health/first-30-days-on-glp-1", desc: "Just got a prescription? Start here" },
+      { name: "Side Effects: Am I Normal?", href: "/health/glp-1-side-effects", desc: "Nausea, fatigue, timeline & red flags" },
+      { name: "Plateau Analyzer", href: "/health/glp-1-plateau-analyzer", desc: "Why did my weight loss stall?" },
+      { name: "Maintenance & Keeping It Off", href: "/health/glp-1-maintenance", desc: "Maintenance dose + weight planner" },
+      { name: "Stopping: Will I Gain It Back?", href: "/health/glp-1-stopping", desc: "Regain risk + tapering planner" },
+    ],
+  },
+  {
+    title: "Choose & predict",
+    items: [
+      { name: "How Much Will I Lose?", href: "/health/glp-1-weight-loss-projection-calculator", desc: "Project your weight loss" },
+      { name: "Tirzepatide vs Semaglutide", href: "/compare/tirzepatide-vs-semaglutide", desc: "Zepbound vs Wegovy, head to head" },
+      { name: "Ozempic vs Wegovy", href: "/compare/ozempic-vs-wegovy", desc: "Same drug, different label" },
+    ],
+  },
+  {
+    title: "Dosing tools",
+    items: [
+      { name: "Semaglutide Dose Calculator", href: "/health/semaglutide-dose-calculator", desc: "Am I on the right dose?" },
+      { name: "Tirzepatide Dose Calculator", href: "/health/tirzepatide-dose-calculator", desc: "Mounjaro & Zepbound schedules" },
+      { name: "GLP-1 Half-Life Calculator", href: "/health/glp-1-half-life-calculator", desc: "Is my medication still active?" },
+      { name: "GLP-1 Unit Converter", href: "/health/glp-1-unit-converter", desc: "Am I measuring it correctly?" },
+      { name: "GLP-1 Injection Day Calculator", href: "/health/glp-1-injection-day-calculator", desc: "When should I inject next?" },
+      { name: "GLP-1 Body Composition Tracker", href: "/health/glp-1-dose-calculator", desc: "Am I losing fat or muscle?" },
+    ],
+  },
+  {
+    title: "Track over time",
+    items: [
+      { name: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker", desc: "How is my treatment working over time?" },
+    ],
+  },
 ]
 
 // ─── Calculator categories (free snapshot tools that feed the service) ───────
@@ -177,25 +206,42 @@ function ProductMenu({ onClose }: { onClose: () => void }) {
   )
 }
 
-// ─── GLP-1 dropdown ───────────────────────────────────────────────────────────
+// ─── GLP-1 mega menu (grouped by journey stage) ──────────────────────────────
 
 function Glp1Menu({ onClose }: { onClose: () => void }) {
   return (
-    <div className="absolute left-0 top-full z-50 mt-2 w-[22rem] overflow-hidden rounded-xl border border-gray-100 bg-white py-2 shadow-2xl">
-      <div className="flex items-center gap-2 px-4 pb-1.5 pt-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600">GLP-1 Companion</span>
+    <div className="absolute left-0 right-0 top-full z-50 border-t border-gray-100 bg-white shadow-xl">
+      <div className="container mx-auto px-6 py-6">
+        <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3">
+          <span className="text-base font-semibold text-gray-900">
+            GLP-1 Companion <span className="text-sm font-normal text-gray-400">— tools for every stage of your journey</span>
+          </span>
+          <Link href="/health/first-30-days-on-glp-1" onClick={onClose} className="text-sm font-semibold text-emerald-600 hover:text-emerald-700">
+            New to GLP-1? Start here →
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-4">
+          {glp1Groups.map((group) => (
+            <div key={group.title}>
+              <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-emerald-600">{group.title}</p>
+              <ul className="space-y-2.5">
+                {group.items.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      onClick={onClose}
+                      className="group flex flex-col rounded-lg px-2 py-1 -mx-2 transition-colors hover:bg-emerald-50"
+                    >
+                      <span className="text-[13.5px] font-semibold text-gray-800 group-hover:text-emerald-700">{l.name}</span>
+                      <span className="text-xs text-gray-400">{l.desc}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
-      {glp1Links.map((l) => (
-        <Link
-          key={l.href}
-          href={l.href}
-          onClick={onClose}
-          className="group flex flex-col px-4 py-2 transition-colors hover:bg-emerald-50"
-        >
-          <span className="text-sm font-semibold text-gray-800 group-hover:text-emerald-700">{l.name}</span>
-          <span className="text-xs text-gray-400">{l.desc}</span>
-        </Link>
-      ))}
     </div>
   )
 }
@@ -298,6 +344,8 @@ export function Header() {
   const [authReady, setAuthReady] = useState(false)
   const [avatarOpen, setAvatarOpen] = useState(false)
 
+  const suppressed = ctaSuppressed(pathname)
+
   const headerRef = useRef<HTMLElement>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -370,7 +418,7 @@ export function Header() {
               width={654}
               height={167}
               priority
-              className="h-10 w-auto object-contain"
+              className="h-8 w-auto object-contain lg:h-10"
             />
           </Link>
 
@@ -413,7 +461,6 @@ export function Header() {
                 GLP-1
                 <ChevronDown className={`h-3.5 w-3.5 transition-transform ${activeMenu === "glp1" ? "rotate-180 text-emerald-600" : "text-gray-400"}`} />
               </button>
-              {activeMenu === "glp1" && <Glp1Menu onClose={closeAll} />}
             </div>
 
             <Link href="/how-it-works" onClick={closeAll} className="px-3.5 py-2 text-[13.5px] font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
@@ -473,26 +520,20 @@ export function Header() {
               </div>
             ) : (
               <>
-                <Link href="/login" onClick={closeAll} className="px-3 py-2 text-[13.5px] font-medium text-gray-600 hover:text-gray-900 rounded-md transition-colors">
+                <Link href="/login" onClick={closeAll} className="px-2.5 py-2 text-[13px] font-medium text-gray-500 hover:text-gray-900 rounded-md transition-colors">
                   Log in
                 </Link>
-                <Link
-                  href="/signup?next=/dashboard/glp1"
-                  onClick={() => { track("cta_click", { cta_id: "header_start_free", cta_label: "Start free", source_page: pathname, destination: "/signup?next=/dashboard/glp1" }); closeAll() }}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-[13.5px] font-semibold text-white hover:bg-emerald-700 transition-colors shadow-sm"
-                >
-                  Start free
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                <PrimaryCTA label="Start Free" ctaId="header_desktop" onClick={closeAll} />
               </>
             )}
           </div>
 
           {/* ── Mobile/tablet right ── */}
           <div className="flex lg:hidden items-center gap-1 ml-auto">
-            <button onClick={() => { setSearchOpen((v) => !v); setMobileOpen(false) }} aria-label="Search" className="p-2.5 sm:p-3 rounded-md text-gray-500 hover:bg-gray-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
-              <Search className="h-5 w-5" />
-            </button>
+            {/* Primary CTA — always visible, never hidden in the menu */}
+            {!loggedIn && !suppressed && (
+              <PrimaryCTA label="Start Free" ctaId="header_mobile_top" onClick={closeAll} className="mr-0.5" />
+            )}
             <button
               onClick={() => { setMobileOpen((v) => !v); setSearchOpen(false) }}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -511,17 +552,11 @@ export function Header() {
         )}
       </div>
 
-      {/* ── Desktop dropdowns ── */}
+      {/* ── Desktop dropdowns (full-width) ── */}
       <div className="hidden lg:block" onMouseEnter={cancelClose} onMouseLeave={startClose}>
         {activeMenu === "calculators" && <CalculatorsMenu onClose={closeAll} />}
+        {activeMenu === "glp1" && <Glp1Menu onClose={closeAll} />}
       </div>
-
-      {/* ── Mobile/tablet search bar ── */}
-      {searchOpen && (
-        <div className="lg:hidden border-t border-gray-100 px-4 py-3 bg-white">
-          <SearchBar placeholder="Search calculators…" className="w-full" />
-        </div>
-      )}
 
       {/* ── Mobile drawer ── */}
       {mobileOpen && (
@@ -561,17 +596,22 @@ export function Header() {
                 <ChevronDown className={`h-4 w-4 transition-transform ${mobileGlp1Open ? "rotate-180 text-emerald-600" : "text-gray-400"}`} />
               </button>
               {mobileGlp1Open && (
-                <div className="bg-emerald-50/40 pb-1">
-                  {glp1Links.map((l) => (
-                    <Link
-                      key={l.href}
-                      href={l.href}
-                      onClick={closeAll}
-                      className="flex min-h-[44px] items-center gap-2.5 px-6 py-2.5 text-sm text-gray-700 hover:text-emerald-700 sm:py-2"
-                    >
-                      <span className="h-1 w-1 flex-shrink-0 rounded-full bg-emerald-500" />
-                      {l.name}
-                    </Link>
+                <div className="bg-emerald-50/40 pb-2">
+                  {glp1Groups.map((group) => (
+                    <div key={group.title} className="pt-1">
+                      <p className="px-6 pt-2 pb-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-600">{group.title}</p>
+                      {group.items.map((l) => (
+                        <Link
+                          key={l.href}
+                          href={l.href}
+                          onClick={closeAll}
+                          className="flex min-h-[44px] items-center gap-2.5 px-6 py-2.5 text-sm text-gray-700 hover:text-emerald-700 sm:py-2"
+                        >
+                          <span className="h-1 w-1 flex-shrink-0 rounded-full bg-emerald-500" />
+                          {l.name}
+                        </Link>
+                      ))}
+                    </div>
                   ))}
                 </div>
               )}
@@ -607,16 +647,17 @@ export function Header() {
                 </form>
               </div>
             ) : (
-              <div className="flex flex-col gap-2">
-                <Link
-                  href="/signup?next=/dashboard/glp1"
-                  onClick={() => { track("cta_click", { cta_id: "header_start_free_mobile", cta_label: "Start free", source_page: pathname, destination: "/signup?next=/dashboard/glp1" }); closeAll() }}
-                  className="flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-3 sm:py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 min-h-[44px]"
-                >
-                  Start free <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link href="/login" onClick={closeAll} className="w-full rounded-lg border border-gray-300 px-4 py-3 sm:py-2.5 text-center text-sm font-medium text-gray-600 hover:bg-gray-50 min-h-[44px] flex items-center justify-center">
-                  Log in
+              <div className="flex flex-col gap-2.5">
+                <PrimaryCTA variant="block" label="Start Free" ctaId="drawer" onClick={closeAll} />
+                <p className="flex items-center justify-center gap-3 text-[11px] font-medium text-gray-500">
+                  {["Free", "No credit card", "Save progress"].map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1">
+                      <Check className="h-3 w-3 text-emerald-600" strokeWidth={3} /> {t}
+                    </span>
+                  ))}
+                </p>
+                <Link href="/login" onClick={closeAll} className="w-full text-center text-sm font-medium text-gray-500 hover:text-gray-900 min-h-[44px] flex items-center justify-center">
+                  Already have an account? Log in
                 </Link>
               </div>
             )}

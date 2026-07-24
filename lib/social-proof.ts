@@ -21,6 +21,31 @@ export interface Stat {
  */
 export const GLP1_MEMBER_COUNT = "";
 
+/**
+ * Signup-page social proof. Every value here is a factual representation shown to
+ * prospective users making a health decision, so it must be REAL and
+ * substantiable. Empty strings are hidden and the UI falls back to truthful
+ * copy — an honest empty state, never an invented number.
+ *
+ * ⚠️ Do NOT put aspirational or made-up figures here. Fabricated user counts,
+ * ratings, or usage stats on a US health product are deceptive and actionable
+ * under the FTC's fake-reviews/endorsements rule.
+ */
+export const SIGNUP_SOCIAL = {
+  /** Real, rounded active-member count, e.g. "1,200+". "" hides it. */
+  memberCount: "",
+  /** Real average rating from genuine reviews in lib/reviews.ts, e.g. "4.8". */
+  rating: "",
+  /** How many real reviews back that rating, e.g. "130". */
+  ratingCount: "",
+  /** Real count of health logs saved, e.g. "40k+". */
+  healthLogsSaved: "",
+  /** Real count of dose reminders sent, e.g. "12K+". */
+  remindersSent: "",
+  /** Only if literally true, e.g. "all 50 U.S. states". */
+  statesCovered: "",
+} as const;
+
 /** Headline numbers. Set to your REAL figures, or "" to hide. */
 export const STATS: Stat[] = [
   // "50+ free calculators" is deliberately gone. Counting calculators sells a

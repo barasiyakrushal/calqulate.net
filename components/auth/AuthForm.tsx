@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Loader2, Mail, Lock, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, Lock, AlertCircle, ArrowRight } from "lucide-react";
 import { TurnstileWidget } from "./TurnstileWidget";
 import { toast } from "sonner";
 import { track } from "@/lib/analytics/track";
@@ -23,7 +23,7 @@ function passwordStrength(pw: string): { label: string; color: string; width: st
   return { label: "Strong", color: "bg-emerald-500", width: "100%", score: 4 };
 }
 
-export function AuthForm({ mode }: { mode: "login" | "signup" }) {
+export function AuthForm({ mode, ctaLabel }: { mode: "login" | "signup"; ctaLabel?: string }) {
   const router = useRouter();
   const params = useSearchParams();
   // Both login and sign-up land on the GLP-1 tracker (the primary experience).
@@ -379,10 +379,13 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
 
         <button
           disabled={busy}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition-colors min-h-[44px]"
+          className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#16A34A] text-[15px] font-semibold text-white shadow-[0_8px_24px_rgba(22,163,74,0.18)] transition-colors hover:bg-[#15803D] active:bg-[#166534] disabled:opacity-60"
         >
           {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-          {busy ? "Please wait…" : mode === "signup" ? "Create account" : "Sign in"}
+          {busy
+            ? "Please wait…"
+            : ctaLabel ?? (mode === "signup" ? "Create account" : "Sign in")}
+          {!busy && <ArrowRight className="h-4 w-4" />}
         </button>
       </form>
 

@@ -904,7 +904,7 @@ export default function BMICalculatorPage() {
               <FAQSection faqs={faqs} />
             </div>
 
-            <MedicalReviewerSection />
+            <MedicalReviewerSection lastReviewed="July 24, 2026" />
             <AuthorSection />
           </div>
         </div>

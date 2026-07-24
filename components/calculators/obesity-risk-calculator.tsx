@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { parseNumber } from "@/lib/utils"
+import { Glp1EligibilityBranch } from "@/components/calculators/glp1-eligibility-branch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Calculator, RefreshCw, Loader2, HeartPulse, AlertCircle,
@@ -638,6 +639,18 @@ export default function ObesityRiskCalculator() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* IS A GLP-1 RIGHT FOR ME? — connect this risk result to the GLP-1 path */}
+            <div className="mt-6">
+              <Glp1EligibilityBranch
+                bmi={result.bmi}
+                condition={
+                  result.compositeTier === "High" || result.compositeTier === "Very High"
+                    ? { present: true, label: "elevated obesity-related health risk" }
+                    : undefined
+                }
+              />
+            </div>
           </div>
         )}
       </div>

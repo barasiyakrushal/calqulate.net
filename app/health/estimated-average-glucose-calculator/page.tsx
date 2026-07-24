@@ -374,7 +374,7 @@ export default function EAGCalculatorPage() {
             </div>
 
             {/* Author Badge Section */}
-            <MedicalReviewerSection />
+            <MedicalReviewerSection lastReviewed="July 24, 2026" />
             <AuthorSection />
           </div>
         </div>

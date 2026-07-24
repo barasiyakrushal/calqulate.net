@@ -530,7 +530,7 @@ export default function WeightLossPercentageCalculatorPage() {
 
             <RelatedCalculators slug="weight-loss-percentage-calculator" />
 
-            <MedicalReviewerSection />
+            <MedicalReviewerSection lastReviewed="July 24, 2026" />
             <AuthorSection />
           </div>
         </div>

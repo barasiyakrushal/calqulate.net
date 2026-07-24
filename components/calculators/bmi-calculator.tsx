@@ -1,6 +1,7 @@
 "use client";
 
 import { SyncPrompt } from "@/components/marketing/SyncPrompt";
+import { Glp1EligibilityBranch } from "@/components/calculators/glp1-eligibility-branch";
 import { useState, useRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -1110,6 +1111,13 @@ export default function BmiCalculator() {
                 <RefreshCw className="w-4 h-4 mr-2" /> Calculate Again
               </Button>
             </div>
+
+            {/* IS A GLP-1 RIGHT FOR ME? — connect an overweight/obese result to the GLP-1 path */}
+            {result.bmi >= 25 && (
+              <div className="mt-8">
+                <Glp1EligibilityBranch bmi={result.bmi} />
+              </div>
+            )}
 
           </div>
         )}

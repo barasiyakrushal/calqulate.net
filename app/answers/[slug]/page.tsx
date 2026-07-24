@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { ArrowRight, ArrowLeft, ShieldCheck } from "lucide-react";
 import { STANDALONE_QUESTIONS, getStandaloneQuestion } from "../questions-data";
 import { getService } from "@/app/product/data";
+import { Glp1EligibilityBranch } from "@/components/calculators/glp1-eligibility-branch";
 
 export function generateStaticParams() {
   return STANDALONE_QUESTIONS.map((q) => ({ slug: q.slug! }));
@@ -108,6 +109,13 @@ export default async function AnswerPage({
                   </Link>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Is a GLP-1 right for me? — next step from a diagnosis-shaped answer */}
+          {qa.glp1Branch && (
+            <div className="mt-8">
+              <Glp1EligibilityBranch condition={{ present: true, label: qa.glp1Branch.conditionLabel }} />
             </div>
           )}
 

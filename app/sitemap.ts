@@ -4,6 +4,7 @@ import path from "path";
 import type { MetadataRoute } from "next";
 import { blogs } from "@/lib/blog/blogs-data";
 import { STANDALONE_QUESTIONS } from "@/app/answers/questions-data";
+import { SIDE_EFFECT_SLUGS } from "@/lib/glp1/sideEffects";
 
 const baseUrl = "https://calqulate.net";
 
@@ -72,6 +73,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const q of STANDALONE_QUESTIONS) {
     urls.push({
       url: `${baseUrl}/answers/${q.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    });
+  }
+
+  // GLP-1 side-effect symptom pages (dynamic /health/glp-1-side-effects/[symptom]).
+  for (const slug of SIDE_EFFECT_SLUGS) {
+    urls.push({
+      url: `${baseUrl}/health/glp-1-side-effects/${slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,

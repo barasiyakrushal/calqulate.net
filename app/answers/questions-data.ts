@@ -25,6 +25,13 @@ export interface QA {
   serviceLabel?: string;
   /** SEO meta description for the standalone page. */
   metaDescription?: string;
+  /**
+   * Show the "Is a GLP-1 right for me?" eligibility branch on the standalone
+   * page. Set on diagnosis-shaped questions (prediabetes / A1c / diabetes) so a
+   * reader who just learned their number has a next step toward the GLP-1 path.
+   * `conditionLabel` prefills the weight-related condition in that self-check.
+   */
+  glp1Branch?: { conditionLabel: string };
 }
 
 export interface Group {
@@ -44,6 +51,7 @@ export const GROUPS: Group[] = [
         slug: "a1c-5-7-what-to-do",
         serviceSlug: "metabolic-health-tracker",
         serviceLabel: "Track my A1c risk with Calqulate Vitals",
+        glp1Branch: { conditionLabel: "prediabetes" },
         metaDescription:
           "An A1c of 5.7% is the bottom of the prediabetes range — and one of the most reversible numbers in medicine. Here's what it means and exactly what to do next, from Calqulate.net.",
         q: "My A1c is 5.7 — what does that actually mean and what do I do?",
@@ -63,6 +71,7 @@ export const GROUPS: Group[] = [
         slug: "is-prediabetes-reversible",
         serviceSlug: "metabolic-health-tracker",
         serviceLabel: "Track my reversal with Calqulate Vitals",
+        glp1Branch: { conditionLabel: "prediabetes" },
         metaDescription:
           "Yes, prediabetes is reversible for most people — usually within 3–6 months of consistent change. Here's how long it takes and how to prove it's working, from Calqulate.net.",
         q: "Is prediabetes reversible, and how long does it take?",
@@ -260,6 +269,25 @@ export const GROUPS: Group[] = [
     blurb: "The questions people whisper in the GLP-1 forums: muscle, rebound, and what happens after.",
     items: [
       {
+        slug: "glp-1-prescription-no-instructions",
+        serviceSlug: "glp1-progress-tracker",
+        serviceLabel: "Turn month one into an adaptive plan",
+        metaDescription:
+          "You got a GLP-1 prescription and no instructions. Here's exactly what to do in your first 30 days — dosing, side effects, protein, and what to expect — from Calqulate.net.",
+        q: "I have a GLP-1 prescription and no instructions — what do I actually do?",
+        a: "Start slow and get organised. Confirm your starting dose (nearly everyone begins at the lowest for 4 weeks), store it in the fridge, pick a consistent weekly injection day, and stock protein and water. Then work through Calqulate's free interactive First 30 Days checklist, which walks you week by week and saves your progress.",
+        longAnswer: [
+          "This is one of the most common — and most stressful — moments in the whole journey: the prescription is filled, the pen or vial is in your hand, and the guidance you got was essentially 'start it.' That void is exactly where people make the month-one mistakes that derail them.",
+          "Here's the short version. First, confirm your exact starting dose against the pen or vial — almost everyone begins at the lowest dose for the first four weeks, and that's about building tolerance, not going slow for its own sake. Store unused medication in the fridge. Pick one weekly day you'll remember and set a recurring reminder. Capture a day-zero baseline (weight, waist, a photo) because month one on the scale is noisy. And stock up on easy protein and water, because your appetite is about to drop fast.",
+          "Then it's mostly about three things for 30 days: go slow on the dose, protect your muscle with protein and a little resistance training, and stay ahead of your gut with water, fiber, and short walks. Expect mild nausea or constipation that fades, and expect at least one flat week — that's normal, not failure.",
+          "Rather than hold all of that in your head, use Calqulate.net's free First 30 Days on a GLP-1 checklist. It lays out every step week by week, links to the free tools that do the math (injection day, dose, unit conversion), and saves your progress in your browser. When month one is done, Calqulate Vitals turns it into an adaptive plan for the titration ahead.",
+        ],
+        links: [
+          { label: "Open the First 30 Days checklist", href: "/health/first-30-days-on-glp-1" },
+          { label: "Plan my injection day", href: "/health/glp-1-injection-day-calculator" },
+        ],
+      },
+      {
         slug: "best-glp-1-for-weight-loss",
         serviceSlug: "glp1-progress-tracker",
         serviceLabel: "Track any GLP-1 with Calqulate Vitals",
@@ -275,8 +303,10 @@ export const GROUPS: Group[] = [
           "Here's the part the drug comparison misses entirely: whichever GLP-1 you pick, up to 40% of the weight you lose can be muscle, not fat. That's what leaves people \"skinny-fat\" and sets up regain later. The GLP-1 that works best long-term is the one you pair with enough protein, resistance training, and tracking of fat vs. muscle. Calqulate.net's GLP-1 Progress Tracker works with any of these medications — log your shots or pills, watch your metabolism score and heart age improve, and confirm you're burning fat, not lean mass.",
         ],
         links: [
+          { label: "Tirzepatide vs Semaglutide", href: "/compare/tirzepatide-vs-semaglutide" },
+          { label: "Ozempic vs Wegovy", href: "/compare/ozempic-vs-wegovy" },
+          { label: "How much will I lose? (calculator)", href: "/health/glp-1-weight-loss-projection-calculator" },
           { label: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker" },
-          { label: "GLP-1 Dose Calculator", href: "/health/glp-1-dose-calculator" },
         ],
       },
       {
@@ -332,8 +362,9 @@ export const GROUPS: Group[] = [
           "So the smartest move is to go into the off-ramp lean-mass-aware and tracking the markers that matter — body composition and your heart and diabetes risk — not just the scale. Calqulate.net's GLP-1 Progress Tracker is designed specifically for this: protect the muscle, watch the risk numbers, and don't let months of effort quietly reverse.",
         ],
         links: [
+          { label: "Regain Risk Calculator & Tapering Planner", href: "/health/glp-1-stopping" },
+          { label: "GLP-1 Maintenance & Keeping It Off", href: "/health/glp-1-maintenance" },
           { label: "GLP-1 Progress Tracker", href: "/product/glp1-progress-tracker" },
-          { label: "Lean Body Mass Calculator", href: "/health/lean-body-mass-calculator" },
         ],
       },
       {
@@ -388,6 +419,7 @@ export const GROUPS: Group[] = [
           "Honestly, this one capability stops more people from giving up than anything else we've built. Get your free snapshot on Calqulate.net and let the trajectory engine tell you the truth the scale can't.",
         ],
         links: [
+          { label: "GLP-1 Plateau Analyzer", href: "/health/glp-1-plateau-analyzer" },
           { label: "How the trajectory engine works", href: "/how-it-works" },
           { label: "Weight Loss % Calculator", href: "/health/weight-loss-percentage-calculator" },
         ],

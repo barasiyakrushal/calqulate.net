@@ -13,6 +13,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calculator, RefreshCw, Loader2, Activity, Droplet, Info, HeartPulse, Target, TrendingDown } from "lucide-react";
 import { parseNumber } from "@/lib/utils"
+import { Glp1EligibilityBranch } from "@/components/calculators/glp1-eligibility-branch";
 
 // --- FORM SCHEMA ---
 const formSchema = z.object({
@@ -507,6 +508,16 @@ export default function EstimatedAverageGlucoseCalculator() {
                   provider.
                 </p>
               </div>
+
+              {/* IS A GLP-1 RIGHT FOR ME? — connect a prediabetes/diabetes result to the GLP-1 path */}
+              {result.category !== "Normal" && (
+                <Glp1EligibilityBranch
+                  condition={{
+                    present: true,
+                    label: result.category === "Diabetes" ? "type 2 diabetes" : "prediabetes",
+                  }}
+                />
+              )}
             </CardContent>
           </Card>
         )}

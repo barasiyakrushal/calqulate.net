@@ -1,45 +1,119 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { SignupSocialProof } from "@/components/auth/SignupSocialProof";
+import { SIGNUP_SOCIAL } from "@/lib/social-proof";
+import { ShieldCheck, TrendingUp, Syringe, Star, Lock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Create your account | Calqulate",
-  description: "Create a free Calqulate account to track your metabolic health, heart age, and diabetes risk with validated clinical models.",
+  description:
+    "Create a free Calqulate account to track your GLP-1 journey — weight, injections, side effects, and progress — with validated clinical models.",
   robots: { index: false },
 };
 
+// Bottom stat row: shows REAL figures when set, otherwise truthful capability
+// cards (never invented numbers) so the layout stays premium either way.
+const realStats = [
+  { icon: TrendingUp, value: SIGNUP_SOCIAL.healthLogsSaved, label: "Health logs saved" },
+  { icon: Syringe, value: SIGNUP_SOCIAL.remindersSent, label: "Injection reminders sent" },
+  { icon: Star, value: SIGNUP_SOCIAL.rating, label: "Average rating" },
+].filter((s) => s.value);
+
+const capabilityCards = [
+  { icon: TrendingUp, title: "Weekly", sub: "Progress tracking" },
+  { icon: Syringe, title: "Dose", sub: "Reminders built in" },
+  { icon: Lock, title: "Private", sub: "Encrypted & yours" },
+];
+
 export default function SignupPage() {
+  const showRealStats = realStats.length === 3;
+
   return (
-    <main id="main" className="relative flex min-h-screen items-center justify-center bg-gradient-to-b from-blue-50/80 via-white to-white px-4 py-12">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute -left-32 -top-32 h-64 w-64 rounded-full bg-blue-100/40 blur-3xl" />
-        <div className="absolute -right-32 bottom-0 h-72 w-72 rounded-full bg-emerald-100/30 blur-3xl" />
-      </div>
-      <div className="relative w-full">
-        <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-emerald-600 group-hover:bg-emerald-700 transition-colors flex items-center justify-center shadow-sm">
-              <svg className="h-[18px] w-[18px] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-              </svg>
-            </div>
-            <span className="text-lg font-bold tracking-tight text-gray-900">
-              Calqulate<span className="text-emerald-600">.NET</span>
-            </span>
+    <main
+      id="main"
+      className="min-h-screen bg-gradient-to-b from-emerald-50/60 via-white to-white px-4 pt-8 pb-[calc(env(safe-area-inset-bottom)+2rem)]"
+    >
+      <div className="mx-auto w-full max-w-md space-y-6">
+        {/* Logo */}
+        <div className="flex justify-center pt-2">
+          <Link href="/" aria-label="Calqulate — Home">
+            <Image
+              src="/calqulate-wordmark.png"
+              alt="Calqulate"
+              width={654}
+              height={167}
+              priority
+              className="h-9 w-auto object-contain"
+            />
           </Link>
         </div>
-        <div className="mx-auto flex w-full max-w-4xl flex-col items-start justify-center gap-8 lg:flex-row">
-          <Suspense fallback={
-            <div className="mx-auto w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-              <div className="h-6 w-48 bg-gray-200 rounded animate-pulse" />
-              <div className="mt-4 h-12 bg-gray-200 rounded animate-pulse" />
+
+        {/* Title + subtitle */}
+        <div className="text-center">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Create your free account</h1>
+          <p className="mt-2 text-[15px] leading-relaxed text-slate-500">
+            The private home for your GLP-1 journey — weight, injections, side effects, and progress, all in one
+            place.
+          </p>
+        </div>
+
+        {/* Premium social-proof card (data-gated, honest) */}
+        <SignupSocialProof />
+
+        {/* Auth form — Google + email/password + green CTA */}
+        <Suspense
+          fallback={
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="h-6 w-48 animate-pulse rounded bg-gray-200" />
+              <div className="mt-4 h-12 animate-pulse rounded bg-gray-200" />
             </div>
-          }>
-            <AuthForm mode="signup" />
-          </Suspense>
-          <SignupSocialProof />
+          }
+        >
+          <AuthForm mode="signup" ctaLabel="Start my free GLP-1 journey" />
+        </Suspense>
+
+        {/* Trust row (truthful capability claims) */}
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[12.5px] font-medium text-slate-500">
+          <span className="inline-flex items-center gap-1.5">
+            <Lock className="h-3.5 w-3.5 text-emerald-600" /> Private & encrypted
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <TrendingUp className="h-3.5 w-3.5 text-emerald-600" /> Track progress over time
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Syringe className="h-3.5 w-3.5 text-emerald-600" /> Injection reminders included
+          </span>
+        </div>
+
+        {/* Fine print */}
+        <p className="text-center text-xs text-slate-400">Always free to start · No credit card required</p>
+
+        {/* Bottom stat row — real numbers if set, else truthful capability cards */}
+        <div className="grid grid-cols-3 gap-3 pt-2">
+          {(showRealStats ? realStats : capabilityCards).map((s, i) => {
+            const Icon = s.icon;
+            const value = "value" in s ? s.value : (s as { title: string }).title;
+            const label = "label" in s ? s.label : (s as { sub: string }).sub;
+            return (
+              <div
+                key={i}
+                className="flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-2 py-4 text-center shadow-[0_4px_16px_rgba(15,23,42,0.04)]"
+              >
+                <Icon className="h-5 w-5 text-emerald-600" />
+                <p className="mt-2 text-base font-extrabold text-slate-900">{value}</p>
+                <p className="mt-0.5 text-[11px] leading-tight text-slate-500">{label}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Reassurance */}
+        <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
+          <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+          Your health data is never sold.
         </div>
       </div>
     </main>

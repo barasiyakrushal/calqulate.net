@@ -21,6 +21,7 @@
 import React, { useMemo, useState } from "react"
 import Link from "next/link"
 import { parseNumber } from "@/lib/utils"
+import { SaveProgressPanel } from "@/components/weight-loss/SaveProgressPanel"
 import {
   TrendingDown,
   ArrowRight,
@@ -641,6 +642,16 @@ function ResultView({
               </div>
             </div>
           </div>
+        )}
+
+        {/* SAVE PROGRESS — turn the number into a saved trend + route to body composition */}
+        {!result.gained && (
+          <SaveProgressPanel
+            weight={parseNumber(answers.current ?? "")}
+            unit={result.unit}
+            pct={result.pct}
+            lost={result.totalLost}
+          />
         )}
 
         {/* COMMIT */}

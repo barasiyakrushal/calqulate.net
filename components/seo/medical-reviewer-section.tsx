@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Stethoscope, ExternalLink, CalendarCheck, UserCheck } from "lucide-react"
 
-export function MedicalReviewerSection() {
+export function MedicalReviewerSection({ lastReviewed = "June 2026" }: { lastReviewed?: string } = {}) {
   return (
     <div className="mt-16 mb-6 max-w-2xl mx-auto">
       {/* Tool Info Box */}
@@ -13,7 +13,7 @@ export function MedicalReviewerSection() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
           <div>
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Last reviewed</span>
-            <p className="text-slate-800 font-medium mt-0.5">June 2026</p>
+            <p className="text-slate-800 font-medium mt-0.5">{lastReviewed}</p>
           </div>
           <div>
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Reviewed by</span>

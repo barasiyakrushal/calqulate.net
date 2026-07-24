@@ -77,23 +77,6 @@ function respond(raw: string): Msg {
     };
   }
 
-  // Install / mobile app — guide the PWA install (no native app yet)
-  if (
-    has(
-      t,
-      "install", "mobile app", "android", "iphone", "ipad", "ios", "home screen",
-      "add to home", "pwa", "native app", "download the app", "download app",
-      "get the app", "is there an app", "do you have an app", "have an app", "app store", "play store",
-    )
-  ) {
-    return {
-      role: "bot",
-      text:
-        "We haven't launched native iOS/Android apps yet — but you don't have to wait for a better mobile experience. You can install Calqulate to your phone right now and use it just like an app: a home-screen icon, offline access, faster loading, and dose & push reminders.\n\n📱 iPhone / iPad (Safari): tap the Share button, then \"Add to Home Screen.\"\n🤖 Android (Chrome): tap the ⋮ menu, then \"Install app\" (or \"Add to Home screen\").\n💻 Desktop (Chrome / Edge): click the install icon at the right of the address bar.\n\nThen open Calqulate from your home screen — it runs full-screen like a real app. Want better mobile tracking? Install it and try app mode.",
-      chips: ["GLP-1 & muscle", "Pricing", "Talk to a human"],
-    };
-  }
-
   // How it works
   if (has(t, "how it works", "how does it work", "what is calqulate", "what is vitals", "explain", "what do you do")) {
     return {

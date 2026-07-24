@@ -25,6 +25,7 @@ import {
   Target
 } from "lucide-react";
 import { parseNumber } from "@/lib/utils"
+import { Glp1EligibilityBranch } from "@/components/calculators/glp1-eligibility-branch"
 
 // --- TYPES & INTERFACES ---
 type UnitSystem = "metric" | "imperial";
@@ -754,6 +755,16 @@ export default function DiabetesRiskCalculator() {
                 </CardContent>
               </Card>
             )}
+
+            {/* IS A GLP-1 RIGHT FOR ME? — connect this diagnosis result to the GLP-1 path */}
+            <Glp1EligibilityBranch
+              bmi={result.bmi}
+              condition={
+                result.score >= 5
+                  ? { present: true, label: "elevated type 2 diabetes risk" }
+                  : undefined
+              }
+            />
 
             <div className="pt-6 pb-12 flex justify-center">
               <Button variant="outline" size="lg" onClick={resetForm} className="px-8 shadow-sm">

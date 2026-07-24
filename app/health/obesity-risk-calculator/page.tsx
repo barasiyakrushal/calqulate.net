@@ -329,7 +329,7 @@ export default function ObesityRiskCalculatorPage() {
             </div>
 
             {/* Author Badge Section */}
-            <MedicalReviewerSection />
+            <MedicalReviewerSection lastReviewed="July 24, 2026" />
             <AuthorSection />
           </div>
         </div>

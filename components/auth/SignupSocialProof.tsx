@@ -1,72 +1,136 @@
-import { Star, Quote, BadgeCheck, ShieldCheck, Users } from "lucide-react";
+import { Star, ShieldCheck, BadgeCheck, User, Activity, Syringe, Scale, TrendingUp } from "lucide-react";
+import { SIGNUP_SOCIAL } from "@/lib/social-proof";
+import { LIVE_ACTIVITY, hasLiveActivity } from "@/lib/live-activity";
 import { getReviews } from "@/lib/reviews";
-import { GLP1_MEMBER_COUNT } from "@/lib/social-proof";
 
 /**
- * Trust panel shown beside the signup form.
+ * Premium signup social-proof card.
  *
- * Only ONE line here is a fixed claim, and it is verifiably true: the app really
- * does run the Framingham, ASCVD Pooled Cohort and FINDRISC models (see
- * lib/healthCalculations and the methodology shown on every result page).
- *
- * The testimonial and the member count are DATA-GATED on purpose:
- *   - the quote renders only if a real, permissioned review exists in lib/reviews
- *   - the "Join X people" line renders only if GLP1_MEMBER_COUNT is set
- * Until then they are simply absent. Nothing here is a placeholder or an invented
- * number — that would be deceptive for a health product, and the rest of the site
- * is deliberately built the same way.
+ * The full visual design (avatar stack, "LIVE" activity feed, member count, star
+ * rating) is built and ready — but every claim is DATA-GATED to real figures:
+ *   - counts render only when set to a real number in lib/social-proof.ts
+ *   - the live feed renders only from genuine, consented entries in lib/live-activity.ts
+ *   - the rating renders only when there are real reviews in lib/reviews.ts
+ * When those are empty (the honest default), the card shows truthful trust
+ * signals instead of invented numbers. Fabricated counts/reviews/activity on a
+ * US health signup are deceptive and FTC-actionable — see the notes in those files.
  */
 export function SignupSocialProof() {
-  // Prefer a GLP-1 specific review, fall back to any genuine one.
-  const review = getReviews("glp1", 1)[0] ?? getReviews(undefined, 1)[0];
+  const { memberCount, rating, ratingCount, statesCovered } = SIGNUP_SOCIAL;
+  const reviewCount = getReviews("glp1").length;
+  const showRating = !!rating && reviewCount > 0;
+  const filledStars = showRating ? Math.round(Number(rating)) : 0;
 
   return (
-    <aside className="mx-auto mt-6 w-full max-w-sm space-y-3 lg:mt-0">
-      {/* Member count — real number only */}
-      {GLP1_MEMBER_COUNT && (
-        <div className="flex items-center gap-2.5 rounded-xl border border-emerald-100 bg-emerald-50/70 px-4 py-3">
-          <Users className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
-          <p className="text-sm font-medium text-emerald-900">
-            Join <strong>{GLP1_MEMBER_COUNT}</strong> people tracking their GLP-1 progress.
-          </p>
+    <section
+      aria-label="Why people join Calqulate"
+      className="w-full rounded-[18px] border border-emerald-100 bg-[#F0FDF4] p-5 shadow-[0_8px_24px_rgba(16,163,74,0.06)] sm:p-6"
+    >
+      {/* ── Live activity — only if there is genuine, consented activity ── */}
+      {hasLiveActivity && (
+        <div className="mb-4 rounded-2xl border border-emerald-100 bg-white p-4">
+          <div className="mb-3 flex items-center gap-2">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            </span>
+            <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-700">Live</span>
+          </div>
+          <ul className="space-y-2.5">
+            {LIVE_ACTIVITY.slice(0, 3).map((a, i) => (
+              <li key={i} className="flex items-baseline justify-between gap-3 text-sm">
+                <span className="text-slate-700">
+                  <strong className="font-semibold text-slate-900">{a.firstName}</strong>{" "}
+                  <span className="text-slate-400">({a.state})</span> {a.action}
+                </span>
+                {a.emoji && <span className="shrink-0">{a.emoji}</span>}
+              </li>
+            ))}
+          </ul>
+          {memberCount && (
+            <p className="mt-3 border-t border-slate-100 pt-2.5 text-xs font-semibold text-emerald-700">
+              {memberCount} people tracking today
+            </p>
+          )}
         </div>
       )}
 
-      {/* Methodology — always shown, and true */}
-      <div className="flex items-start gap-2.5 rounded-xl border border-gray-200 bg-white px-4 py-3">
-        <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
-        <p className="text-sm leading-relaxed text-gray-600">
-          Built on the same validated models clinicians use, including the{" "}
-          <strong className="text-gray-900">Framingham</strong>,{" "}
-          <strong className="text-gray-900">ASCVD Pooled Cohort</strong> and{" "}
-          <strong className="text-gray-900">FINDRISC</strong> equations, with the methodology shown on
-          every result.
-        </p>
-      </div>
-
-      {/* Testimonial — real, permissioned review only */}
-      {review && (
-        <figure className="rounded-xl border border-gray-200 bg-white px-4 py-3">
-          <div className="mb-1.5 flex items-center gap-1 text-amber-400" aria-label={`${review.rating ?? 5} out of 5`}>
-            {Array.from({ length: Math.max(1, Math.min(5, review.rating ?? 5)) }).map((_, i) => (
-              <Star key={i} className="h-3.5 w-3.5 fill-current" />
+      {/* ── Member count + avatar affordance — only with a real count ── */}
+      {memberCount ? (
+        <div className="flex items-center gap-3">
+          <div className="flex -space-x-2" aria-hidden="true">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <span
+                key={i}
+                className="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-gradient-to-br from-emerald-200 to-teal-300 text-emerald-800 shadow-sm"
+              >
+                <User className="h-3.5 w-3.5" />
+              </span>
             ))}
           </div>
-          <Quote className="mb-1 h-4 w-4 text-emerald-300" aria-hidden="true" />
-          <blockquote className="text-sm leading-relaxed text-gray-700">{review.quote}</blockquote>
-          <figcaption className="mt-2 text-xs text-gray-500">
-            <span className="font-semibold text-gray-800">{review.name}</span> · {review.context}
-          </figcaption>
-        </figure>
+          <span className="rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
+            {memberCount}
+          </span>
+        </div>
+      ) : (
+        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-bold text-emerald-700">
+          <Activity className="h-3.5 w-3.5" /> Built for GLP-1 users
+        </div>
       )}
 
-      {/* Reassurance — always true, no number required */}
-      <div className="flex items-center gap-2.5 rounded-xl border border-gray-200 bg-white px-4 py-3">
-        <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
-        <p className="text-sm text-gray-600">
-          Free to start, no card. Private, encrypted, and never sold.
-        </p>
+      {/* ── Headline ── */}
+      <p className="mt-3 text-[17px] font-bold leading-snug text-slate-900">
+        {memberCount
+          ? `${memberCount} people are tracking their GLP-1 journey with Calqulate.`
+          : "Track your whole GLP-1 journey in one private place."}
+      </p>
+
+      {/* ── What you track (truthful, always) ── */}
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        {[
+          { icon: Scale, label: "Weight & waist" },
+          { icon: Syringe, label: "Injections" },
+          { icon: Activity, label: "Side effects" },
+          { icon: TrendingUp, label: "Progress & trends" },
+        ].map((f) => (
+          <div key={f.label} className="flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-[13px] font-medium text-slate-700">
+            <f.icon className="h-4 w-4 shrink-0 text-emerald-600" />
+            {f.label}
+          </div>
+        ))}
       </div>
-    </aside>
+
+      {/* ── Rating (real reviews only) OR validated-models trust (always true) ── */}
+      {showRating ? (
+        <div className="mt-4 flex items-center gap-2">
+          <div className="flex text-amber-400" aria-label={`${rating} out of 5`}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star key={i} className={`h-4 w-4 ${i < filledStars ? "fill-current" : "text-slate-200"}`} />
+            ))}
+          </div>
+          <span className="text-sm font-semibold text-slate-800">{rating}</span>
+          <span className="text-xs text-slate-500">
+            average{ratingCount ? ` · ${ratingCount} reviews` : ""}
+            {statesCovered ? ` · across ${statesCovered}` : ""}
+          </span>
+        </div>
+      ) : (
+        <div className="mt-4 flex items-start gap-2 border-t border-emerald-100 pt-3 text-[13px] leading-relaxed text-slate-600">
+          <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+          <span>
+            Built on the same validated models clinicians use —{" "}
+            <strong className="text-slate-800">Framingham</strong>,{" "}
+            <strong className="text-slate-800">ASCVD Pooled Cohort</strong> &{" "}
+            <strong className="text-slate-800">FINDRISC</strong> — with the methodology shown on every result.
+          </span>
+        </div>
+      )}
+
+      {/* ── Privacy (always true) ── */}
+      <div className="mt-2.5 flex items-center gap-2 text-[13px] text-slate-600">
+        <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
+        Private, encrypted, and never sold.
+      </div>
+    </section>
   );
 }
